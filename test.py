@@ -1,14 +1,13 @@
-import asyncio
-async def my_coro(delay):  
-	loop = asyncio.get_running_loop()
-	end_time = loop.time() + delay
-	while True:
-		print("Blocking...")
-		await asyncio.sleep(1)
-		if loop.time() > end_time:
-			print("Done.")
-			break
-async def main():  
-	my_coro(3.0)
-	print('that was idioTOC')
-asyncio.run(main())  
+from multiprocessing import Process
+import time
+
+def asyncFileWriter():
+	for i in range(10):
+		with open('TEST_WOW.txt', 'a') as txt:
+			txt.write(f':D oh wow #{i}\n')
+		time.sleep(5)
+
+if __name__ == '__main__':
+	proc = Process(target=asyncFileWriter)
+	proc.start()
+	print('Niggers are gay')
