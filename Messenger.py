@@ -1,5 +1,5 @@
 import socket
-from multiprocessing import Process
+import threading
 
 SOCKET_BIND_PARAMS = ('', 13490)
 
@@ -20,5 +20,5 @@ class MessengerClient(MessengerBase):
 		super().__init__()
 		def messageReceiver():
 			"""  """
-		self._messageReceiverProcess = Process(target=messageReceiver)
+		self._messageReceiverProcess = threading.Thread(target=messageReceiver)
 		self._messageReceiverProcess.start()
