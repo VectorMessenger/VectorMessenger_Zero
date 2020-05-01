@@ -14,9 +14,8 @@ ui_root.iconbitmap(h.ICON_MAIN_PATH)
 # Top Frame
 frame_top = tkinter.Frame(ui_root)
 frame_top.pack(side=tkinter.TOP)
-chat_message_list = tkinter.Message(ui_root, text='', anchor=tkinter.W, width=ui_root.winfo_width())
-print(ui_root.winfo_width)
-chat_message_list.pack(side=tkinter.TOP, fill=tkinter.BOTH)
+chat_messages = tkinter.Text(ui_root, width=ui_root.winfo_screenmmwidth(), wrap=tkinter.WORD, state=tkinter.DISABLED)
+chat_messages.pack(side=tkinter.TOP, fill=tkinter.BOTH)
 
 # UI Bottom Canvas
 frame_bottom = tkinter.Frame(ui_root)
@@ -26,8 +25,8 @@ chat_message_input.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 chat_btn_sendMessage = tkinter.Button(frame_bottom, text='>')
 chat_btn_sendMessage.pack(side=tkinter.LEFT)
 
-#TEST MESSAGE BOX
-""" proc = Thread(target=h._testMessageBox, args=(chat_message_list,))
-proc.start() """
-
-ui_root.mainloop()
+if __name__ == '__main__':
+	if '--debug' in sys.argv: h.showDebugConsole()
+	if '--testmsgb' in sys.argv: proc = Thread(target=h._testMessageBox, args=(chat_messages,)); proc.start() # Test Chat Messagebox
+	globals()[h.UI_VARNAME_MESSAGES] = chat_messages
+	ui_root.mainloop()
