@@ -12,24 +12,15 @@ strings = {
 	'title': f'Localhost Messenger (version: {VERSION})'
 }
 
-# UI Functions
-def ui_showMessage(text: str):
-	""" Will change widget state to normal, insert message to in and then disable it """
-	ui_chat = globals()[UI_VARNAME_MESSAGES]
-	ui_chat.config(state=tkinter.NORMAL)
-	ui_chat.insert(tkinter.END, text)
-	ui_chat.config(state=tkinter.DISABLED)
-
 # Debug Functions
-def _testMessageBox(messageBox: tkinter.Text):
+def _testMessageBox(messages_ui: object):
+	""" Will test chat messages widget by sending test messages to it """
 	from time import sleep
 	createLog('Messagebox test begin')
-	messageString = ''
-	arrayMessage = ('\ntest_0: Все понятно, автор запустил тест месседжбокса.', '\ntest_34: Мда, вот это неожиданная ситуация конечно.', '\ntest_12: Да реално.\n', 'test_2: Застал в расплох так сказать.\n')
+	arrayMessage = ('\ntest_0: Все понятно, автор запустил тест месседжбокса.', '\ntest_34: Мда, вот это неожиданная ситуация конечно.', '\ntest_12: Да реально.\n', 'test_2: Застал в расплох так сказать.\n')
 	for i in range(40):	
 		for i in range(len(arrayMessage)):
-			messageString = messageString + arrayMessage[i]
-			ui_showMessage(messageString)
+			messages_ui.showMessage(arrayMessage[i])
 			createLog('test message sent')
 			sleep(0.05)
 	createLog('Messagebox test ended')
@@ -53,7 +44,6 @@ def createLog(text: str):
 
 	ui_console: Output message ui. Default = linked to lhm_debug_console_output in globals()
 	"""
-
 	# Check if debug mode enabled and debug window exists
 	if 'lhm_debug_console_output' in globals():
 		if globals()['lhm_debug_console_output'].winfo_exists():
