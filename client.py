@@ -3,6 +3,7 @@ import Messenger
 import sys, os
 import helpers as h
 from threading import Thread
+from datetime import datetime
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
@@ -27,8 +28,35 @@ class LHM_MainWindow:
 		""" Will show the message in chat ui """
 		self.chat_messages.config(state=tkinter.NORMAL)
 		self.chat_messages.insert(tkinter.END, text)
-		self.chat_messages.see(tkinter.END)
 		self.chat_messages.config(state=tkinter.DISABLED)
+		self.chat_messages.see(tkinter.END)
+	
+	def showDebugConsole(self):
+		"""
+		Show in-app console with actions logs
+		
+		To create log - use `createLog()` function
+		"""
+		ui_window = tkinter.Toplevel(bg='#181818')
+		ui_window.geometry('700x300')
+		ui_window.title('Debug Console')
+		self._debug_console_output = tkinter.Text(ui_window, width=ui_window.winfo_screenwidth(), bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
+		self._debug_console_output.pack(side=tkinter.TOP, fill=tkinter.BOTH)
+
+	def createLog(self, text: str):
+		"""
+		Will add log to debug console UI
+
+		ui_console: Output message ui. Default = linked to lhm_debug_console_output in globals()
+		"""
+		# Check if debug mode enabled and debug window exists
+		if '--debug' in sys.argv:
+			if self._debug_console_output.winfo_exists():
+				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
+				self._debug_console_output.config(state=tkinter.NORMAL)
+				self._debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
+				self._debug_console_output.see(tkinter.END)
+				self._debug_console_output.config(state=tkinter.DISABLED)
 
 ui_root = tkinter.Tk()
 ui_root.geometry('600x700')
@@ -38,6 +66,6 @@ ui_root.resizable(False, False)
 mainWindow = LHM_MainWindow(ui_root)
 
 if __name__ == '__main__':
-	if '--debug' in sys.argv: h.showDebugConsole()
+	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testmsgb' in sys.argv: proc = Thread(target=h._testMessageBox, args=(mainWindow,)); proc.start() # Test Chat Messagebox
 	ui_root.mainloop()
