@@ -17,7 +17,7 @@ def _testMessageBox(messages_ui: object):
 	""" Will test chat messages widget by sending test messages to it """
 	from time import sleep
 	createLog('Messagebox test begin')
-	arrayMessage = ('\ntest_0: Все понятно, автор запустил тест месседжбокса.', '\ntest_34: Мда, вот это неожиданная ситуация конечно.', '\ntest_12: Да реально.\n', 'test_2: Застал в расплох так сказать.\n')
+	arrayMessage = ('test_0: Все понятно, автор запустил тест месседжбокса.\n', 'test_34: Мда, вот это неожиданная ситуация конечно.\n', 'test_12: Да реально.\n', 'test_2: Застал в расплох так сказать.\n')
 	for i in range(40):	
 		for i in range(len(arrayMessage)):
 			messages_ui.showMessage(arrayMessage[i])
