@@ -41,7 +41,7 @@ class LHM_MainWindow:
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
 		self._debug_console_output = tkinter.Text(ui_window, width=ui_window.winfo_screenwidth(), bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
-		self._debug_console_output.pack(side=tkinter.TOP, fill=tkinter.BOTH)
+		self._debug_console_output.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
 
 	def createLog(self, text: str):
 		"""
