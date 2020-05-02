@@ -8,9 +8,12 @@ class LHM_MainWindow:
 	def __init__(self, root: object):
 		# Top Frame
 		self.frame_top = tkinter.Frame(root)
-		self.chat_messages = tkinter.Text(self.frame_top, width=root.winfo_width(), wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
+		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
+		self.chat_scroll = tkinter.Scrollbar(self.frame_top, command=self.chat_messages.yview)
+		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
 		self.frame_top.pack(side=tkinter.TOP, fill=tkinter.BOTH)
-		self.chat_messages.pack(side=tkinter.TOP, fill=tkinter.BOTH)
+		self.chat_messages.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
+		self.chat_scroll.pack(side=tkinter.LEFT, fill=tkinter.Y)
 
 		# Bottom Frame
 		self.frame_bottom = tkinter.Frame(root)
@@ -28,7 +31,7 @@ class LHM_MainWindow:
 		self.chat_messages.config(state=tkinter.DISABLED)
 
 ui_root = tkinter.Tk()
-ui_root.geometry('600x700+0+0')
+ui_root.geometry('600x700')
 ui_root.title(h.strings['title'])
 ui_root.iconbitmap(h.ICON_MAIN_PATH)
 ui_root.resizable(False, False)

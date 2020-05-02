@@ -3,7 +3,7 @@ from datetime import datetime
 import sys
 
 # CONSTS
-VERSION = '#dev0'
+VERSION = f"dev#{datetime.now().strftime('%d%m%Y')}"
 ICON_MAIN_PATH = './data/ico/main.ico'
 UI_VARNAME_MESSAGES = 'lhm_ui_chat_messages'
 
