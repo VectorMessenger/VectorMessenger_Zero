@@ -1,6 +1,4 @@
-import tkinter
 from datetime import datetime
-import sys
 from random import choice as RChoice
 
 # CONSTS
