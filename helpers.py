@@ -9,7 +9,7 @@ ICON_MAIN_PATH = './data/ico/main.ico'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
-DEF_CONNECTION = {'ip': '', 'port': 9263}
+DEF_CONNECTION = {'ip': '172.24.173.106', 'port': 9263}
 
 STRINGS = {
 	'client': {
@@ -41,7 +41,7 @@ def createUniversalLog(text: str, ui_log = None):
 	else:
 		print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
-def lhm_config(conf_type: int, ui_log = None) -> bool:
+def lhm_config(conf_type: int, ui_log = None) -> dict:
 	"""
 	Checks for .json config files existance and creates a new one if not exist
 
@@ -52,24 +52,32 @@ def lhm_config(conf_type: int, ui_log = None) -> bool:
 		ui_log {function} -- argument for ui log function. Only if running from client. (default: {None})
 
 	Returns:
-		bool -- True : config dir and file generated, False : config dir and file already exists
-	"""	
+		dict -- Returns config .json parsed to dict
+	"""
+	def _getConfigDict(path) -> dict:
+		with open(path) as f:
+			return json.load(f)
 
+	exist = False
 	if conf_type == 0:
 		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir')
 		cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
-		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); return False
-		with open(cfgserver_path, 'rt') as configFile:
-			config_data = STRINGS['client']['config_default']
-			json.dump(config_data, configFile, indent=4)
+		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
+		if not exist:
+			with open(cfgserver_path, 'rt') as configFile:
+				config_data = STRINGS['client']['config_default']
+				json.dump(config_data, configFile, indent=4)
+		return _getConfigDict(cfgserver_path)
 	elif conf_type == 1:
 		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 		cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
-		if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); return False
-		with open(cfgclient_path, 'wt') as configFile:
-			config_data = STRINGS['client']['config_default']
-			json.dump(config_data, configFile, indent=4)
-		createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
+		if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); exist = True
+		if not exist:
+			with open(cfgclient_path, 'wt') as configFile:
+				config_data = STRINGS['client']['config_default']
+				json.dump(config_data, configFile, indent=4)
+			createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
+		return _getConfigDict(cfgclient_path)
 
 # ----- CLIENT -----
 # Debug Functions

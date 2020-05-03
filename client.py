@@ -24,7 +24,7 @@ class LHM_MainWindow:
 		self.frame_bottom.pack(side=tkinter.TOP)
 		self.chat_message_input.pack(side=tkinter.LEFT)
 		self.chat_btn_sendMessage.pack(side=tkinter.LEFT)
-	
+
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
 		self.chat_messages.config(state=tkinter.NORMAL)
@@ -69,15 +69,16 @@ class LHM_MainWindow:
 				_log()
 
 if __name__ == '__main__':
+	cfg = h.lhm_config(1, mainWindow.createLog)
+	
 	# Init UI
 	ui_root = tkinter.Tk()
 	ui_root.geometry('600x700')
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.resizable(False, False)
-	mainWindow = LHM_MainWindow(ui_root)
-	
-	h.lhm_config(1, mainWindow.createLog)
+	mainWindow = LHM_MainWindow(ui_root, cfg)
+
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 	if '--testchat-inf' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True,)).start()

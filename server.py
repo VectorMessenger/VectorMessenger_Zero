@@ -1,5 +1,3 @@
-import socket
-import helpers as h
+from Messenger import MessengerServer
 
-h.lhm_config(0)
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server = MessengerServer()
