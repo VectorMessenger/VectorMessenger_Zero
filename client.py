@@ -34,9 +34,8 @@ class LHM_MainWindow:
 	
 	def showDebugConsole(self):
 		"""
-		Show in-app console with actions logs
-		
-		To create log - use `createLog()` function
+		Show in-app console with actions logs.
+		To create log - use createLog() function
 		"""
 		ui_window = tkinter.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
