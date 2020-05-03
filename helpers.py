@@ -14,13 +14,13 @@ strings = {
 }
 
 # Debug Functions
-def _testMessageBox(ui_object: object):
-	""" Will test chat messages widget by sending test messages to it """
+def _testChat(showMessageFNC, createLogFNC):
+	""" Will test chat widget by sending test messages to it """
 	from time import sleep
-	ui_object.createLog('Messagebox test begin')
+	createLogFNC('Messagebox test begin')
 	arrayMessage = ('test_0: Guys, Im testing this new chat app now.\n', 'test_34: Wow! Thats cool.\n', 'test_12: Hello world!\n', 'test_2: Why? Just... why?\n')
 	for i in range(48):	
-		ui_object.showMessage(RChoice(arrayMessage))
-		ui_object.createLog('test message sent')
+		showMessageFNC(RChoice(arrayMessage))
+		createLogFNC('test message sent')
 		sleep(0.05)
-	ui_object.createLog('Messagebox test ended')
+	createLogFNC('Messagebox test ended')

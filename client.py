@@ -67,5 +67,5 @@ mainWindow = LHM_MainWindow(ui_root)
 
 if __name__ == '__main__':
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
-	if '--testmsgb' in sys.argv: proc = Thread(target=h._testMessageBox, args=(mainWindow,)); proc.start() # Test Chat Messagebox
+	if '--testchat' in sys.argv: proc = Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)); proc.start() # Test Chat Messagebox
 	ui_root.mainloop()
