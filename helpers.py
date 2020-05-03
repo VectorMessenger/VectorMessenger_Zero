@@ -9,23 +9,18 @@ ICON_MAIN_PATH = './data/ico/main.ico'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
+DEF_CONNECTION = {'ip': '', 'port': 9263}
 
 STRINGS = {
 	'client': {
 		'title': f'Localhost Messenger (version: {VERSION})',
-		'config_source': {
-			'connection': {
-				'ip': '',
-				'port': 9263
-			}
+		'config_default': {
+			'connection': DEF_CONNECTION
 		}
 	},
 	'server': {
-		'config_source': {
-			'connection': {
-				'ip': '',
-				'port': 9263
-			}
+		'config_default': {
+			'connection': DEF_CONNECTION
 		}
 	}
 }
@@ -65,14 +60,14 @@ def lhm_config(conf_type: int, ui_log = None) -> bool:
 		cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
 		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); return False
 		with open(cfgserver_path, 'rt') as configFile:
-			config_data = STRINGS['client']['config_source']
+			config_data = STRINGS['client']['config_default']
 			json.dump(config_data, configFile, indent=4)
 	elif conf_type == 1:
 		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 		cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
 		if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); return False
 		with open(cfgclient_path, 'wt') as configFile:
-			config_data = STRINGS['client']['config_source']
+			config_data = STRINGS['client']['config_default']
 			json.dump(config_data, configFile, indent=4)
 		createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
 
