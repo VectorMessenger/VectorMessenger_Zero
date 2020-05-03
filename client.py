@@ -4,6 +4,7 @@ import sys, os
 import helpers as h
 from threading import Thread
 from datetime import datetime
+from time import sleep
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
@@ -51,12 +52,15 @@ class LHM_MainWindow:
 		"""
 		# Check if debug mode enabled and debug window exists
 		if '--debug' in sys.argv:
-			if self._debug_console_output.winfo_exists():
+			def _loggerThread(self, text):
+				while not hasattr(self, '_debug_console_output'): print('no var'); sleep(1)
+				if not self._debug_console_output.winfo_exists(): return False
 				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
 				self._debug_console_output.config(state=tkinter.NORMAL)
 				self._debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
 				self._debug_console_output.see(tkinter.END)
 				self._debug_console_output.config(state=tkinter.DISABLED)
+			Thread(target=_loggerThread, args=(self,text,)).start()
 
 if __name__ == '__main__':
 	# Init UI

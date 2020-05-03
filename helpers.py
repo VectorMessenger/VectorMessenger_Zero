@@ -13,10 +13,20 @@ CONFIG_CLIENT = 'config_client.json'
 STRINGS = {
 	'client': {
 		'title': f'Localhost Messenger (version: {VERSION})',
-		'config_source': {}
+		'config_source': {
+			'connection': {
+				'ip': '',
+				'port': 9263
+			}
+		}
 	},
 	'server': {
-		'config_source': {}
+		'config_source': {
+			'connection': {
+				'ip': '',
+				'port': 9263
+			}
+		}
 	}
 }
 
@@ -32,7 +42,7 @@ def createUniversalLog(text: str, ui_log = None):
 		ui_log {function} -- Log function (default: {None})
 	"""
 	if ui_log != None:
-		ui_log(str)
+		ui_log(text)
 	else:
 		print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
@@ -50,15 +60,21 @@ def lhm_config(conf_type: int, ui_log = None) -> bool:
 		bool -- True : config dir and file generated, False : config dir and file already exists
 	"""	
 
-	if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir')
 	if conf_type == 0:
-		pass
-	elif conf_type == 1:
-		cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
-		if os.path.isfile(cfgclient_path): return False
-		with open(cfgclient_path, 'rt') as configFile:
+		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir')
+		cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
+		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); return False
+		with open(cfgserver_path, 'rt') as configFile:
 			config_data = STRINGS['client']['config_source']
 			json.dump(config_data, configFile, indent=4)
+	elif conf_type == 1:
+		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
+		cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
+		if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); return False
+		with open(cfgclient_path, 'wt') as configFile:
+			config_data = STRINGS['client']['config_source']
+			json.dump(config_data, configFile, indent=4)
+		createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
 
 # ----- CLIENT -----
 # Debug Functions
