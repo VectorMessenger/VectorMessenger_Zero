@@ -60,7 +60,7 @@ class LHM_MainWindow:
 
 ui_root = tkinter.Tk()
 ui_root.geometry('600x700')
-ui_root.title(h.strings['title'])
+ui_root.title(h.strings['client']['title'])
 ui_root.iconbitmap(h.ICON_MAIN_PATH)
 ui_root.resizable(False, False)
 mainWindow = LHM_MainWindow(ui_root)
