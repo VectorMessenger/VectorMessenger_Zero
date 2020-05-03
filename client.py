@@ -31,6 +31,7 @@ class LHM_MainWindow:
 		self.chat_messages.insert(tkinter.END, text)
 		self.chat_messages.config(state=tkinter.DISABLED)
 		self.chat_messages.see(tkinter.END)
+		self.createLog('Message received')
 	
 	def showDebugConsole(self):
 		"""
@@ -51,15 +52,21 @@ class LHM_MainWindow:
 		"""
 		# Check if debug mode enabled and debug window exists
 		if '--debug' in sys.argv:
-			def _loggerThread(self, text):
-				while not hasattr(self, '_debug_console_output'): sleep(1)
+			def _log():
 				if not self._debug_console_output.winfo_exists(): return False
 				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
 				self._debug_console_output.config(state=tkinter.NORMAL)
 				self._debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
 				self._debug_console_output.see(tkinter.END)
 				self._debug_console_output.config(state=tkinter.DISABLED)
-			Thread(target=_loggerThread, args=(self,text,)).start()
+			def _loggerThread():
+				while not hasattr(self, '_debug_console_output'): sleep(1)
+				_log()
+
+			if not hasattr(self, '_debug_console_output'):
+				Thread(target=_loggerThread).start()
+			else:
+				_log()
 
 if __name__ == '__main__':
 	# Init UI
@@ -69,10 +76,9 @@ if __name__ == '__main__':
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.resizable(False, False)
 	mainWindow = LHM_MainWindow(ui_root)
-
-	# Config Check
+	
 	h.lhm_config(1, mainWindow.createLog)
-
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
-	if '--testchat' in sys.argv: proc = Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)); proc.start() # Test Chat Messagebox
+	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
+	if '--testchat-inf' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True,)).start()
 	ui_root.mainloop()

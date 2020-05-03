@@ -73,14 +73,27 @@ def lhm_config(conf_type: int, ui_log = None) -> bool:
 
 # ----- CLIENT -----
 # Debug Functions
-def _testChat(showMessageFNC, createLogFNC):
-	#Will test chat widget by sending test messages to it
+def _testChat(showMessageFNC, createLogFNC, infinite = False):
+	"""
+	Will test chat widget by sending test messages to it
+
+	Arguments:
+		showMessageFNC {function} -- Function for sending message to ui
+		createLogFNC {function} -- Function for actions logging
+
+	Keyword Arguments:
+		infinite {bool} -- Enable infinite messages test. If False then only 48 messages will be sent (default: {False})
+	"""
 
 	from time import sleep
-	createLogFNC('Messagebox test begin')
+	createLogFNC(f'Chat test begin. Infinite: {infinite}')
 	arrayMessage = ('test_0: Guys, Im testing this new chat app now.\n', 'test_34: Wow! Thats cool.\n', 'test_12: Hello world!\n', 'test_2: Why? Just... why?\n')
-	for i in range(48):	
+	i = 0
+	while True:
 		showMessageFNC(RChoice(arrayMessage))
-		createLogFNC('test message sent')
-		sleep(0.05)
-	createLogFNC('Messagebox test ended')
+		createLogFNC(f'test message{"" if infinite else " #" + str(i + 1)} sent')
+		sleep(0.001)
+		if not infinite:
+			i = i + 1
+			if i >= 48: return False
+	createLogFNC('Chat test ended')
