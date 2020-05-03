@@ -58,14 +58,18 @@ class LHM_MainWindow:
 				self._debug_console_output.see(tkinter.END)
 				self._debug_console_output.config(state=tkinter.DISABLED)
 
-ui_root = tkinter.Tk()
-ui_root.geometry('600x700')
-ui_root.title(h.strings['client']['title'])
-ui_root.iconbitmap(h.ICON_MAIN_PATH)
-ui_root.resizable(False, False)
-mainWindow = LHM_MainWindow(ui_root)
-
 if __name__ == '__main__':
+	# Init UI
+	ui_root = tkinter.Tk()
+	ui_root.geometry('600x700')
+	ui_root.title(h.STRINGS['client']['title'])
+	ui_root.iconbitmap(h.ICON_MAIN_PATH)
+	ui_root.resizable(False, False)
+	mainWindow = LHM_MainWindow(ui_root)
+
+	# Config Check
+	h.lhm_config(1, mainWindow.createLog)
+
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: proc = Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)); proc.start() # Test Chat Messagebox
 	ui_root.mainloop()
