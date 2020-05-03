@@ -53,7 +53,7 @@ class LHM_MainWindow:
 		# Check if debug mode enabled and debug window exists
 		if '--debug' in sys.argv:
 			def _loggerThread(self, text):
-				while not hasattr(self, '_debug_console_output'): print('no var'); sleep(1)
+				while not hasattr(self, '_debug_console_output'): sleep(1)
 				if not self._debug_console_output.winfo_exists(): return False
 				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
 				self._debug_console_output.config(state=tkinter.NORMAL)
