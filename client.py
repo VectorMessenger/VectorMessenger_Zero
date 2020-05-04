@@ -67,8 +67,11 @@ class LHM_MainWindow:
 		def _handleConsoleInput(e):
 			input_str = self.debug_console_input.get().lower()
 			if input_str == 'clear': self.debug_console_output.config(state=tkinter.NORMAL); self.debug_console_output.delete(1.0, tkinter.END)
+			elif input_str == 'clear-chat': self.chat_messages.config(state=tkinter.NORMAL); self.chat_messages.delete(1.0, tkinter.END); self.chat_messages.config(state=tkinter.NORMAL)
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
 			elif input_str == 'test-dark': self.refreshColorScheme(True)
+			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
+			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
 			self.debug_console_output.config(state=tkinter.DISABLED)
 			self.debug_console_input.delete(0, tkinter.END)
 
