@@ -10,11 +10,13 @@ CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
 DEF_CONNECTION = {'ip': '172.24.173.106', 'port': 9263}
+DEF_CLIENT_USERNAME = 'Anonymous'
 
 STRINGS = {
 	'client': {
 		'title': f'Localhost Messenger (version: {VERSION})',
 		'config_default': {
+			'username': DEF_CLIENT_USERNAME,
 			'connection': DEF_CONNECTION
 		}
 	},

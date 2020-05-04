@@ -1,3 +1,4 @@
 from Messenger import MessengerServer
 
-server = MessengerServer()
+if __name__ == '__main__':
+	server = MessengerServer()

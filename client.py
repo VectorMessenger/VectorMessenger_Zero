@@ -60,7 +60,7 @@ class LHM_MainWindow:
 				self._debug_console_output.see(tkinter.END)
 				self._debug_console_output.config(state=tkinter.DISABLED)
 			def _loggerThread():
-				while not hasattr(self, '_debug_console_output'): sleep(1)
+				while not hasattr(self, '_debug_console_output'): sleep(0.1)
 				_log()
 
 			if not hasattr(self, '_debug_console_output'):
@@ -71,7 +71,6 @@ class LHM_MainWindow:
 if __name__ == '__main__':
 	# Init UI
 	ui_root = tkinter.Tk()
-	ui_root.geometry('600x700')
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.resizable(False, False)
