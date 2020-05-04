@@ -69,8 +69,6 @@ class LHM_MainWindow:
 				_log()
 
 if __name__ == '__main__':
-	cfg = h.lhm_config(1, mainWindow.createLog)
-	
 	# Init UI
 	ui_root = tkinter.Tk()
 	ui_root.geometry('600x700')
@@ -78,6 +76,8 @@ if __name__ == '__main__':
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.resizable(False, False)
 	mainWindow = LHM_MainWindow(ui_root)
+	
+	cfg = h.lhm_config(1, mainWindow.createLog)
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
