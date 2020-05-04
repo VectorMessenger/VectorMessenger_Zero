@@ -15,16 +15,19 @@ class LHM_MainWindow:
 		self.chat_scroll = tkinter.Scrollbar(root, command=self.chat_messages.yview)
 		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
 
-		self.chat_messages.grid(column=0, row=0)
-		self.chat_scroll.grid(column=1,row=0, sticky=tkinter.NS)
+		self.chat_messages.grid(column=0, row=0, sticky="NSEW")
+		self.chat_scroll.grid(column=1,row=0, sticky="NSEW")
 
 		# Bottom
 		self.chat_message_input = tkinter.Entry(root, width=50) 
 		self.chat_btn_sendMessage = tkinter.Button(root, image=UI_SENDM)
 		self.chat_btn_sendMessage.image = UI_SENDM
 
-		self.chat_message_input.grid(column=0, row=1, pady=0, sticky=tkinter.W)
-		self.chat_btn_sendMessage.grid(column=1, row=1)
+		self.chat_message_input.grid(column=0, row=1, pady=10, sticky="EW")
+		self.chat_btn_sendMessage.grid(column=1, row=1, sticky="SE")
+		
+		root.columnconfigure(0, weight=1)
+		root.rowconfigure(0, weight=1)
 
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
@@ -42,8 +45,10 @@ class LHM_MainWindow:
 		ui_window = tkinter.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
+		ui_window.columnconfigure(0, weight=1)
+		ui_window.rowconfigure(0, weight=1)
 		self._debug_console_output = tkinter.Text(ui_window, width=ui_window.winfo_screenwidth(), bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
-		self._debug_console_output.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
+		self._debug_console_output.grid(column=0, row=0, sticky="NSEW")
 
 	def createLog(self, text: str):
 		"""
@@ -74,7 +79,7 @@ if __name__ == '__main__':
 	ui_root = tkinter.Tk()
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
-	#ui_root.resizable(False, False)
+	ui_root.minsize(width=600, height=700)
 	mainWindow = LHM_MainWindow(ui_root)
 	
 	cfg = h.lhm_config(1, mainWindow.createLog)

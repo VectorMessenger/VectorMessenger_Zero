@@ -1,10 +1,10 @@
+import os
 from datetime import datetime
 from random import choice as RChoice
-import os
 import json
 
 # CONSTS
-VERSION = f"dev#{datetime.now().strftime('%d%m%Y')}"
+VERSION = "#dev"
 ICON_MAIN_PATH = './data/ico/main.ico'
 ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
@@ -58,7 +58,7 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 		dict -- Returns config .json parsed to dict
 	"""
 	def _getConfigDict(path) -> dict:
-		with open(path) as f:
+		with open(path, 'rt') as f:
 			return json.load(f)
 
 	exist = False
@@ -67,7 +67,7 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 		cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
 		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
 		if not exist:
-			with open(cfgserver_path, 'rt') as configFile:
+			with open(cfgserver_path, 'wt') as configFile:
 				config_data = STRINGS['client']['config_default']
 				json.dump(config_data, configFile, indent=4)
 		return _getConfigDict(cfgserver_path)
