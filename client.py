@@ -8,22 +8,23 @@ from time import sleep
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
-		# Top Frame
-		self.frame_top = tkinter.Frame(root)
-		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
-		self.chat_scroll = tkinter.Scrollbar(self.frame_top, command=self.chat_messages.yview)
-		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
-		self.frame_top.pack(side=tkinter.TOP, fill=tkinter.BOTH)
-		self.chat_messages.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
-		self.chat_scroll.pack(side=tkinter.LEFT, fill=tkinter.Y)
+		UI_SENDM = tkinter.PhotoImage(file=h.ICON_SEND_MESSAGE)
 
-		# Bottom Frame
-		self.frame_bottom = tkinter.Frame(root)
-		self.chat_message_input = tkinter.Entry(self.frame_bottom, width=60)
-		self.chat_btn_sendMessage = tkinter.Button(self.frame_bottom, text='Send')
-		self.frame_bottom.pack(side=tkinter.TOP)
-		self.chat_message_input.pack(side=tkinter.LEFT)
-		self.chat_btn_sendMessage.pack(side=tkinter.LEFT)
+		# Top
+		self.chat_messages = tkinter.Text(root, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
+		self.chat_scroll = tkinter.Scrollbar(root, command=self.chat_messages.yview)
+		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
+
+		self.chat_messages.grid(column=0, row=0)
+		self.chat_scroll.grid(column=1,row=0, sticky=tkinter.NS)
+
+		# Bottom
+		self.chat_message_input = tkinter.Entry(root, width=50) 
+		self.chat_btn_sendMessage = tkinter.Button(root, image=UI_SENDM)
+		self.chat_btn_sendMessage.image = UI_SENDM
+
+		self.chat_message_input.grid(column=0, row=1, pady=0, sticky=tkinter.W)
+		self.chat_btn_sendMessage.grid(column=1, row=1)
 
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
@@ -73,7 +74,7 @@ if __name__ == '__main__':
 	ui_root = tkinter.Tk()
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
-	ui_root.resizable(False, False)
+	#ui_root.resizable(False, False)
 	mainWindow = LHM_MainWindow(ui_root)
 	
 	cfg = h.lhm_config(1, mainWindow.createLog)

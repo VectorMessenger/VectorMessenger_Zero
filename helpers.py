@@ -6,6 +6,7 @@ import json
 # CONSTS
 VERSION = f"dev#{datetime.now().strftime('%d%m%Y')}"
 ICON_MAIN_PATH = './data/ico/main.ico'
+ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
