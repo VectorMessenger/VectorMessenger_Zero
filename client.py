@@ -34,7 +34,6 @@ class LHM_MainWindow:
 		self.frame_bot.columnconfigure(0, weight=1)
 		self.frame_bot.rowconfigure(0, weight=0)
 
-
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
@@ -46,39 +45,80 @@ class LHM_MainWindow:
 		self.chat_messages.see(tkinter.END)
 		self.createLog('Message received')
 	
+	def refreshColorScheme(self, testDarkTheme = False):
+		""" Will refresh color theme from json config file """
+		cfg = h.getLHMConfigDict(os.path.join(h.CONFIG_DIR, h.CONFIG_CLIENT))
+		if len(cfg) > 0:
+			selected_theme = cfg['ui']['theme_selected']
+			if selected_theme == 'dark' or testDarkTheme:
+				#TODO: Finish dark theme for all widgets
+				colors_dark = cfg['ui']['theme_dark']
+				self.frame_top.config(bg=colors_dark['frame_bg'])
+				self.chat_messages.config(bg=colors_dark['chat_bg'], fg=colors_dark['text'])
+				self.chat_message_input.config(bg=colors_dark['message_input_bg'], fg=colors_dark['text'])
+		else: del(cfg); self.createLog('Cant refresh color theme -> config file was not found.')
+	
 	def showDebugConsole(self):
 		"""
 		Show in-app console with actions logs.
 		To create log - use createLog() function
 		"""
+
+		def _handleConsoleInput(e):
+			input_str = self.debug_console_input.get().lower()
+			if input_str == 'clear': self.debug_console_output.config(state=tkinter.NORMAL); self.debug_console_output.delete(1.0, tkinter.END)
+			elif input_str == 'refresh-theme': self.refreshColorScheme()
+			elif input_str == 'test-dark': self.refreshColorScheme(True)
+			self.debug_console_output.config(state=tkinter.DISABLED)
+			self.debug_console_input.delete(0, tkinter.END)
+
 		ui_window = tkinter.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
 		ui_window.columnconfigure(0, weight=1)
 		ui_window.rowconfigure(0, weight=1)
-		self._debug_console_output = tkinter.Text(ui_window, bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
-		self._debug_console_output.grid(column=0, row=0, sticky="NSEW")
+
+		# Top
+		self.debug_console_FTop = tkinter.Frame(ui_window)
+		self.debug_console_FTop.columnconfigure(0, weight=1)
+		self.debug_console_FTop.rowconfigure(0, weight=1)
+		self.debug_console_output = tkinter.Text(self.debug_console_FTop, bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
+		self.debug_console_scrollbar = tkinter.Scrollbar(self.debug_console_FTop, command=self.debug_console_output.yview)
+		self.debug_console_output.config(yscrollcommand=self.debug_console_scrollbar.set)
+		self.debug_console_FTop.grid(column=0, row=0, sticky="NSEW")
+		self.debug_console_output.grid(column=0, row=0, sticky="NSEW")
+		self.debug_console_scrollbar.grid(column=1, row=0, sticky="NS")
+		
+		# Bottom
+		self.debug_console_FBot = tkinter.Frame(ui_window)
+		self.debug_console_FBot.columnconfigure(0, weight=1)
+		self.debug_console_FBot.rowconfigure(0, weight=1)
+		self.debug_console_input = tkinter.Entry(self.debug_console_FBot, bg='#303030', fg='white', font='Consolas 10')
+		self.debug_console_input.bind('<Return>', _handleConsoleInput)
+		self.debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
+		self.debug_console_input.grid(column=0, row=0, sticky="EW")
 
 	def createLog(self, text: str):
 		"""
-		Will add log to debug console UI
+		Will create log to ui
 
-		ui_console: Output message ui. Default = linked to lhm_debug_console_output in globals()
+		Arguments:
+			text {str} -- Info to log
 		"""
 		# Check if debug mode enabled and debug window exists
 		if '--debug' in sys.argv:
 			def _log():
-				if not self._debug_console_output.winfo_exists(): return False
+				if not self.debug_console_output.winfo_exists(): return False
 				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
-				self._debug_console_output.config(state=tkinter.NORMAL)
-				self._debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
-				self._debug_console_output.see(tkinter.END)
-				self._debug_console_output.config(state=tkinter.DISABLED)
+				self.debug_console_output.config(state=tkinter.NORMAL)
+				self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
+				self.debug_console_output.see(tkinter.END)
+				self.debug_console_output.config(state=tkinter.DISABLED)
 			def _loggerThread():
-				while not hasattr(self, '_debug_console_output'): sleep(0.1)
+				while not hasattr(self, 'debug_console_output'): sleep(0.1)
 				_log()
 
-			if not hasattr(self, '_debug_console_output'):
+			if not hasattr(self, 'debug_console_output'):
 				Thread(target=_loggerThread).start()
 			else:
 				_log()
@@ -88,7 +128,7 @@ if __name__ == '__main__':
 	ui_root = tkinter.Tk()
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
-	ui_root.minsize(width=600, height=700)
+	ui_root.minsize(width=100, height=100)
 	mainWindow = LHM_MainWindow(ui_root)
 	
 	cfg = h.lhm_config(1, mainWindow.createLog)

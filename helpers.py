@@ -10,20 +10,30 @@ ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
-DEF_CONNECTION = {'ip': '172.24.173.106', 'port': 9263}
-DEF_CLIENT_USERNAME = 'Anonymous'
+DEF_CONNECTION_DICT = {'ip': '172.24.173.106', 'port': 9263}
 
 STRINGS = {
 	'client': {
 		'title': f'Localhost Messenger (version: {VERSION})',
 		'config_default': {
-			'username': DEF_CLIENT_USERNAME,
-			'connection': DEF_CONNECTION
+			'username': 'Anonymous',
+			'version': VERSION,
+			'connection': DEF_CONNECTION_DICT,
+			'ui': {
+				'theme_selected': 'light',
+				'theme_dark': {
+					'text': '#ffffff',
+					'frame_bg': '#181818',
+					'chat_bg': '#202020',
+					'message_input_bg': '#202020'
+				}
+			}
 		}
 	},
 	'server': {
 		'config_default': {
-			'connection': DEF_CONNECTION
+			'version': VERSION,
+			'connection': DEF_CONNECTION_DICT
 		}
 	}
 }
@@ -44,6 +54,22 @@ def createUniversalLog(text: str, ui_log = None):
 	else:
 		print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
+def getLHMConfigDict(path: str) -> dict:
+	"""
+	Get the LHM .json config as dict
+
+	Arguments:
+		path {str} -- Path to .json config
+
+	Returns:
+		dict -- Formatted .json as dict. __len__() == 0 if json not found.
+	"""
+	if os.path.isfile(path):
+		with open(path, 'rt') as f:
+			return json.load(f)
+	else:
+		return {}
+
 def lhm_config(conf_type: int, ui_log = None) -> dict:
 	"""
 	Checks for .json config files existance and creates a new one if not exist
@@ -57,9 +83,6 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 	Returns:
 		dict -- Returns config .json parsed to dict
 	"""
-	def _getConfigDict(path) -> dict:
-		with open(path, 'rt') as f:
-			return json.load(f)
 
 	exist = False
 	if conf_type == 0:
@@ -68,9 +91,9 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 		if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
 		if not exist:
 			with open(cfgserver_path, 'wt') as configFile:
-				config_data = STRINGS['client']['config_default']
+				config_data = STRINGS['server']['config_default']
 				json.dump(config_data, configFile, indent=4)
-		return _getConfigDict(cfgserver_path)
+		return getLHMConfigDict(cfgserver_path)
 	elif conf_type == 1:
 		if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 		cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
@@ -80,7 +103,7 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 				config_data = STRINGS['client']['config_default']
 				json.dump(config_data, configFile, indent=4)
 			createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
-		return _getConfigDict(cfgclient_path)
+		return getLHMConfigDict(cfgclient_path)
 
 # ----- CLIENT -----
 # Debug Functions
