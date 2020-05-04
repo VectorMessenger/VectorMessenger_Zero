@@ -77,7 +77,7 @@ if __name__ == '__main__':
 	ui_root.title(h.STRINGS['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.resizable(False, False)
-	mainWindow = LHM_MainWindow(ui_root, cfg)
+	mainWindow = LHM_MainWindow(ui_root)
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
