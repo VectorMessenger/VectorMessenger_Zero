@@ -11,21 +11,30 @@ class LHM_MainWindow:
 		UI_SENDM = tkinter.PhotoImage(file=h.ICON_SEND_MESSAGE)
 
 		# Top
-		self.chat_messages = tkinter.Text(root, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
-		self.chat_scroll = tkinter.Scrollbar(root, command=self.chat_messages.yview)
+		self.frame_top = tkinter.Frame(root)
+		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
+		self.chat_scroll = tkinter.Scrollbar(self.frame_top, command=self.chat_messages.yview)
 		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
 
+		self.frame_top.grid(column=0, row=0, sticky="NSEW")
 		self.chat_messages.grid(column=0, row=0, sticky="NSEW")
-		self.chat_scroll.grid(column=1,row=0, sticky="NSEW")
+		self.chat_scroll.grid(column=1,row=0, sticky="NS")
+		self.frame_top.columnconfigure(0, weight=1)
+		self.frame_top.rowconfigure(0, weight=1)
 
 		# Bottom
-		self.chat_message_input = tkinter.Entry(root, width=50) 
-		self.chat_btn_sendMessage = tkinter.Button(root, image=UI_SENDM)
+		self.frame_bot = tkinter.Frame(root)
+		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
+		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, image=UI_SENDM)
 		self.chat_btn_sendMessage.image = UI_SENDM
 
-		self.chat_message_input.grid(column=0, row=1, pady=10, sticky="EW")
-		self.chat_btn_sendMessage.grid(column=1, row=1, sticky="SE")
-		
+		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
+		self.chat_message_input.grid(column=0, row=0, sticky="EW")
+		self.chat_btn_sendMessage.grid(column=1, row=0, sticky="SE")
+		self.frame_bot.columnconfigure(0, weight=1)
+		self.frame_bot.rowconfigure(0, weight=0)
+
+
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
@@ -47,7 +56,7 @@ class LHM_MainWindow:
 		ui_window.title('Debug Console')
 		ui_window.columnconfigure(0, weight=1)
 		ui_window.rowconfigure(0, weight=1)
-		self._debug_console_output = tkinter.Text(ui_window, width=ui_window.winfo_screenwidth(), bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
+		self._debug_console_output = tkinter.Text(ui_window, bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
 		self._debug_console_output.grid(column=0, row=0, sticky="NSEW")
 
 	def createLog(self, text: str):
