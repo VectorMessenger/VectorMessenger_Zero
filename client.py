@@ -1,7 +1,8 @@
+import helpers as h
+import Messenger
 import tkinter
 import Messenger
 import sys, os
-import helpers as h
 from threading import Thread
 from datetime import datetime
 from time import sleep
@@ -72,6 +73,7 @@ class LHM_MainWindow:
 			elif input_str == 'test-dark': self.refreshColorScheme(True)
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
+			elif input_str.startswith('test-xor'): input_str=input_str[9:]; self.createLog(f'\tResult of XOR cipher: <' + Messenger.MessengerBase.MCrypt(input_str) + ' >', False); self.createLog(f'\tOriginal input: < {input_str} >', False)
 			self.debug_console_output.config(state=tkinter.DISABLED)
 			self.debug_console_input.delete(0, tkinter.END)
 
@@ -96,23 +98,24 @@ class LHM_MainWindow:
 		self.debug_console_FBot = tkinter.Frame(ui_window)
 		self.debug_console_FBot.columnconfigure(0, weight=1)
 		self.debug_console_FBot.rowconfigure(0, weight=1)
-		self.debug_console_input = tkinter.Entry(self.debug_console_FBot, bg='#303030', fg='white', font='Consolas 10')
+		self.debug_console_input = tkinter.Entry(self.debug_console_FBot, bg='#303030', fg='#00fa00', font='Consolas 10')
 		self.debug_console_input.bind('<Return>', _handleConsoleInput)
 		self.debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
 		self.debug_console_input.grid(column=0, row=0, sticky="EW")
 
-	def createLog(self, text: str):
+	def createLog(self, text: str, addTime = True):
 		"""
 		Will create log to ui
 
 		Arguments:
 			text {str} -- Info to log
+			addTime {bool} -- True - add time to log string, False - time will be replaced with ">"
 		"""
 		# Check if debug mode enabled and debug window exists
 		if '--debug' in sys.argv:
 			def _log():
 				if not self.debug_console_output.winfo_exists(): return False
-				formatted_log = f'[{datetime.now().strftime("%H:%M:%S:%f")}] : {text}'
+				formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
 				self.debug_console_output.config(state=tkinter.NORMAL)
 				self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
 				self.debug_console_output.see(tkinter.END)

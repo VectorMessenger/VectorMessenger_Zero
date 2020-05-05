@@ -7,13 +7,13 @@ class MessengerBase():
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	@staticmethod
-	def MCrypt(text: str, key: int) -> str:
+	def MCrypt(text: str, key = 12345) -> str:
 		"""
 		Message encryptor/decryptor based on XOR cipher
 
 		Arguments:
 			text {str} -- Text to commit actions on
-			key {int} -- Key for cipher
+			key {int} -- Key for cipher (default: 12345)
 
 		Returns:
 			str -- Result of actions
