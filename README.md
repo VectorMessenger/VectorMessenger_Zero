@@ -19,3 +19,5 @@ Simple python-based ui application for global chatting in your local network.
 | `test-chat`      | Run chat widget test by sending messages to it (only 48 messages)   |
 | `test-chat-inf`  | Run chat widget test by sending messages to it (inifinite messages) |
 | `test-xor {str}` | Test XOR cipher and show the result to debug console                |
+
+Note, that all commands are <ins>case sensitive</ins>!

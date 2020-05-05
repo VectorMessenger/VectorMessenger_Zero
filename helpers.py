@@ -10,7 +10,7 @@ ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
-DEF_CONNECTION_DICT = {'ip': '172.24.173.106', 'port': 9263}
+DEF_CONNECTION_DICT = {'ip': 'localhost', 'port': 9263}
 
 STRINGS = {
 	'client': {
