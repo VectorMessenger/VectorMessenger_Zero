@@ -75,6 +75,7 @@ class LHM_MainWindow:
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
 			elif input_str.startswith('test-xor'): input_str=input_str[9:]; self.createLog(f'\tOriginal input: <  {input_str} >', False); msg =  Messenger.MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg =  Messenger.MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
+			else: self.createLog('ERROR: Command doesnt exist', False)
 			self.debug_console_output.config(state=tkinter.DISABLED)
 			self.debug_console_input.delete(0, tkinter.END)
 

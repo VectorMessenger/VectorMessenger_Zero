@@ -102,7 +102,7 @@ def lhm_config(conf_type: int, ui_log = None) -> dict:
 			with open(cfgclient_path, 'wt') as configFile:
 				config_data = STRINGS['client']['config_default']
 				json.dump(config_data, configFile, indent=4)
-			createUniversalLog(f'Config file successfully generated < {cfgclient_path} >', ui_log)
+			createUniversalLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >', ui_log)
 		return getLHMConfigDict(cfgclient_path)
 
 # ----- CLIENT -----
