@@ -64,6 +64,7 @@ class LHM_MainWindow:
 		Show in-app console with actions logs.
 		To create log - use createLog() function
 		"""
+		if hasattr(self, 'debug_console_showing'): return False
 
 		def _handleConsoleInput(e):
 			input_str = self.debug_console_input.get().lower()
@@ -77,9 +78,14 @@ class LHM_MainWindow:
 			self.debug_console_output.config(state=tkinter.DISABLED)
 			self.debug_console_input.delete(0, tkinter.END)
 
+		def _onClose(window, obj):
+			delattr(obj, 'debug_console_showing')
+			window.destroy()
+
 		ui_window = tkinter.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
+		ui_window.protocol('WM_DELETE_WINDOW', lambda window=ui_window, obj=self: _onClose(window, obj))
 		ui_window.columnconfigure(0, weight=1)
 		ui_window.rowconfigure(0, weight=1)
 
@@ -102,6 +108,8 @@ class LHM_MainWindow:
 		self.debug_console_input.bind('<Return>', _handleConsoleInput)
 		self.debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
 		self.debug_console_input.grid(column=0, row=0, sticky="EW")
+
+		self.debug_console_showing = True
 
 	def createLog(self, text: str, addTime = True):
 		"""
