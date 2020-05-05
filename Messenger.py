@@ -6,6 +6,23 @@ class MessengerBase():
 	def __init__(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+	@staticmethod
+	def MCrypt(text: str, key: int) -> str:
+		"""
+		Message encryptor/decryptor based on XOR cipher
+
+		Arguments:
+			text {str} -- Text to commit actions on
+			key {int} -- Key for cipher
+
+		Returns:
+			str -- Result of actions
+		"""
+		result = str()
+		for char in text:
+			result += chr(ord(char)^key)
+		return result
+
 class MessengerServer(MessengerBase):
 	def __init__(self):
 		super().__init__()
@@ -19,7 +36,7 @@ class MessengerServer(MessengerBase):
 			h.createUniversalLog(f'Receiving data from < {addres[0]}:{addres[1]} >')
 			if addres not in self.clients:
 				self.clients.append(addres)
-				h.createUniversalLog('\tThis is new address, adding to [clients] var')
+				h.createUniversalLog('\t-> New address, adding to [clients] var')
 			for client in self.clients:
 				self.sock.sendto(data, client)
 
