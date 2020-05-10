@@ -9,8 +9,6 @@ from time import sleep
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
-		UI_SENDM = tkinter.PhotoImage(file=h.ICON_SEND_MESSAGE)
-
 		# Top
 		self.frame_top = tkinter.Frame(root)
 		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
@@ -26,11 +24,10 @@ class LHM_MainWindow:
 		# Bottom
 		self.frame_bot = tkinter.Frame(root)
 		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
-		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, image=UI_SENDM)
-		self.chat_btn_sendMessage.image = UI_SENDM
+		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20)
 
 		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
-		self.chat_message_input.grid(column=0, row=0, sticky="EW")
+		self.chat_message_input.grid(column=0, row=0, sticky="NSEW")
 		self.chat_btn_sendMessage.grid(column=1, row=0, sticky="SE")
 		self.frame_bot.columnconfigure(0, weight=1)
 		self.frame_bot.rowconfigure(0, weight=0)
@@ -46,17 +43,19 @@ class LHM_MainWindow:
 		self.chat_messages.see(tkinter.END)
 		self.createLog('Message received')
 	
-	def refreshColorScheme(self, testDarkTheme = False):
+	def refreshColorScheme(self, forceDarkTheme = False):
 		""" Will refresh color theme from json config file """
 		cfg = h.getLHMConfigDict(os.path.join(h.CONFIG_DIR, h.CONFIG_CLIENT))
 		if len(cfg) > 0:
 			selected_theme = cfg['ui']['theme_selected']
-			if selected_theme == 'dark' or testDarkTheme:
+			if selected_theme == 'dark' or forceDarkTheme:
 				#TODO: Finish dark theme for all widgets
 				colors_dark = cfg['ui']['theme_dark']
 				self.frame_top.config(bg=colors_dark['frame_bg'])
 				self.chat_messages.config(bg=colors_dark['chat_bg'], fg=colors_dark['text'])
+				self.frame_bot.config(bg=colors_dark['chat_bg'])
 				self.chat_message_input.config(bg=colors_dark['message_input_bg'], fg=colors_dark['text'])
+				self.chat_btn_sendMessage.config(bg=colors_dark['buttond_send_bg'], fg=colors_dark['buttond_send_fg'])
 		else: del(cfg); self.createLog('Cant refresh color theme -> config file was not found.')
 	
 	def showDebugConsole(self):
@@ -68,14 +67,23 @@ class LHM_MainWindow:
 
 		def _handleConsoleInput(e):
 			input_str = self.debug_console_input.get()
-			if input_str == 'clear': self.debug_console_output.config(state=tkinter.NORMAL); self.debug_console_output.delete(1.0, tkinter.END)
-			elif input_str == 'clear-chat': self.chat_messages.config(state=tkinter.NORMAL); self.chat_messages.delete(1.0, tkinter.END); self.chat_messages.config(state=tkinter.NORMAL)
+			if input_str == 'clear': 
+				self.debug_console_output.config(state=tkinter.NORMAL)
+				self.debug_console_output.delete(1.0, tkinter.END)
+				self.debug_console_output.config(state=tkinter.DISABLED)
+			elif input_str == 'clear-chat':
+				self.chat_messages.config(state=tkinter.NORMAL)
+				self.chat_messages.delete(1.0, tkinter.END)
+				self.chat_messages.config(state=tkinter.DISABLED)
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
 			elif input_str == 'test-dark': self.refreshColorScheme(True)
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
-			elif input_str.startswith('test-xor'): input_str=input_str[9:]; self.createLog(f'\tOriginal input: <  {input_str} >', False); msg =  Messenger.MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg =  Messenger.MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
-			self.debug_console_output.config(state=tkinter.DISABLED)
+			elif input_str.startswith('test-xor'):
+				input_str=input_str[9:]
+				self.createLog(f'\tOriginal input: <  {input_str} >', False)
+				msg =  Messenger.MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg =  Messenger.MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
+			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)
 
 		def _onClose(window, obj):

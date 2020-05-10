@@ -24,8 +24,10 @@ STRINGS = {
 				'theme_dark': {
 					'text': '#ffffff',
 					'frame_bg': '#181818',
-					'chat_bg': '#202020',
-					'message_input_bg': '#202020'
+					'chat_bg': '#303030',
+					'message_input_bg': '#252525',
+					'buttond_send_bg': '#303030',
+					'buttond_send_fg': '#ffffff'
 				}
 			}
 		}
