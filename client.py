@@ -9,6 +9,13 @@ from time import sleep
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
+		# Title Menu
+		self.HM_Root = tkinter.Menu(root)
+		root.configure(menu=self.HM_Root)
+		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
+		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
+		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
+
 		# Top
 		self.frame_top = tkinter.Frame(root)
 		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
@@ -127,23 +134,22 @@ class LHM_MainWindow:
 			text {str} -- Info to log
 			addTime {bool} -- True - add time to log string, False - time will be replaced with ">"
 		"""
-		# Check if debug mode enabled and debug window exists
-		if '--debug' in sys.argv:
-			def _log():
-				if not self.debug_console_output.winfo_exists(): return False
-				formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
-				self.debug_console_output.config(state=tkinter.NORMAL)
-				self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
-				self.debug_console_output.see(tkinter.END)
-				self.debug_console_output.config(state=tkinter.DISABLED)
-			def _loggerThread():
-				while not hasattr(self, 'debug_console_output'): sleep(0.1)
-				_log()
+		# Check if debug window exists
+		def _log():
+			if not self.debug_console_output.winfo_exists(): return False
+			formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
+			self.debug_console_output.config(state=tkinter.NORMAL)
+			self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
+			self.debug_console_output.see(tkinter.END)
+			self.debug_console_output.config(state=tkinter.DISABLED)
+		def _loggerThread():
+			while not hasattr(self, 'debug_console_output'): sleep(0.1)
+			_log()
 
-			if not hasattr(self, 'debug_console_output'):
-				Thread(target=_loggerThread).start()
-			else:
-				_log()
+		if not hasattr(self, 'debug_console_output'):
+			Thread(target=_loggerThread).start()
+		else:
+			_log()
 
 if __name__ == '__main__':
 	# Init UI
