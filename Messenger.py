@@ -44,13 +44,18 @@ class MessengerClient(MessengerBase):
 	def __init__(self, lhm_client_ui = None):
 		super().__init__()
 		self.cfg = h.lhm_config(1)
+		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
-		self.messagePooling = Thread(target=self._messagePoolingThread)
-		self.messagePooling.start()
+		self.messagePollingThread = Thread(target=self.messagePolling, args=(lhm_client_ui,))
+		self.messagePollingThread.start()
 	
-	def _messagePoolingThread(self):
+	def messagePolling(self, lhm_client_ui):
+		lhm_client_ui.createLog('Polling thread status: active')
 		while True:
 			data = self.sock.recv(1024)
 			msg = data.decode('utf-8')
-			print(msg)
-			#TODO: Output to ui
+			lhm_client_ui.showMessage(msg)
+			lhm_client_ui.createLog('Received message')
+
+	def sendMessage(self, text: str):
+		self.sock.send(bytes(text, 'utf-8'))

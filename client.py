@@ -1,7 +1,6 @@
 import helpers as h
-import Messenger
+from Messenger import MessengerClient, MessengerBase
 import tkinter
-import Messenger
 import sys, os
 from threading import Thread
 from datetime import datetime
@@ -31,7 +30,7 @@ class LHM_MainWindow:
 		# Bottom
 		self.frame_bot = tkinter.Frame(root)
 		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
-		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20)
+		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, command=self.sendMessage)
 
 		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
 		self.chat_message_input.grid(column=0, row=0, sticky="NSEW")
@@ -42,6 +41,9 @@ class LHM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
+		# Messenger Core
+		self.messenger = MessengerClient(self)
+
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
 		self.chat_messages.config(state=tkinter.NORMAL)
@@ -49,6 +51,9 @@ class LHM_MainWindow:
 		self.chat_messages.config(state=tkinter.DISABLED)
 		self.chat_messages.see(tkinter.END)
 		self.createLog('Message received')
+	
+	def sendMessage(self):
+		self.messenger.sendMessage(self.chat_message_input.get())
 	
 	def refreshColorScheme(self, forceDarkTheme = False):
 		""" Will refresh color theme from json config file """
@@ -89,7 +94,7 @@ class LHM_MainWindow:
 			elif input_str.startswith('test-xor'):
 				input_str=input_str[9:]
 				self.createLog(f'\tOriginal input: <  {input_str} >', False)
-				msg =  Messenger.MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg =  Messenger.MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
+				msg = MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
 			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)
 
