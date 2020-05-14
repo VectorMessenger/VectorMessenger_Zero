@@ -4,16 +4,23 @@ import tkinter
 import sys, os
 from threading import Thread
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
-		# Title Menu
+
+		self._time_start = time()
+
+		# Header Menu
 		self.HM_Root = tkinter.Menu(root)
 		root.configure(menu=self.HM_Root)
+		self.HM_Theme = tkinter.Menu(self.HM_Root, tearoff=0)
+		self.HM_Root.add_cascade(label='Theme', menu=self.HM_Theme)
+		self.HM_Theme.add_command(label='Light', state=tkinter.DISABLED)
+		self.HM_Theme.add_command(label='Dark', state=tkinter.DISABLED)
 		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
-		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
+		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
 
 		# Top
 		self.frame_top = tkinter.Frame(root)
@@ -40,9 +47,6 @@ class LHM_MainWindow:
 
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
-
-		# UI Theme Refresh
-		self.refreshColorScheme()
 
 		# Messenger Core
 		self.messenger = MessengerClient(self)
@@ -156,7 +160,8 @@ class LHM_MainWindow:
 			while not hasattr(self, 'debug_console_output'): sleep(0.1)
 			_log()
 
-		if not hasattr(self, 'debug_console_output'):
+		passed_time = time() - self._time_start
+		if not hasattr(self, 'debug_console_output') and passed_time <= 5.0:
 			Thread(target=_loggerThread).start()
 		else:
 			_log()
@@ -170,6 +175,7 @@ if __name__ == '__main__':
 	mainWindow = LHM_MainWindow(ui_root)
 	
 	cfg = h.LHMConfig.init(1, mainWindow.createLog)
+	mainWindow.refreshColorScheme()
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
