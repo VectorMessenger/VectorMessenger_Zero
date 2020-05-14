@@ -38,6 +38,8 @@ class MessengerServer(MessengerBase):
 				self.clients.append(addres)
 				h.createUniversalLog('\t-> New address, adding to [clients] var')
 			for client in self.clients:
+				# Send message to all clients
+				# TODO: Add client existence check before sending
 				self.sock.sendto(data, client)
 
 class MessengerClient(MessengerBase):
