@@ -67,21 +67,39 @@ def createUniversalLog(text: str, ui_log = None):
 # Global Classes
 class LHMConfig:
 	@staticmethod
-	def get(path: str) -> dict:
+	def get(conf_type: int) -> dict:
 		"""
 		Get the LHM .json config as dict
 
 		Arguments:
-			path {str} -- Path to .json config
+			conf_type {int} -- Type of config file (0 - Server, 1 - Client)
 
 		Returns:
 			dict -- Formatted .json as dict. __len__() == 0 if json not found.
 		"""
+		cfg_path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
+		path = os.path.join(CONFIG_DIR, cfg_path)
 		if os.path.isfile(path):
 			with open(path, 'rt') as f:
 				return json.load(f)
 		else:
 			return {}
+	
+	@staticmethod
+	def write(cfg: dict, conf_type = 1):
+		"""
+		Update json values from dict
+
+		Arguments:
+			cfg {dict} -- python dict to update from
+
+		Keyword Arguments:
+			conf_type {int} -- Type of config file (0 - Server, 1 - Client)
+		"""
+		cfg_path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
+		path = os.path.join(CONFIG_DIR, cfg_path)
+		with open(path, 'wt') as configFile:
+			json.dump(cfg, configFile, indent=4)
 
 	@classmethod
 	def init(cls, conf_type: int, ui_log = None) -> dict:
@@ -104,18 +122,14 @@ class LHMConfig:
 			cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
 			if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
 			if not exist:
-				with open(cfgserver_path, 'wt') as configFile:
-					config_data = APPDICT['server']['config_default']
-					json.dump(config_data, configFile, indent=4)
+				cls.write(APPDICT['server']['config_default'], conf_type)
 			return cls.get(cfgserver_path)
 		elif conf_type == 1:
 			if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 			cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
 			if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); exist = True
 			if not exist:
-				with open(cfgclient_path, 'wt') as configFile:
-					config_data = APPDICT['client']['config_default']
-					json.dump(config_data, configFile, indent=4)
+				cls.write(APPDICT['client']['config_default'], conf_type)
 				createUniversalLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >', ui_log)
 			return cls.get(cfgclient_path)
 

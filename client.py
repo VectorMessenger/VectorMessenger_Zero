@@ -62,7 +62,7 @@ class LHM_MainWindow:
 	def sendMessage(self):
 		self.messenger.sendMessage(self.chat_message_input.get())
 	
-	def refreshColorScheme(self, forceDarkTheme = False):
+	def refreshColorScheme(self):
 		""" Will refresh color theme from json config file """
 		def _updateThemeFromDict(theme: dict):
 			self.frame_top.config(bg=theme['frame_bg'])
@@ -71,13 +71,27 @@ class LHM_MainWindow:
 			self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
 			self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
 
-		cfg = h.LHMConfig.get(os.path.join(h.CONFIG_DIR, h.CONFIG_CLIENT))
+		cfg = h.LHMConfig.get(1)
 		if len(cfg) > 0:
 			selected_theme = cfg['ui']['theme_' + cfg['ui']['theme_selected']]
 			_updateThemeFromDict(selected_theme)
 		else:
 			self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
 			_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
+
+	def setColorScheme(self, mode: int):
+		"""
+		Set color scheme to selected mode
+
+		Arguments:
+			mode {int} -- Theme type (0 - light, 1 - dark, 3 (#todo) - custom)
+		"""
+		cfg = h.LHMConfig.get(1)
+		theme = 'light' if mode == 0 else 'dark'
+		cfg['ui']['theme_selected'] = theme
+		h.LHMConfig.write(cfg, 1)
+		self.createLog(f'UI Theme set to {theme}')
+		self.refreshColorScheme()
 	
 	def showDebugConsole(self):
 		"""
@@ -97,7 +111,6 @@ class LHM_MainWindow:
 				self.chat_messages.delete(1.0, tkinter.END)
 				self.chat_messages.config(state=tkinter.DISABLED)
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
-			elif input_str == 'test-dark': self.refreshColorScheme(True)
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
 			elif input_str.startswith('test-xor'):
@@ -174,7 +187,7 @@ if __name__ == '__main__':
 	ui_root.minsize(width=100, height=100)
 	mainWindow = LHM_MainWindow(ui_root)
 	
-	cfg = h.LHMConfig.init(1, mainWindow.createLog)
+	h.LHMConfig.init(1, mainWindow.createLog)
 	mainWindow.refreshColorScheme()
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
