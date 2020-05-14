@@ -1,7 +1,8 @@
 from cx_Freeze import setup, Executable
+import helpers
 
 executables = [
-	Executable('client.py', targetName='LHM Client', base='Win32GUI', icon='./data/ico/main.ico'),
+	Executable('client.py', targetName='LHM Client', base='Win32GUI', icon=helpers.ICON_MAIN_PATH),
 	Executable('server.py', targetName='LHM Server', base=None)
 ]
 
@@ -20,7 +21,6 @@ options = {
 }
 
 setup(name='LocalhostMessenger',
-    version='0.1',
     description='',
 	executables=executables,
     options=options)

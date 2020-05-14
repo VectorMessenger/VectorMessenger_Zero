@@ -41,6 +41,9 @@ class LHM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
+		# UI Theme Refresh
+		self.refreshColorScheme()
+
 		# Messenger Core
 		self.messenger = MessengerClient(self)
 
@@ -57,18 +60,20 @@ class LHM_MainWindow:
 	
 	def refreshColorScheme(self, forceDarkTheme = False):
 		""" Will refresh color theme from json config file """
-		cfg = h.getLHMConfigDict(os.path.join(h.CONFIG_DIR, h.CONFIG_CLIENT))
+		def _updateThemeFromDict(theme: dict):
+			self.frame_top.config(bg=theme['frame_bg'])
+			self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
+			self.frame_bot.config(bg=theme['chat_bg'])
+			self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
+			self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
+
+		cfg = h.LHMConfig.get(os.path.join(h.CONFIG_DIR, h.CONFIG_CLIENT))
 		if len(cfg) > 0:
-			selected_theme = cfg['ui']['theme_selected']
-			if selected_theme == 'dark' or forceDarkTheme:
-				#TODO: Finish dark theme for all widgets
-				colors_dark = cfg['ui']['theme_dark']
-				self.frame_top.config(bg=colors_dark['frame_bg'])
-				self.chat_messages.config(bg=colors_dark['chat_bg'], fg=colors_dark['text'])
-				self.frame_bot.config(bg=colors_dark['chat_bg'])
-				self.chat_message_input.config(bg=colors_dark['message_input_bg'], fg=colors_dark['text'])
-				self.chat_btn_sendMessage.config(bg=colors_dark['buttond_send_bg'], fg=colors_dark['buttond_send_fg'])
-		else: del(cfg); self.createLog('Cant refresh color theme -> config file was not found.')
+			selected_theme = cfg['ui']['theme_' + cfg['ui']['theme_selected']]
+			_updateThemeFromDict(selected_theme)
+		else:
+			self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
+			_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
 	
 	def showDebugConsole(self):
 		"""
@@ -159,12 +164,12 @@ class LHM_MainWindow:
 if __name__ == '__main__':
 	# Init UI
 	ui_root = tkinter.Tk()
-	ui_root.title(h.STRINGS['client']['title'])
+	ui_root.title(h.APPDICT['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.minsize(width=100, height=100)
 	mainWindow = LHM_MainWindow(ui_root)
 	
-	cfg = h.lhm_config(1, mainWindow.createLog)
+	cfg = h.LHMConfig.init(1, mainWindow.createLog)
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()

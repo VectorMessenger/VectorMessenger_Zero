@@ -26,7 +26,7 @@ class MessengerBase():
 class MessengerServer(MessengerBase):
 	def __init__(self):
 		super().__init__()
-		self.cfg = h.lhm_config(0)
+		self.cfg = h.LHMConfig.init(0)
 		self.sock.bind((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 		self.clients = []
 		h.createUniversalLog('Server online')
@@ -45,7 +45,7 @@ class MessengerServer(MessengerBase):
 class MessengerClient(MessengerBase):
 	def __init__(self, lhm_client_ui = None):
 		super().__init__()
-		self.cfg = h.lhm_config(1)
+		self.cfg = h.LHMConfig.init(1)
 		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
 		self.messagePollingThread = Thread(target=self.messagePolling, args=(lhm_client_ui,))
