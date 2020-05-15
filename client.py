@@ -1,5 +1,5 @@
 import helpers as h
-from Messenger import MessengerClient, MessengerBase
+from Messenger import MessengerClient, MXORCrypt
 import tkinter
 import sys, os
 from threading import Thread
@@ -8,7 +8,6 @@ from time import sleep, time
 
 class LHM_MainWindow:
 	def __init__(self, root: object):
-
 		self._time_start = time()
 
 		# Header Menu
@@ -21,6 +20,7 @@ class LHM_MainWindow:
 		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
 		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
+		self.HM_Advanced.add_command(label='Set Encryption Key', command=self.showWindow_SetEncKey)
 
 		# Top
 		self.frame_top = tkinter.Frame(root)
@@ -103,6 +103,24 @@ class LHM_MainWindow:
 		self.createLog(f'UI Theme set to {theme}')
 		self.refreshColorScheme()
 	
+	def showWindow_SetEncKey(self):
+		""" Will show window to set encryption key """
+		def _setKey():
+			key = int(input_field.get())
+			MXORCrypt.set_key(key)
+
+		window = tkinter.Toplevel(ui_root)
+		window.iconbitmap(h.ICON_MAIN_PATH)
+		window.title('Set Encryption Key')
+		window.resizable(False, False)
+		warning_label = tkinter.Label(window, text='Please note that only integer values are allowed.')
+		input_field = tkinter.Entry(window, width=40)
+		confirm_button = tkinter.Button(window, text='Set', command=_setKey)
+
+		warning_label.grid(row=0, column=0, sticky='EW')
+		input_field.grid(row=1, column=0, sticky='EW')
+		confirm_button.grid(row=1, column=1, sticky='E')
+	
 	def showDebugConsole(self):
 		"""
 		Show in-app console with actions logs.
@@ -126,7 +144,7 @@ class LHM_MainWindow:
 			elif input_str.startswith('test-xor'):
 				input_str=input_str[9:]
 				self.createLog(f'\tOriginal input: <  {input_str} >', False)
-				msg = MessengerBase.MXORCrypt(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MessengerBase.MXORCrypt(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
+				msg = MXORCrypt.run(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MXORCrypt.run(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
 			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)
 

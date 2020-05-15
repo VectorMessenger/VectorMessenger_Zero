@@ -6,23 +6,6 @@ class MessengerBase():
 	def __init__(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-	@staticmethod
-	def MXORCrypt(text: str, key = 12345) -> str:
-		"""
-		Message encryptor/decryptor based on XOR cipher
-
-		Arguments:
-			text {str} -- Text to commit actions on
-			key {int} -- Key for cipher (default: 12345)
-
-		Returns:
-			str -- Result of actions
-		"""
-		result = str()
-		for char in text:
-			result += chr(ord(char)^key)
-		return result
-
 class MessengerServer(MessengerBase):
 	def __init__(self):
 		super().__init__()
@@ -61,3 +44,27 @@ class MessengerClient(MessengerBase):
 
 	def sendMessage(self, text: str):
 		self.sock.send(bytes(text, 'utf-8'))
+
+class MXORCrypt:
+	@staticmethod
+	def run(text: str) -> str:
+		"""
+		Message encryptor/decryptor based on XOR cipher
+
+		Arguments:
+			text {str} -- Text to commit actions on
+
+		Returns:
+			str -- Result of actions
+		"""
+		key = h.LHMConfig.get(1)['key_int']
+		result = str()
+		for char in text:
+			result += chr(ord(char)^key)
+		return result
+		
+	@staticmethod
+	def set_key(key: int):
+		cfg = h.LHMConfig.get(1)
+		cfg['key_int'] = key
+		h.LHMConfig.write(cfg, 1)

@@ -11,6 +11,7 @@ CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
 DEF_CONNECTION_DICT = {'ip': 'localhost', 'port': 9263}
+DEF_KEY_INT = 12345
 
 APPDICT = {
 	'client': {
@@ -18,6 +19,7 @@ APPDICT = {
 		'config_default': {
 			'username': 'Anonymous',
 			'version': VERSION,
+			'key_int': DEF_KEY_INT,
 			'connection': DEF_CONNECTION_DICT,
 			'ui': {
 				'theme_selected': 'light',
@@ -43,6 +45,7 @@ APPDICT = {
 	'server': {
 		'config_default': {
 			'version': VERSION,
+			'key_int': DEF_KEY_INT,
 			'connection': DEF_CONNECTION_DICT
 		}
 	}
