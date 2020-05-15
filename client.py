@@ -37,6 +37,7 @@ class LHM_MainWindow:
 		# Bottom
 		self.frame_bot = tkinter.Frame(root)
 		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
+		self.chat_message_input.bind('<Return>', self.sendMessage)
 		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, command=self.sendMessage)
 
 		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
@@ -60,7 +61,9 @@ class LHM_MainWindow:
 		self.createLog('Message received')
 	
 	def sendMessage(self):
-		self.messenger.sendMessage(self.chat_message_input.get())
+		message = self.chat_message_input.get()
+		if len(message) > 0:
+			self.messenger.sendMessage(message)
 	
 	def refreshColorScheme(self):
 		""" Will refresh color theme from json config file """
