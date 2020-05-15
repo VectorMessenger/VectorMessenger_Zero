@@ -129,6 +129,7 @@ class LHM_MainWindow:
 
 		def _onClose(window, obj):
 			delattr(obj, 'debug_console_showing')
+			obj.HM_Advanced.entryconfig(0, state=tkinter.NORMAL)
 			window.destroy()
 
 		ui_window = tkinter.Toplevel(bg='#181818')
@@ -158,6 +159,7 @@ class LHM_MainWindow:
 		self.debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
 		self.debug_console_input.grid(column=0, row=0, sticky="EW")
 
+		self.HM_Advanced.entryconfig(0, state=tkinter.DISABLED)
 		self.debug_console_showing = True
 
 	def createLog(self, text: str, addTime = True):
@@ -181,7 +183,7 @@ class LHM_MainWindow:
 			_log()
 
 		passed_time = time() - self._time_start
-		if not hasattr(self, 'debug_console_output') and passed_time <= 0.5:
+		if not hasattr(self, 'debug_console_output') and passed_time <= 1:
 			Thread(target=_loggerThread).start()
 		else:
 			_log()
