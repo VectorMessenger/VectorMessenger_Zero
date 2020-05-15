@@ -16,8 +16,8 @@ class LHM_MainWindow:
 		root.configure(menu=self.HM_Root)
 		self.HM_Theme = tkinter.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Theme', menu=self.HM_Theme)
-		self.HM_Theme.add_command(label='Light', state=tkinter.DISABLED)
-		self.HM_Theme.add_command(label='Dark', state=tkinter.DISABLED)
+		self.HM_Theme.add_command(label='Light', command=lambda x=0: self.setColorScheme(x))
+		self.HM_Theme.add_command(label='Dark', command=lambda x=1: self.setColorScheme(x))
 		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
 		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
@@ -73,8 +73,15 @@ class LHM_MainWindow:
 
 		cfg = h.LHMConfig.get(1)
 		if len(cfg) > 0:
-			selected_theme = cfg['ui']['theme_' + cfg['ui']['theme_selected']]
+			theme_name = 'theme_' + cfg['ui']['theme_selected']
+			selected_theme = cfg['ui'][theme_name]
 			_updateThemeFromDict(selected_theme)
+			if theme_name == 'theme_light':
+				self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
+				self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
+			elif theme_name == 'theme_dark':
+				self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
+				self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
 		else:
 			self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
 			_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
@@ -84,7 +91,7 @@ class LHM_MainWindow:
 		Set color scheme to selected mode
 
 		Arguments:
-			mode {int} -- Theme type (0 - light, 1 - dark, 3 (#todo) - custom)
+			mode {int} -- Theme type (0 - light, 1 - dark)
 		"""
 		cfg = h.LHMConfig.get(1)
 		theme = 'light' if mode == 0 else 'dark'
@@ -163,7 +170,7 @@ class LHM_MainWindow:
 		"""
 		# Check if debug window exists
 		def _log():
-			if not self.debug_console_output.winfo_exists(): return False
+			if not hasattr(self, 'debug_console_showing'): return False
 			formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
 			self.debug_console_output.config(state=tkinter.NORMAL)
 			self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
@@ -174,7 +181,7 @@ class LHM_MainWindow:
 			_log()
 
 		passed_time = time() - self._time_start
-		if not hasattr(self, 'debug_console_output') and passed_time <= 5.0:
+		if not hasattr(self, 'debug_console_output') and passed_time <= 0.5:
 			Thread(target=_loggerThread).start()
 		else:
 			_log()
