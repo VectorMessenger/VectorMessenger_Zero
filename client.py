@@ -36,7 +36,7 @@ class VM_MainWindow:
 
 		# Bottom
 		self.frame_bot = tkinter.Frame(root)
-		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
+		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50) 
 		self.chat_message_input.bind('<Return>', self.sendMessage)
 		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, relief=tkinter.FLAT, command=self.sendMessage)
 
@@ -49,8 +49,9 @@ class VM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
-		# Messenger Core
-		self.messenger = MessengerClient(self)
+
+	def initMessenger(self, cfg: dict):
+		self.messenger = MessengerClient(self, cfg)
 
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
@@ -76,32 +77,37 @@ class VM_MainWindow:
 		if refreshAll:
 			for i in range(2):
 				self.refreshColorScheme(screen=i)
+				return 0
 
-		if screen == 0:
-			def _updateThemeFromDict(theme: dict):
-				self.frame_top.config(bg=theme['frame_bg'])
-				self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
-				self.frame_bot.config(bg=theme['chat_bg'])
-				self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
-				self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
-
-			cfg = h.VMConfig.get(1)
-			if len(cfg) > 0:
-				theme_name = 'theme_' + cfg['ui']['theme_selected']
-				selected_theme = cfg['ui']['root'][theme_name]
+		cfg = h.VMConfig.get(1)
+		if len(cfg) > 0:
+			theme_name = 'theme_' + cfg['ui']['theme_selected']
+			selected_theme = cfg['ui']['root'][theme_name]
+			if screen == 0:
+				def _updateThemeFromDict(theme: dict):
+					self.frame_top.config(bg=theme['frame_bg'])
+					self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
+					self.frame_bot.config(bg=theme['chat_bg'])
+					self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
+					self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
+				
+				# Font update
+				self.chat_messages.config(font=cfg['ui']['root']['font'])
+				self.chat_message_input.config(font=cfg['ui']['root']['font'])
+				# Theme update
 				_updateThemeFromDict(selected_theme)
-				if theme_name == 'theme_light':
-					self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
-					self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
-				elif theme_name == 'theme_dark':
-					self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
-					self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
-			else:
-				self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
-				_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
-		if screen == 1:
-			pass
-			# TODO: Implement theme refreshing for settings window
+			if screen == 1:
+				pass # TODO: Implement theme refreshing for settings window
+			if theme_name == 'theme_light':
+				self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
+				self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
+			elif theme_name == 'theme_dark':
+				self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
+				self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
+		else:
+			self.createLog('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
+			h.VMConfig.init(1, self.createLog)
+			self.refreshColorScheme(screen, refreshAll)
 
 	def setColorScheme(self, mode: int):
 		"""
@@ -146,22 +152,23 @@ class VM_MainWindow:
 		frame_setUsername = tkinter.LabelFrame(window, text='Username')
 		uname_currentLabel = tkinter.Label(frame_setUsername, text=''); _reloadUname()
 		uname_input = tkinter.Entry(frame_setUsername, width=ENTRY_WIDTH)
-		uname_btn_set = tkinter.Button(frame_setUsername, text='Set', command=_setUname)
+		uname_btn_set = tkinter.Button(frame_setUsername, text='Set', command=_setUname, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
 
 		frame_setUsername.grid(row=0, column=0, sticky='NSEW')
-		uname_currentLabel.grid(row=0, column=0, sticky='EW')
-		uname_input.grid(row=1, column=0, sticky='EW')
-		uname_btn_set.grid(row=1, column=1, sticky='E')
+		uname_currentLabel.grid(row=0, column=0, sticky='W')
+		uname_input.grid(row=1, column=0, sticky='W')
+		uname_btn_set.grid(row=1, column=1, sticky='EW')
 
 		# Advanced
 		def _resetCfg():
-			h.VMConfig.reset(1)
+			h.VMConfig.reset(1, self.createLog)
 			_reloadUname()
-			self.refreshColorScheme(0)
+			_hideEncKey()
+			self.refreshColorScheme(refreshAll=True)
 			self.createLog('Config file reset complete')
 
 		frame_advanced = tkinter.LabelFrame(window, text='Advanced')
-		adv_btn_resetConfig = tkinter.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, relief=tkinter.FLAT, bg='#afafaf')
+		adv_btn_resetConfig = tkinter.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
 
 		frame_advanced.grid(row=0, column=1, sticky='NSEW', rowspan=10)
 		adv_btn_resetConfig.grid(row=0, column=1, sticky='EW', padx=2)
@@ -175,17 +182,29 @@ class VM_MainWindow:
 				ekey_warning_label.config(text='ONLY INTEGER VALUES ALLOWED D:<', fg='#ff0000')
 			else:
 				MXORCrypt.set_key(key)
+				_hideEncKey
 				ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
+		def _showEncKey():
+			ekey_currentKey_label.config(text=f'Current Key: {h.VMConfig.get(1)["key_int"]}')
+		def _hideEncKey():
+			ekey_currentKey_label.config(text='Current Key: ****')
 
-		frame_encKeySettings = tkinter.LabelFrame(window, text='Set Encryption Key')
+		frame_encKeySettings = tkinter.LabelFrame(window, text='Encryption Key')
 		ekey_warning_label = tkinter.Label(frame_encKeySettings, text='Please note that only integer values are allowed.')
+		ekey_currentKey_label = tkinter.Label(frame_encKeySettings, text='Current Key: ****', bg='#ffffff')
+		ekey_btn_showCurrentKey = tkinter.Button(frame_encKeySettings, text='Show', command=_showEncKey, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
 		ekey_input_field = tkinter.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
-		ekey_confirm_button = tkinter.Button(frame_encKeySettings, text='Set', command=_setEncKey)
+		ekey_btn_set = tkinter.Button(frame_encKeySettings, text='Set', command=_setEncKey, relief=tkinter.FLAT, bg='#dfdfdf')
 
 		frame_encKeySettings.grid(row=1, column=0, sticky='NSEW')
-		ekey_warning_label.grid(row=0, column=0, sticky='EW')
-		ekey_input_field.grid(row=1, column=0, sticky='EW')
-		ekey_confirm_button.grid(row=1, column=1, sticky='E')
+		ekey_warning_label.grid(row=0, column=0, sticky='W')
+		ekey_currentKey_label.grid(row=1, column=0, sticky='EW')
+		ekey_btn_showCurrentKey.grid(row=1, column=1, sticky='EW')
+		ekey_input_field.grid(row=2, column=0, sticky='E')
+		ekey_btn_set.grid(row=2, column=1, sticky='EW')
+
+		# Refresh theme
+		#self.refreshColorScheme(1) # TODO: Finish screen
 	
 	def showDebugConsole(self):
 		"""
@@ -230,7 +249,7 @@ class VM_MainWindow:
 		self.debug_console_FTop = tkinter.Frame(ui_window)
 		self.debug_console_FTop.columnconfigure(0, weight=1)
 		self.debug_console_FTop.rowconfigure(0, weight=1)
-		self.debug_console_output = tkinter.Text(self.debug_console_FTop, bg='#262626', fg='white', font='Consolas 10', state=tkinter.DISABLED)
+		self.debug_console_output = tkinter.Text(self.debug_console_FTop, bg='#262626', fg='white', font=h.VMConfig.get(1)['ui']['debug_console']['font'], state=tkinter.DISABLED)
 		self.debug_console_scrollbar = tkinter.Scrollbar(self.debug_console_FTop, command=self.debug_console_output.yview)
 		self.debug_console_output.config(yscrollcommand=self.debug_console_scrollbar.set)
 		self.debug_console_FTop.grid(column=0, row=0, sticky="NSEW")
@@ -282,9 +301,10 @@ if __name__ == '__main__':
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.minsize(width=100, height=100)
 	mainWindow = VM_MainWindow(ui_root)
+	cfg = h.VMConfig.init(1, mainWindow.createLog)
 	
-	h.VMConfig.init(1, mainWindow.createLog)
 	mainWindow.refreshColorScheme()
+	mainWindow.initMessenger(cfg)
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()
 	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()

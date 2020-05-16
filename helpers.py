@@ -24,6 +24,7 @@ APPDICT = {
 			'ui': {
 				'theme_selected': 'light',
 				'root': {
+					'font': 'Arial 14',
 					'theme_light': {
 						'text': '#000000',
 						'frame_bg': '#ffffff',
@@ -40,6 +41,13 @@ APPDICT = {
 						'buttond_send_bg': '#303030',
 						'buttond_send_fg': '#ffffff'
 					}
+				},
+				'settings': {
+					'theme_light': {},
+					'theme_dark': {}
+				},
+				'debug_console': {
+					'font': 'Consolas 10'
 				}
 			}
 		}
@@ -105,15 +113,16 @@ class VMConfig:
 			json.dump(cfg, configFile, indent=4)
 
 	@classmethod
-	def reset(cls, conf_type: int):
+	def reset(cls, conf_type: int, ui_log = None):
 		"""
 		Reset config json to default values
 
 		Arguments:
 			conf_type {int} -- 0 - Server, 1 - Client
+			ui_log {function} -- UI Logger function
 		"""
 		cls.delete(conf_type)
-		cls.init(conf_type)
+		cls.init(conf_type, ui_log)
 
 	@classmethod
 	def delete(cls, conf_type: int) -> bool:
