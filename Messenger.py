@@ -28,7 +28,7 @@ class MessengerServer(MessengerBase):
 class MessengerClient(MessengerBase):
 	def __init__(self, vm_client_ui = None, cfg = None):
 		super().__init__()
-		self.cfg = cfg
+		self.cfg = cfg if cfg != None else h.VMConfig.init(1)
 		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
 		self.messagePollingThread = Thread(target=self.messagePolling, args=(vm_client_ui,))

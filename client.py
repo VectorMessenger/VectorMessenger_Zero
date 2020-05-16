@@ -98,6 +98,7 @@ class VM_MainWindow:
 				_updateThemeFromDict(selected_theme)
 			if screen == 1:
 				pass # TODO: Implement theme refreshing for settings window
+			
 			if theme_name == 'theme_light':
 				self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
 				self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
