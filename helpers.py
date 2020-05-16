@@ -15,7 +15,7 @@ DEF_KEY_INT = 12345
 
 APPDICT = {
 	'client': {
-		'title': f'Localhost Messenger (version: {VERSION})',
+		'title': f'Vector Messenger (version: {VERSION})',
 		'config_default': {
 			'username': 'Anonymous',
 			'version': VERSION,
@@ -23,21 +23,23 @@ APPDICT = {
 			'connection': DEF_CONNECTION_DICT,
 			'ui': {
 				'theme_selected': 'light',
-				'theme_light': {
-					'text': '#000000',
-					'frame_bg': '#ffffff',
-					'chat_bg': '#ffffff',
-					'message_input_bg': '#ffffff',
-					'buttond_send_bg': '#ffffff',
-					'buttond_send_fg': '#000000'
-				},
-				'theme_dark': {
-					'text': '#ffffff',
-					'frame_bg': '#181818',
-					'chat_bg': '#303030',
-					'message_input_bg': '#252525',
-					'buttond_send_bg': '#303030',
-					'buttond_send_fg': '#ffffff'
+				'root': {
+					'theme_light': {
+						'text': '#000000',
+						'frame_bg': '#ffffff',
+						'chat_bg': '#ffffff',
+						'message_input_bg': '#ffffff',
+						'buttond_send_bg': '#dfdfdf',
+						'buttond_send_fg': '#000000'
+					},
+					'theme_dark': {
+						'text': '#ffffff',
+						'frame_bg': '#181818',
+						'chat_bg': '#303030',
+						'message_input_bg': '#252525',
+						'buttond_send_bg': '#303030',
+						'buttond_send_fg': '#ffffff'
+					}
 				}
 			}
 		}
@@ -68,11 +70,11 @@ def createUniversalLog(text: str, ui_log = None):
 		print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
 # Global Classes
-class LHMConfig:
-	@staticmethod
-	def get(conf_type: int) -> dict:
+class VMConfig:
+	@classmethod
+	def get(cls, conf_type: int) -> dict:
 		"""
-		Get the LHM .json config as dict
+		Get the VM .json config as dict
 
 		Arguments:
 			conf_type {int} -- Type of config file (0 - Server, 1 - Client)
@@ -80,16 +82,15 @@ class LHMConfig:
 		Returns:
 			dict -- Formatted .json as dict. __len__() == 0 if json not found.
 		"""
-		cfg_path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
-		path = os.path.join(CONFIG_DIR, cfg_path)
-		if os.path.isfile(path):
-			with open(path, 'rt') as f:
+		cfg_path = cls.getConfigPath(conf_type)
+		if os.path.isfile(cfg_path):
+			with open(cfg_path, 'rt') as f:
 				return json.load(f)
 		else:
 			return {}
 	
-	@staticmethod
-	def write(cfg: dict, conf_type = 1):
+	@classmethod
+	def write(cls, cfg: dict, conf_type = 1):
 		"""
 		Update json values from dict
 
@@ -99,10 +100,38 @@ class LHMConfig:
 		Keyword Arguments:
 			conf_type {int} -- Type of config file (0 - Server, 1 - Client)
 		"""
-		cfg_path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
-		path = os.path.join(CONFIG_DIR, cfg_path)
-		with open(path, 'wt') as configFile:
+		cfg_path = cls.getConfigPath(conf_type)
+		with open(cfg_path, 'wt') as configFile:
 			json.dump(cfg, configFile, indent=4)
+
+	@classmethod
+	def reset(cls, conf_type: int):
+		"""
+		Reset config json to default values
+
+		Arguments:
+			conf_type {int} -- 0 - Server, 1 - Client
+		"""
+		cls.delete(conf_type)
+		cls.init(conf_type)
+
+	@classmethod
+	def delete(cls, conf_type: int) -> bool:
+		"""
+		Running this method will completely delete json config
+
+		Arguments:
+			conf_type {int} -- 0 - Server, 1 - Client
+
+		Returns:
+			bool -- True - file was successfully removed, False - can't find file to remove
+		"""
+		cfg_path = cls.getConfigPath(conf_type)
+		if os.path.isfile(cfg_path):
+			os.remove(cfg_path)
+			return True
+		else:
+			return False
 
 	@classmethod
 	def init(cls, conf_type: int, ui_log = None) -> dict:
@@ -135,6 +164,21 @@ class LHMConfig:
 				cls.write(APPDICT['client']['config_default'], conf_type)
 				createUniversalLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >', ui_log)
 			return cls.get(cfgclient_path)
+
+	@staticmethod
+	def getConfigPath(conf_type: int) -> str:
+		"""
+		Will return config path
+
+		Arguments:
+			conf_type {int} -- 0 - Server, 1 - Client
+
+		Returns:
+			str -- Path to json config
+		"""
+		path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
+		cfg_path = os.path.join(CONFIG_DIR, path)
+		return cfg_path
 
 # ----- CLIENT -----
 # Debug Functions

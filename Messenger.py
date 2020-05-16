@@ -9,7 +9,7 @@ class MessengerBase():
 class MessengerServer(MessengerBase):
 	def __init__(self):
 		super().__init__()
-		self.cfg = h.LHMConfig.init(0)
+		self.cfg = h.VMConfig.init(0)
 		self.sock.bind((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 		self.clients = []
 		h.createUniversalLog('Server online')
@@ -26,21 +26,21 @@ class MessengerServer(MessengerBase):
 				self.sock.sendto(data, client)
 
 class MessengerClient(MessengerBase):
-	def __init__(self, lhm_client_ui = None):
+	def __init__(self, vm_client_ui = None):
 		super().__init__()
-		self.cfg = h.LHMConfig.init(1)
+		self.cfg = h.VMConfig.init(1)
 		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
-		self.messagePollingThread = Thread(target=self.messagePolling, args=(lhm_client_ui,))
+		self.messagePollingThread = Thread(target=self.messagePolling, args=(vm_client_ui,))
 		self.messagePollingThread.start()
 	
-	def messagePolling(self, lhm_client_ui):
-		lhm_client_ui.createLog('Polling thread status: active')
+	def messagePolling(self, vm_client_ui):
+		vm_client_ui.createLog('Polling thread status: active')
 		while True:
 			data = self.sock.recv(1024)
 			msg = data.decode('utf-8')
-			lhm_client_ui.showMessage(msg)
-			lhm_client_ui.createLog('Received message')
+			vm_client_ui.showMessage(msg)
+			vm_client_ui.createLog('Received message')
 
 	def sendMessage(self, text: str):
 		self.sock.send(bytes(text, 'utf-8'))
@@ -57,7 +57,7 @@ class MXORCrypt:
 		Returns:
 			str -- Result of actions
 		"""
-		key = h.LHMConfig.get(1)['key_int']
+		key = h.VMConfig.get(1)['key_int']
 		result = str()
 		for char in text:
 			result += chr(ord(char)^key)
@@ -65,6 +65,6 @@ class MXORCrypt:
 		
 	@staticmethod
 	def set_key(key: int):
-		cfg = h.LHMConfig.get(1)
+		cfg = h.VMConfig.get(1)
 		cfg['key_int'] = key
-		h.LHMConfig.write(cfg, 1)
+		h.VMConfig.write(cfg, 1)

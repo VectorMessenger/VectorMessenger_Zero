@@ -2,8 +2,8 @@ from cx_Freeze import setup, Executable
 import helpers
 
 executables = [
-	Executable('client.py', targetName='LHM Client', base='Win32GUI', icon=helpers.ICON_MAIN_PATH),
-	Executable('server.py', targetName='LHM Server', base=None)
+	Executable('client.py', targetName='VM Client', base='Win32GUI', icon=helpers.ICON_MAIN_PATH),
+	Executable('server.py', targetName='VM Server', base=None)
 ]
 
 includes = ['tkinter']
@@ -20,7 +20,7 @@ options = {
     }
 }
 
-setup(name='LocalhostMessenger',
+setup(name='VectorMessenger',
     description='',
 	executables=executables,
     options=options)

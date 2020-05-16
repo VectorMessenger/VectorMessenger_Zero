@@ -6,7 +6,7 @@ from threading import Thread
 from datetime import datetime
 from time import sleep, time
 
-class LHM_MainWindow:
+class VM_MainWindow:
 	def __init__(self, root: object):
 		self._time_start = time()
 
@@ -38,7 +38,7 @@ class LHM_MainWindow:
 		self.frame_bot = tkinter.Frame(root)
 		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50, font="Arial 14") 
 		self.chat_message_input.bind('<Return>', self.sendMessage)
-		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, command=self.sendMessage)
+		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, relief=tkinter.FLAT, command=self.sendMessage)
 
 		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
 		self.chat_message_input.grid(column=0, row=0, sticky="NSEW")
@@ -65,14 +65,19 @@ class LHM_MainWindow:
 		if len(message) > 0:
 			self.messenger.sendMessage(message)
 	
-	def refreshColorScheme(self, window = 0):
+	def refreshColorScheme(self, screen = 0, refreshAll = False):
 		"""
 		Will refresh color theme from json config file
 
 		Keyword Arguments:
-			window {int} -- Select window to refresh colors. 0 - Root, 1 - Settings (default: {0})
+			screen {int} -- Select screen to refresh colors. 0 - Root, 1 - Settings (default: {0})
+			refreshAll {bool} -- Will refresh theme on all screens (default: {False})
 		"""
-		if window == 0:
+		if refreshAll:
+			for i in range(2):
+				self.refreshColorScheme(screen=i)
+
+		if screen == 0:
 			def _updateThemeFromDict(theme: dict):
 				self.frame_top.config(bg=theme['frame_bg'])
 				self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
@@ -80,10 +85,10 @@ class LHM_MainWindow:
 				self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
 				self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
 
-			cfg = h.LHMConfig.get(1)
+			cfg = h.VMConfig.get(1)
 			if len(cfg) > 0:
 				theme_name = 'theme_' + cfg['ui']['theme_selected']
-				selected_theme = cfg['ui'][theme_name]
+				selected_theme = cfg['ui']['root'][theme_name]
 				_updateThemeFromDict(selected_theme)
 				if theme_name == 'theme_light':
 					self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
@@ -94,7 +99,7 @@ class LHM_MainWindow:
 			else:
 				self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
 				_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
-		if window == 1:
+		if screen == 1:
 			pass
 			# TODO: Implement theme refreshing for settings window
 
@@ -105,10 +110,10 @@ class LHM_MainWindow:
 		Arguments:
 			mode {int} -- Theme type (0 - light, 1 - dark)
 		"""
-		cfg = h.LHMConfig.get(1)
+		cfg = h.VMConfig.get(1)
 		theme = 'light' if mode == 0 else 'dark'
 		cfg['ui']['theme_selected'] = theme
-		h.LHMConfig.write(cfg, 1)
+		h.VMConfig.write(cfg, 1)
 		self.createLog(f'UI Theme set to {theme}')
 		self.refreshColorScheme()
 	
@@ -120,17 +125,19 @@ class LHM_MainWindow:
 		window.iconbitmap(h.ICON_MAIN_PATH)
 		window.title('Settings')
 		window.resizable(False, False)
+		window = tkinter.Frame(window)
+		window.grid(row=0, column=0, padx=5, pady=5)
 
 		# Username settings
 		def _reloadUname():
-			uname_currentLabel.config(text='Current username: ' + h.LHMConfig.get(1)['username'])
+			uname_currentLabel.config(text='Current username: ' + h.VMConfig.get(1)['username'])
 
 		def _setUname():
 			username = uname_input.get()
 			if len(username) > 0:
-				cfg = h.LHMConfig.get(1)
+				cfg = h.VMConfig.get(1)
 				cfg['username'] = username
-				h.LHMConfig.write(cfg, 1)
+				h.VMConfig.write(cfg, 1)
 				_reloadUname()
 			else: 
 				uname_input.delete(0, tkinter.END)
@@ -145,6 +152,19 @@ class LHM_MainWindow:
 		uname_currentLabel.grid(row=0, column=0, sticky='EW')
 		uname_input.grid(row=1, column=0, sticky='EW')
 		uname_btn_set.grid(row=1, column=1, sticky='E')
+
+		# Advanced
+		def _resetCfg():
+			h.VMConfig.reset(1)
+			_reloadUname()
+			self.refreshColorScheme(0)
+			self.createLog('Config file reset complete')
+
+		frame_advanced = tkinter.LabelFrame(window, text='Advanced')
+		adv_btn_resetConfig = tkinter.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, relief=tkinter.FLAT, bg='#afafaf')
+
+		frame_advanced.grid(row=0, column=1, sticky='NSEW', rowspan=10)
+		adv_btn_resetConfig.grid(row=0, column=1, sticky='EW', padx=2)
 
 		# Encryption settings
 		def _setEncKey():
@@ -261,9 +281,9 @@ if __name__ == '__main__':
 	ui_root.title(h.APPDICT['client']['title'])
 	ui_root.iconbitmap(h.ICON_MAIN_PATH)
 	ui_root.minsize(width=100, height=100)
-	mainWindow = LHM_MainWindow(ui_root)
+	mainWindow = VM_MainWindow(ui_root)
 	
-	h.LHMConfig.init(1, mainWindow.createLog)
+	h.VMConfig.init(1, mainWindow.createLog)
 	mainWindow.refreshColorScheme()
 
 	if '--debug' in sys.argv: mainWindow.showDebugConsole()

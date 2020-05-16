@@ -2,7 +2,7 @@
 __pycache__
 .vscode
 
-# LHM Config files
+# VM Config files
 data/config
 
 # cx-Freeze build
