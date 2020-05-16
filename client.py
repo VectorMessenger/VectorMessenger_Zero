@@ -18,9 +18,9 @@ class LHM_MainWindow:
 		self.HM_Theme.add_command(label='Light', command=lambda x=0: self.setColorScheme(x))
 		self.HM_Theme.add_command(label='Dark', command=lambda x=1: self.setColorScheme(x))
 		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
+		self.HM_Root.add_cascade(label='Settings', command=self.showWindow_settings)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
 		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
-		self.HM_Advanced.add_command(label='Set Encryption Key', command=self.showWindow_SetEncKey)
 
 		# Top
 		self.frame_top = tkinter.Frame(root)
@@ -65,29 +65,38 @@ class LHM_MainWindow:
 		if len(message) > 0:
 			self.messenger.sendMessage(message)
 	
-	def refreshColorScheme(self):
-		""" Will refresh color theme from json config file """
-		def _updateThemeFromDict(theme: dict):
-			self.frame_top.config(bg=theme['frame_bg'])
-			self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
-			self.frame_bot.config(bg=theme['chat_bg'])
-			self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
-			self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
+	def refreshColorScheme(self, window = 0):
+		"""
+		Will refresh color theme from json config file
 
-		cfg = h.LHMConfig.get(1)
-		if len(cfg) > 0:
-			theme_name = 'theme_' + cfg['ui']['theme_selected']
-			selected_theme = cfg['ui'][theme_name]
-			_updateThemeFromDict(selected_theme)
-			if theme_name == 'theme_light':
-				self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
-				self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
-			elif theme_name == 'theme_dark':
-				self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
-				self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
-		else:
-			self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
-			_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
+		Keyword Arguments:
+			window {int} -- Select window to refresh colors. 0 - Root, 1 - Settings (default: {0})
+		"""
+		if window == 0:
+			def _updateThemeFromDict(theme: dict):
+				self.frame_top.config(bg=theme['frame_bg'])
+				self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
+				self.frame_bot.config(bg=theme['chat_bg'])
+				self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
+				self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
+
+			cfg = h.LHMConfig.get(1)
+			if len(cfg) > 0:
+				theme_name = 'theme_' + cfg['ui']['theme_selected']
+				selected_theme = cfg['ui'][theme_name]
+				_updateThemeFromDict(selected_theme)
+				if theme_name == 'theme_light':
+					self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
+					self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
+				elif theme_name == 'theme_dark':
+					self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
+					self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
+			else:
+				self.createLog('Cant refresh color theme -> config file was not found. Refreshing theme from built-in values')
+				_updateThemeFromDict(h.APPDICT['client']['config_default']['ui']['theme_light'])
+		if window == 1:
+			pass
+			# TODO: Implement theme refreshing for settings window
 
 	def setColorScheme(self, mode: int):
 		"""
@@ -103,23 +112,60 @@ class LHM_MainWindow:
 		self.createLog(f'UI Theme set to {theme}')
 		self.refreshColorScheme()
 	
-	def showWindow_SetEncKey(self):
-		""" Will show window to set encryption key """
-		def _setKey():
-			key = int(input_field.get())
-			MXORCrypt.set_key(key)
+	def showWindow_settings(self):
+		""" Will show window with settings """
+		ENTRY_WIDTH = 40
 
 		window = tkinter.Toplevel(ui_root)
 		window.iconbitmap(h.ICON_MAIN_PATH)
-		window.title('Set Encryption Key')
+		window.title('Settings')
 		window.resizable(False, False)
-		warning_label = tkinter.Label(window, text='Please note that only integer values are allowed.')
-		input_field = tkinter.Entry(window, width=40)
-		confirm_button = tkinter.Button(window, text='Set', command=_setKey)
 
-		warning_label.grid(row=0, column=0, sticky='EW')
-		input_field.grid(row=1, column=0, sticky='EW')
-		confirm_button.grid(row=1, column=1, sticky='E')
+		# Username settings
+		def _reloadUname():
+			uname_currentLabel.config(text='Current username: ' + h.LHMConfig.get(1)['username'])
+
+		def _setUname():
+			username = uname_input.get()
+			if len(username) > 0:
+				cfg = h.LHMConfig.get(1)
+				cfg['username'] = username
+				h.LHMConfig.write(cfg, 1)
+				_reloadUname()
+			else: 
+				uname_input.delete(0, tkinter.END)
+				uname_input.insert(0, 'Username cant be empty!')
+		
+		frame_setUsername = tkinter.LabelFrame(window, text='Username')
+		uname_currentLabel = tkinter.Label(frame_setUsername, text=''); _reloadUname()
+		uname_input = tkinter.Entry(frame_setUsername, width=ENTRY_WIDTH)
+		uname_btn_set = tkinter.Button(frame_setUsername, text='Set', command=_setUname)
+
+		frame_setUsername.grid(row=0, column=0, sticky='NSEW')
+		uname_currentLabel.grid(row=0, column=0, sticky='EW')
+		uname_input.grid(row=1, column=0, sticky='EW')
+		uname_btn_set.grid(row=1, column=1, sticky='E')
+
+		# Encryption settings
+		def _setEncKey():
+			try:
+				key = int(ekey_input_field.get())
+			except ValueError:
+				ekey_input_field.delete(0, tkinter.END)
+				ekey_warning_label.config(text='ONLY INTEGER VALUES ALLOWED D:<', fg='#ff0000')
+			else:
+				MXORCrypt.set_key(key)
+				ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
+
+		frame_encKeySettings = tkinter.LabelFrame(window, text='Set Encryption Key')
+		ekey_warning_label = tkinter.Label(frame_encKeySettings, text='Please note that only integer values are allowed.')
+		ekey_input_field = tkinter.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
+		ekey_confirm_button = tkinter.Button(frame_encKeySettings, text='Set', command=_setEncKey)
+
+		frame_encKeySettings.grid(row=1, column=0, sticky='NSEW')
+		ekey_warning_label.grid(row=0, column=0, sticky='EW')
+		ekey_input_field.grid(row=1, column=0, sticky='EW')
+		ekey_confirm_button.grid(row=1, column=1, sticky='E')
 	
 	def showDebugConsole(self):
 		"""
