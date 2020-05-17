@@ -1,10 +1,31 @@
 import helpers as h
-from Messenger import MessengerClient, MXORCrypt
+from MessengerCore import MessengerBase, MXORCrypt
 import tkinter
 import sys, os
 from threading import Thread
 from datetime import datetime
 from time import sleep, time
+
+class MessengerClient(MessengerBase):
+	def __init__(self, vm_client_ui = None, cfg = None):
+		super().__init__()
+		self.cfg = cfg if cfg != None else h.VMConfig.init(1)
+		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
+
+		self.messagePollingThread = Thread(target=self.messagePolling, args=(vm_client_ui,))
+		self.messagePollingThread.start()
+	
+	def messagePolling(self, vm_client_ui):
+		vm_client_ui.createLog('Polling thread status: active')
+		while True:
+			data = self.sock.recv(1024)
+			msg = MXORCrypt.run(data.decode('utf-8'))
+			vm_client_ui.showMessage(msg)
+			vm_client_ui.createLog('Received message')
+
+	def sendMessage(self, text: str):
+		text = MXORCrypt.run('@{}: {}'.format(self.cfg['username'], text))
+		self.sock.send(bytes(text, 'utf-8'))
 
 class VM_MainWindow:
 	def __init__(self, root: object):

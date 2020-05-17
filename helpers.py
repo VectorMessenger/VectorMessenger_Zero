@@ -62,7 +62,7 @@ APPDICT = {
 }
 
 # Global Functions
-def createUniversalLog(text: str, ui_log = None):
+def createUniversalLog(text: str, ui_log = None, echo = False):
 	"""
 	Create log output to stdout or another function if ui_log defined
 
@@ -71,9 +71,12 @@ def createUniversalLog(text: str, ui_log = None):
 
 	Keyword Arguments:
 		ui_log {function} -- Log function (default: {None})
+		echo {bool} -- Return formatted log string without printing it (default: {False})
 	"""
 	if ui_log != None:
 		ui_log(text)
+	if echo:
+		return f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}'
 	else:
 		print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
