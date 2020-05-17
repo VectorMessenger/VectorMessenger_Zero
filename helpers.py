@@ -15,7 +15,7 @@ DEF_KEY_INT = 12345
 
 APPDICT = {
 	'client': {
-		'title': f'Vector Messenger (version: {VERSION})',
+		'title': 'Vector Messenger',
 		'config_default': {
 			'username': 'Anonymous',
 			'version': VERSION,
@@ -55,7 +55,6 @@ APPDICT = {
 	'server': {
 		'config_default': {
 			'version': VERSION,
-			'key_int': DEF_KEY_INT,
 			'connection': DEF_CONNECTION_DICT
 		}
 	}

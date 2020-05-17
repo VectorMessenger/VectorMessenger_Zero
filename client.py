@@ -49,7 +49,6 @@ class VM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
-
 	def initMessenger(self, cfg: dict):
 		self.messenger = MessengerClient(self, cfg)
 
