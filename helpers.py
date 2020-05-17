@@ -97,7 +97,7 @@ class VMConfig:
 			return {}
 	
 	@classmethod
-	def write(cls, cfg: dict, conf_type = 1):
+	def write(cls, cfg: dict, conf_type: int):
 		"""
 		Update json values from dict
 
@@ -163,7 +163,7 @@ class VMConfig:
 			if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
 			if not exist:
 				cls.write(APPDICT['server']['config_default'], conf_type)
-			return cls.get(cfgserver_path)
+			return cls.get(conf_type)
 		elif conf_type == 1:
 			if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 			cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
@@ -171,7 +171,7 @@ class VMConfig:
 			if not exist:
 				cls.write(APPDICT['client']['config_default'], conf_type)
 				createUniversalLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >', ui_log)
-			return cls.get(cfgclient_path)
+			return cls.get(conf_type)
 
 	@staticmethod
 	def getConfigPath(conf_type: int) -> str:
