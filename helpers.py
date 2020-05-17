@@ -5,7 +5,8 @@ import json
 
 # CONSTS
 VERSION = "#dev"
-ICON_MAIN_PATH = './data/ico/main.ico'
+ICON_CLIENT_PATH = './data/ico/VMClient.ico'
+ICON_SERVER_PATH = './data/ico/VMServer.ico'
 ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'

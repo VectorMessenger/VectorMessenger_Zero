@@ -2,8 +2,8 @@ from cx_Freeze import setup, Executable
 import helpers
 
 executables = [
-	Executable('client.py', targetName='VM Client', base='Win32GUI', icon=helpers.ICON_MAIN_PATH),
-	Executable('server.py', targetName='VM Server', base=None)
+	Executable('client.py', targetName='VM Client', base='Win32GUI', icon=helpers.ICON_CLIENT_PATH),
+	Executable('server.py', targetName='VM Server', base=None, icon=helpers.ICON_SERVER_PATH)
 ]
 
 includes = ['tkinter']

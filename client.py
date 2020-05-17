@@ -131,7 +131,7 @@ class VM_MainWindow:
 		ENTRY_WIDTH = 40
 
 		window = tkinter.Toplevel(ui_root)
-		window.iconbitmap(h.ICON_MAIN_PATH)
+		window.iconbitmap(h.ICON_CLIENT_PATH)
 		window.title('Settings')
 		window.resizable(False, False)
 		window = tkinter.Frame(window)
@@ -301,7 +301,7 @@ if __name__ == '__main__':
 	# Init UI
 	ui_root = tkinter.Tk()
 	ui_root.title(h.APPDICT['client']['title'])
-	ui_root.iconbitmap(h.ICON_MAIN_PATH)
+	ui_root.iconbitmap(h.ICON_CLIENT_PATH)
 	ui_root.minsize(width=100, height=100)
 	mainWindow = VM_MainWindow(ui_root)
 	cfg = h.VMConfig.init(1, mainWindow.createLog)
