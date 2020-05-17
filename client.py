@@ -54,14 +54,17 @@ class VM_MainWindow:
 
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
+		text = text + '\n'
+
 		self.chat_messages.config(state=tkinter.NORMAL)
 		self.chat_messages.insert(tkinter.END, text)
 		self.chat_messages.config(state=tkinter.DISABLED)
 		self.chat_messages.see(tkinter.END)
 		self.createLog('Message received')
 	
-	def sendMessage(self):
+	def sendMessage(self, *args):
 		message = self.chat_message_input.get()
+		self.chat_message_input.delete(0, tkinter.END)
 		if len(message) > 0:
 			self.messenger.sendMessage(message)
 	

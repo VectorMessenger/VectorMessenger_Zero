@@ -24,7 +24,7 @@ APPDICT = {
 			'ui': {
 				'theme_selected': 'light',
 				'root': {
-					'font': 'Arial 14',
+					'font': 'Helvetica 14',
 					'theme_light': {
 						'text': '#000000',
 						'frame_bg': '#ffffff',

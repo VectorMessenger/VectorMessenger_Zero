@@ -16,7 +16,7 @@ class MessengerServer(MessengerBase):
 
 		while True:
 			data, addres = self.sock.recvfrom(1024)
-			h.createUniversalLog(f'Receiving data from < {addres[0]}:{addres[1]} >')
+			h.createUniversalLog(f'Receiving data from < {addres[0]}:{addres[1]} >\n\tMessage: {data.decode("utf-8")}')
 			if addres not in self.clients:
 				self.clients.append(addres)
 				h.createUniversalLog('\t-> New address, adding to [clients] var')
@@ -38,11 +38,12 @@ class MessengerClient(MessengerBase):
 		vm_client_ui.createLog('Polling thread status: active')
 		while True:
 			data = self.sock.recv(1024)
-			msg = data.decode('utf-8')
+			msg = MXORCrypt.run(data.decode('utf-8'))
 			vm_client_ui.showMessage(msg)
 			vm_client_ui.createLog('Received message')
 
 	def sendMessage(self, text: str):
+		text = MXORCrypt.run('@{}: {}'.format(self.cfg['username'], text))
 		self.sock.send(bytes(text, 'utf-8'))
 
 class MXORCrypt:
