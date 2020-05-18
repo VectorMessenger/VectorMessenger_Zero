@@ -23,6 +23,6 @@ Note, that all commands are <ins>case sensitive</ins>!
 
 ## Server
 ### Startup arguments
-| Argument         | Description                                                                       |
-| :--------------- | :-------------------------------------------------------------------------------- |
-| `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decoding!</ins> |
+| Argument         | Description                                                                         |
+| :--------------- | :---------------------------------------------------------------------------------- |
+| `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decryption!</ins> |

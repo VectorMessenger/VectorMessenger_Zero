@@ -20,12 +20,19 @@ class MessengerServer(MessengerBase):
 				# Send message to all clients
 				# TODO: Add client existence check before sending
 				self.sock.sendto(data, client)
-				self.logMessage(data.decode('utf-8'))
+				self.logMessage(addres, data.decode('utf-8'))
 	@staticmethod
-	def logMessage(message: str):
+	def logMessage(user: list, message: str):
+		"""
+		Log all messages, coming through server for debug purposes. No decryption!
+
+		Arguments:
+			user {list} -- User data
+			message {str} -- Message string
+		"""
 		if '--log-messages' in argv:
-			with open('./server_message_log.txt', 'at') as logfile:
-				logfile.write(h.createUniversalLog(message, echo=True))
+			with open('./server_messages_log.txt', 'at', encoding='utf-8') as logfile:
+				logfile.write(h.createUniversalLog(f'< {user[0]}:{user[1]} > {message}', echo=True) + '\n')
 
 if __name__ == '__main__':
 	server = MessengerServer()

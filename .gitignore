@@ -5,5 +5,8 @@ __pycache__
 # VM Config files
 data/config
 
+# VM Logs
+server_messages_log.txt
+
 # cx-Freeze build
 build
