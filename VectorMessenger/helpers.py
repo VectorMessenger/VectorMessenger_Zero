@@ -162,14 +162,14 @@ class VMConfig:
 
 		exist = False
 		if conf_type == 0:
-			if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir')
+			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createUniversalLog('Created config dir')
 			cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
 			if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
 			if not exist:
 				cls.write(APPDICT['server']['config_default'], conf_type)
 			return cls.get(conf_type)
 		elif conf_type == 1:
-			if not os.path.isdir(CONFIG_DIR): os.mkdir(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
+			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
 			cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
 			if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); exist = True
 			if not exist:

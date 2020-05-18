@@ -4,7 +4,7 @@ __pycache__
 *.egg-info
 
 # VM Config files
-data/config
+*/data/config
 
 # VM Logs
 server_messages_log.txt
