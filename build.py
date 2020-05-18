@@ -9,8 +9,7 @@ executables = [
 	Executable('./VectorMessenger/client.py', targetName='VM Client', base='Win32GUI', icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
 ]
 
-includes = ['tkinter']
-packages = ['VectorMessenger']
+includes = ['Tkinter', 'VectorMessenger']
 excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data']
 zip_include_packages = []
 include_files = [('./VectorMessenger/data/ico', './data/ico')]
@@ -18,7 +17,6 @@ include_files = [('./VectorMessenger/data/ico', './data/ico')]
 options = {
     'build_exe': {
 		'includes': includes,
-		'packages': packages,
         'excludes': excludes,
         'zip_include_packages': zip_include_packages,
 		'include_files': include_files,
@@ -39,6 +37,7 @@ executables = [
 excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'Tkinter', 'VectorMessenger.MessengerCore.Ecnryption']
 options['build_exe']['build_exe'] = './build/VMServer'
 options['build_exe']['include_files'] = []
+options['build_exe']['includes'] = ['VectorMessenger']
 options['build_exe']['excludes'] = excludes
 
 setup(name='VectorMessenger',

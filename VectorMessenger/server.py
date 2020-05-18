@@ -1,4 +1,5 @@
-from sys import argv
+from sys import argv, platform as sysplatform
+from os import system as cmd
 from VectorMessenger.MessengerCore.Messages import MessengerBase
 from VectorMessenger import helpers as h
 
@@ -35,4 +36,5 @@ class MessengerServer(MessengerBase):
 				logfile.write(h.createUniversalLog(f'< {user[0]}:{user[1]} > {message}', echo=True) + '\n')
 
 if __name__ == '__main__':
+	if sysplatform == 'win32': cmd(f'title {h.APPDICT["server"]["title"]}')
 	server = MessengerServer()
