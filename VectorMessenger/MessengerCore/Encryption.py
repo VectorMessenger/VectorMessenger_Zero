@@ -1,10 +1,4 @@
-import socket
-from threading import Thread
-import helpers as h
-
-class MessengerBase():
-	def __init__(self):
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+from VectorMessenger import helpers as h
 
 class MXORCrypt:
 	@staticmethod

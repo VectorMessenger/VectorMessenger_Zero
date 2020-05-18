@@ -1,6 +1,6 @@
 from sys import argv
-from MessengerCore import MessengerBase
-import helpers as h
+from VectorMessenger.MessengerCore.Messages import MessengerBase
+from VectorMessenger import helpers as h
 
 class MessengerServer(MessengerBase):
 	def __init__(self):

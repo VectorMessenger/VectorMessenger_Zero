@@ -1,6 +1,7 @@
 # Cache files
 __pycache__
 .vscode
+*.egg-info
 
 # VM Config files
 data/config

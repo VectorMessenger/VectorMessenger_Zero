@@ -26,3 +26,11 @@ Note, that all commands are <ins>case sensitive</ins>!
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
 | `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decryption!</ins> |
+
+## Development
+### Preparing the project
+```bash
+$ pipenv install
+$ pipenv install --dev
+$ pipenv install -e .
+```

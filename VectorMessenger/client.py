@@ -1,5 +1,6 @@
-import helpers as h
-from MessengerCore import MessengerBase, MXORCrypt
+from VectorMessenger.MessengerCore.Messages import MessengerBase
+from VectorMessenger.MessengerCore.Encryption import MXORCrypt
+from VectorMessenger import helpers as h
 import tkinter
 import sys, os
 from threading import Thread
