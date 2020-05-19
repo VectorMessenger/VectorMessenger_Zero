@@ -32,5 +32,4 @@ Note, that all commands are <ins>case sensitive</ins>!
 ```bash
 $ pipenv install
 $ pipenv install --dev
-$ pipenv install -e .
 ```
