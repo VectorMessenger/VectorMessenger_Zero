@@ -1,5 +1,5 @@
 # Vector Messenger
-Simple python-based ui application for global chatting in your local network.
+Simple python-based ui application for network global chatting.
 
 ## Client
 ### Startup arguments
