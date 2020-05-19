@@ -12,18 +12,28 @@ class MessengerClient(MessengerBase):
 	def __init__(self, vm_client_ui = None, cfg = None):
 		super().__init__()
 		self.cfg = cfg if cfg != None else h.VMConfig.init(1)
+		self.ui = vm_client_ui
 		self.sock.connect((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
-		self.messagePollingThread = Thread(target=self.messagePolling, args=(vm_client_ui,))
-		self.messagePollingThread.start()
+		self.startMessagePolling()
 	
-	def messagePolling(self, vm_client_ui: object):
-		vm_client_ui.createLog('Polling thread status: active')
-		while True:
+	def messagePolling(self):
+		self.ui.createLog('Message polling thread is active')
+		while self.messagePollingEnabled:
 			data = self.sock.recv(1024)
 			msg = MXORCrypt.run(data.decode('utf-8'))
-			vm_client_ui.showMessage(msg)
-			vm_client_ui.createLog('Received message')
+			self.ui.showMessage(msg)
+			h.createUniversalLog('Received message', self.ui.createLog)
+		h.createUniversalLog('Message polling thread was stopped', self.ui.createLog)
+
+	def startMessagePolling(self):
+		self.messagePollingEnabled = True
+		self.messagePollingThread = Thread(target=self.messagePolling)
+		self.messagePollingThread.start()
+	
+	def stopMessagePolling(self):
+		self.messagePollingEnabled = False
+		self.sock.shutdown(socket.SHUT_RDWR)
 
 	def sendMessage(self, text: str):
 		text = MXORCrypt.run('@{}: {}'.format(self.cfg['username'], text))

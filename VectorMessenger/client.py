@@ -1,4 +1,4 @@
-from VectorMessenger.MessengerCore.Messages import MessengerBase, MessengerClient
+from VectorMessenger.MessengerCore.Messages import MessengerClient
 from VectorMessenger.MessengerCore.Encryption import MXORCrypt
 from VectorMessenger import helpers as h
 import tkinter
@@ -9,6 +9,11 @@ from time import sleep, time
 
 class VM_MainWindow:
 	def __init__(self, root: object):
+		def _onClose():
+			self.messenger.stopMessagePolling()
+			root.destroy()
+		root.protocol('WM_DELETE_WINDOW', _onClose)
+
 		self._time_start = time()
 
 		# Header Menu
@@ -16,8 +21,8 @@ class VM_MainWindow:
 		root.configure(menu=self.HM_Root)
 		self.HM_Theme = tkinter.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Theme', menu=self.HM_Theme)
-		self.HM_Theme.add_command(label='Light', command=lambda x=0: self.setColorScheme(x))
-		self.HM_Theme.add_command(label='Dark', command=lambda x=1: self.setColorScheme(x))
+		self.HM_Theme.add_command(label='Light', command=lambda: self.setColorScheme(0))
+		self.HM_Theme.add_command(label='Dark', command=lambda: self.setColorScheme(1))
 		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Settings', command=self.showWindow_settings)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
@@ -234,6 +239,8 @@ class VM_MainWindow:
 				input_str=input_str[9:]
 				self.createLog(f'\tOriginal input: <  {input_str} >', False)
 				msg = MXORCrypt.run(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MXORCrypt.run(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
+			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
+			elif input_str == 'polling-start': self.messenger.startMessagePolling()
 			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)
 
@@ -245,7 +252,7 @@ class VM_MainWindow:
 		ui_window = tkinter.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
-		ui_window.protocol('WM_DELETE_WINDOW', lambda window=ui_window, obj=self: _onClose(window, obj))
+		ui_window.protocol('WM_DELETE_WINDOW', lambda: _onClose(ui_window, self))
 		ui_window.columnconfigure(0, weight=1)
 		ui_window.rowconfigure(0, weight=1)
 

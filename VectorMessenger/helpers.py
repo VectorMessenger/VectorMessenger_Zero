@@ -1,7 +1,8 @@
+import json
 import os
 from datetime import datetime
 from random import choice as RChoice
-import json
+from threading import Thread
 
 # CONSTS
 VERSION = "#dev"
