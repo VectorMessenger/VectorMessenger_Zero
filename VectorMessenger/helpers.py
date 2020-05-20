@@ -55,7 +55,7 @@ APPDICT = {
 		}
 	},
 	'server': {
-		'title': 'VectorMessenger Server',
+		'title': 'VM Server',
 		'config_default': {
 			'version': VERSION,
 			'connection': DEF_CONNECTION_DICT

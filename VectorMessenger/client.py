@@ -14,8 +14,6 @@ class VM_MainWindow:
 			root.destroy()
 		root.protocol('WM_DELETE_WINDOW', _onClose)
 
-		self._time_start = time()
-
 		# Header Menu
 		self.HM_Root = tkinter.Menu(root)
 		root.configure(menu=self.HM_Root)
@@ -66,7 +64,6 @@ class VM_MainWindow:
 		self.chat_messages.insert(tkinter.END, text)
 		self.chat_messages.config(state=tkinter.DISABLED)
 		self.chat_messages.see(tkinter.END)
-		self.createLog('Message received')
 	
 	def sendMessage(self, *args):
 		message = self.chat_message_input.get()
@@ -240,7 +237,6 @@ class VM_MainWindow:
 				self.createLog(f'\tOriginal input: <  {input_str} >', False)
 				msg = MXORCrypt.run(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MXORCrypt.run(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
 			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
-			elif input_str == 'polling-start': self.messenger.startMessagePolling()
 			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)
 
@@ -287,23 +283,12 @@ class VM_MainWindow:
 			text {str} -- Info to log
 			addTime {bool} -- True - add time to log string, False - time will be replaced with ">"
 		"""
-		# Check if debug window exists
-		def _log():
-			if not hasattr(self, 'debug_console_showing'): return False
-			formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
-			self.debug_console_output.config(state=tkinter.NORMAL)
-			self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
-			self.debug_console_output.see(tkinter.END)
-			self.debug_console_output.config(state=tkinter.DISABLED)
-		def _loggerThread():
-			while not hasattr(self, 'debug_console_output'): sleep(0.1)
-			_log()
-
-		passed_time = time() - self._time_start
-		if not hasattr(self, 'debug_console_output') and passed_time <= 1:
-			Thread(target=_loggerThread).start()
-		else:
-			_log()
+		if not hasattr(self, 'debug_console_showing'): return False
+		formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
+		self.debug_console_output.config(state=tkinter.NORMAL)
+		self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
+		self.debug_console_output.see(tkinter.END)
+		self.debug_console_output.config(state=tkinter.DISABLED)
 
 if __name__ == '__main__':
 	# Init UI

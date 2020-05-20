@@ -1,5 +1,5 @@
 # Vector Messenger
-Simple python-based ui application for network global chatting.
+Simple python-based ui application for network global chatting through UDP protocol.
 
 ## Client
 ### Startup arguments
@@ -18,6 +18,7 @@ Simple python-based ui application for network global chatting.
 | `test-chat`      | Run chat widget test by sending messages to it (only 48 messages)   |
 | `test-chat-inf`  | Run chat widget test by sending messages to it (inifinite messages) |
 | `test-xor {str}` | Test XOR cipher and show the result to debug console                |
+| `polling-stop`   | Will stop message polling thread                                    |
 
 Note, that all commands are <ins>case sensitive</ins>!
 
