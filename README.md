@@ -1,4 +1,9 @@
-# Vector Messenger
+<p align="center">
+	<img src="./.github/VMLogo.png" width=128><br>
+	<b>Vector Messenger</b>
+</p>
+
+---
 Simple python-based ui application for network global chatting through UDP protocol.
 
 ## Client
