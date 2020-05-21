@@ -20,11 +20,16 @@ class VMCrypt:
 		bufferSize = 128 * 1024
 		encb_file = BytesIO(encoded_bytes)
 		decb_file = BytesIO()
-		pyAesCrypt.decryptStream(encb_file, decb_file, passwd, bufferSize, len(encb_file.getvalue()))
-		return decb_file.getvalue().decode('utf-8')
+
+		try:
+			pyAesCrypt.decryptStream(encb_file, decb_file, passwd, bufferSize, len(encb_file.getvalue()))
+		except ValueError:
+			return '< Cant decrypt incoming message >'
+		else:
+			return decb_file.getvalue().decode('utf-8')
 	
 	@staticmethod
-	def __set_key(key: str):
+	def set_key(key: str):
 		cfg = h.VMConfig.get(1)
 		cfg['aes_key'] = key
 		h.VMConfig.write(cfg, 1)

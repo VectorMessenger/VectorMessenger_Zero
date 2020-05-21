@@ -184,7 +184,7 @@ class VM_MainWindow:
 		# Encryption settings
 		def _setEncKey():
 			key = ekey_input_field.get()
-			VMCrypt.__set_key(key)
+			VMCrypt.set_key(key)
 			_hideEncKey()
 			ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
 		def _showEncKey():
