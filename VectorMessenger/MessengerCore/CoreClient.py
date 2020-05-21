@@ -8,14 +8,14 @@ from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
 from VectorMessenger.MessengerCore.Encryption import VMCrypt
 
 class MessengerClient(VMUDPBase):
-	def __init__(self, vm_client_ui = None, cfg = None):
+	def __init__(self, vm_client_ui = None):
 		super().__init__()
-		self.cfg = cfg if cfg != None else h.VMConfig.init(1)
 		self.ui = vm_client_ui
+		self.cfg = h.VMConfig.init(1)
 		self.startMessagePolling()
 	
 	def messagePolling(self):
-		self.ui.createLog('Message polling thread is active')
+		h.createLog('Message polling thread is active')
 		while self.messagePollingEnabled:
 			try:
 				data, _ = self.sock.recvfrom(1024)
@@ -24,9 +24,9 @@ class MessengerClient(VMUDPBase):
 			else:
 				msg = VMCrypt.decrypt(data)
 				self.ui.showMessage(msg)
-				h.createUniversalLog('Received message', self.ui.createLog)
+				h.createLog('Received message')
 			sleep(0.5)
-		h.createUniversalLog('Message polling thread was stopped', self.ui.createLog)
+		h.createLog('Message polling thread was stopped')
 
 	def startMessagePolling(self):
 		self.messagePollingEnabled = True

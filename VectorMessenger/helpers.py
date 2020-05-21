@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from random import choice as RChoice
 from threading import Thread
+import tkinter
 
 # CONSTS
 VERSION = "#dev"
@@ -64,7 +65,7 @@ APPDICT = {
 }
 
 # Global Functions
-def createUniversalLog(text: str, ui_log = None, echo = False):
+def createLog(text: str, echo = False):
 	"""
 	Create log output to stdout or another function if ui_log defined
 
@@ -75,8 +76,6 @@ def createUniversalLog(text: str, ui_log = None, echo = False):
 		ui_log {function} -- Log function (default: {None})
 		echo {bool} -- Return formatted log string without printing it (default: {False})
 	"""
-	if ui_log != None:
-		ui_log(text)
 	if echo:
 		return f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}'
 	else:
@@ -118,16 +117,15 @@ class VMConfig:
 			json.dump(cfg, configFile, indent=4)
 
 	@classmethod
-	def reset(cls, conf_type: int, ui_log = None):
+	def reset(cls, conf_type: int):
 		"""
 		Reset config json to default values
 
 		Arguments:
 			conf_type {int} -- 0 - Server, 1 - Client
-			ui_log {function} -- UI Logger function
 		"""
 		cls.delete(conf_type)
-		cls.init(conf_type, ui_log)
+		cls.init(conf_type)
 
 	@classmethod
 	def delete(cls, conf_type: int) -> bool:
@@ -148,15 +146,12 @@ class VMConfig:
 			return False
 
 	@classmethod
-	def init(cls, conf_type: int, ui_log = None) -> dict:
+	def init(cls, conf_type: int) -> dict:
 		"""
 		Checks for .json config files existance and creates a new one if not exist
 
 		Arguments:
 			conf_type {int} -- Select type of config. 0 - Server, 1 - Client
-
-		Keyword Arguments:
-			ui_log {function} -- argument for ui log function. Only if running from client. (default: {None})
 
 		Returns:
 			dict -- Returns config .json parsed to dict
@@ -164,19 +159,19 @@ class VMConfig:
 
 		exist = False
 		if conf_type == 0:
-			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createUniversalLog('Created config dir')
+			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createLog('Created config dir')
 			cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
-			if os.path.isfile(cfgserver_path): createUniversalLog('Config file was found'); exist = True
+			if os.path.isfile(cfgserver_path): createLog('Config file was found'); exist = True
 			if not exist:
 				cls.write(APPDICT['server']['config_default'], conf_type)
 			return cls.get(conf_type)
 		elif conf_type == 1:
-			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createUniversalLog('Created config dir', ui_log)
+			if not os.path.isdir(CONFIG_DIR): os.makedirs(CONFIG_DIR); createLog('Created config dir')
 			cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
-			if os.path.isfile(cfgclient_path): createUniversalLog('Config file was found', ui_log); exist = True
+			if os.path.isfile(cfgclient_path): createLog('Config file was found'); exist = True
 			if not exist:
 				cls.write(APPDICT['client']['config_default'], conf_type)
-				createUniversalLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >', ui_log)
+				createLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >')
 			return cls.get(conf_type)
 
 	@staticmethod
@@ -194,29 +189,38 @@ class VMConfig:
 		cfg_path = os.path.join(CONFIG_DIR, path)
 		return cfg_path
 
+class RedirectSTD:
+	def __init__(self, console):
+		self.console = console
+	
+	def write(self, string):
+		self.console.config(state=tkinter.NORMAL)
+		self.console.insert(tkinter.END, f'{string}')
+		self.console.see(tkinter.END)
+		self.console.config(state=tkinter.DISABLED)
+
 # ----- CLIENT -----
 # Debug Functions
-def _testChat(showMessageFNC, createLogFNC, infinite = False):
+def _testChat(showMessageFNC, infinite = False):
 	"""
 	Will test chat widget by sending test messages to it
 
 	Arguments:
 		showMessageFNC {function} -- Function for sending message to ui
-		createLogFNC {function} -- Function for actions logging
 
 	Keyword Arguments:
 		infinite {bool} -- Enable infinite messages test. If False then only 48 messages will be sent (default: {False})
 	"""
 
 	from time import sleep
-	createLogFNC(f'Chat test begin. Infinite: {infinite}')
+	createLog(f'Chat test begin. Infinite: {infinite}')
 	arrayMessage = ('test_0: Guys, Im testing this new chat app now.\n', 'test_34: Wow! Thats cool.\n', 'test_12: Hello world!\n', 'test_2: Why? Just... why?\n')
 	i = 0
 	while True:
 		showMessageFNC(RChoice(arrayMessage))
-		createLogFNC(f'test message{"" if infinite else " #" + str(i + 1)} sent')
+		createLog(f'test message{"" if infinite else " #" + str(i + 1)} sent')
 		sleep(0.001)
 		if not infinite:
 			i = i + 1
 			if i >= 48: return False
-	createLogFNC('Chat test ended')
+	createLog('Chat test ended')

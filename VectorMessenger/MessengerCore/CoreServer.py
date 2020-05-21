@@ -12,7 +12,7 @@ class MessengerServer(VMUDPBase):
 		self.sock.bind((self.cfg['connection']['ip'], self.cfg['connection']['port']))
 		self.clients = []
 		self.__online = True
-		h.createUniversalLog('Server online')
+		h.createLog('Server online')
 
 		try:
 			while self.__online:
@@ -21,10 +21,10 @@ class MessengerServer(VMUDPBase):
 				except socket.error:
 					pass
 				else:
-					h.createUniversalLog(f'Receiving data from {addres}')
+					h.createLog(f'Receiving data from {addres}')
 					if addres not in self.clients:
 						self.clients.append(addres)
-						h.createUniversalLog('-> New address, adding to [clients] var')
+						h.createLog('-> New address, adding to [clients] var')
 					for client in self.clients:
 						# TODO: Add client existence check before sending
 						# UPD0: Bruh, there's no way you can check connection with UDP
@@ -38,7 +38,7 @@ class MessengerServer(VMUDPBase):
 	def stop(self):
 		""" Will stop the server """
 		self.__online = False
-		h.createUniversalLog('Shutting down the server')
+		h.createLog('Shutting down the server')
 		sys.exit()
 
 	@staticmethod
@@ -52,4 +52,4 @@ class MessengerServer(VMUDPBase):
 		"""
 		if '--log-messages' in sys.argv:
 			with open('./server_messages_log.txt', 'at', encoding='utf-8') as logfile:
-				logfile.write(h.createUniversalLog(f'< {user[0]}:{user[1]} > {message}', echo=True) + '\n')
+				logfile.write(h.createLog(f'< {user[0]}:{user[1]} > {message}', echo=True) + '\n')

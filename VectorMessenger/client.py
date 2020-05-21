@@ -53,8 +53,8 @@ class VM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
-	def initMessenger(self, cfg: dict):
-		self.messenger = MessengerClient(self, cfg)
+	def initMessenger(self):
+		self.messenger = MessengerClient(self)
 
 	def showMessage(self, text: str):
 		""" Will show the message in chat ui """
@@ -111,8 +111,8 @@ class VM_MainWindow:
 				self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
 				self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
 		else:
-			self.createLog('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
-			h.VMConfig.init(1, self.createLog)
+			h.createLog('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
+			h.VMConfig.init(1)
 			self.refreshColorScheme(screen, refreshAll)
 
 	def setColorScheme(self, mode: int):
@@ -126,7 +126,7 @@ class VM_MainWindow:
 		theme = 'light' if mode == 0 else 'dark'
 		cfg['ui']['theme_selected'] = theme
 		h.VMConfig.write(cfg, 1)
-		self.createLog(f'UI Theme set to {theme}')
+		h.createLog(f'UI Theme set to {theme}')
 		self.refreshColorScheme()
 	
 	def showWindow_settings(self):
@@ -167,11 +167,11 @@ class VM_MainWindow:
 
 		# Advanced
 		def _resetCfg():
-			h.VMConfig.reset(1, self.createLog)
+			h.VMConfig.reset(1)
 			_reloadUname()
 			_hideEncKey()
 			self.refreshColorScheme(refreshAll=True)
-			self.createLog('Config file reset complete')
+			h.createLog('Config file reset complete')
 
 		frame_advanced = tkinter.LabelFrame(window, text='Advanced')
 		adv_btn_resetConfig = tkinter.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
@@ -210,7 +210,6 @@ class VM_MainWindow:
 	def showDebugConsole(self):
 		"""
 		Show in-app console with actions logs.
-		To create log - use createLog() function
 		"""
 		if hasattr(self, 'debug_console_showing'): return False
 
@@ -225,15 +224,18 @@ class VM_MainWindow:
 				self.chat_messages.delete(1.0, tkinter.END)
 				self.chat_messages.config(state=tkinter.DISABLED)
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
-			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
-			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
+			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,)).start()
+			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,True)).start()
 			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
-			else: self.createLog('No such command', False)
+			elif input_str == 'test-raise': raise Exception('Test exception raised')
+			else: h.createLog('No such command')
 			self.debug_console_input.delete(0, tkinter.END)
 
 		def _onClose(window, obj):
 			delattr(obj, 'debug_console_showing')
 			obj.HM_Advanced.entryconfig(0, state=tkinter.NORMAL)
+			sys.stdout = sys.__stdout__
+			sys.stderr = sys.__stderr__
 			window.destroy()
 
 		ui_window = tkinter.Toplevel(bg='#181818')
@@ -265,21 +267,10 @@ class VM_MainWindow:
 
 		self.HM_Advanced.entryconfig(0, state=tkinter.DISABLED)
 		self.debug_console_showing = True
-
-	def createLog(self, text: str, addTime = True):
-		"""
-		Will create log to ui
-
-		Arguments:
-			text {str} -- Info to log
-			addTime {bool} -- True - add time to log string, False - time will be replaced with ">"
-		"""
-		if not hasattr(self, 'debug_console_showing'): return False
-		formatted_log = (f'[{datetime.now().strftime("%H:%M:%S:%f")}]:' if addTime else '>') + f' {text}'
-		self.debug_console_output.config(state=tkinter.NORMAL)
-		self.debug_console_output.insert(tkinter.END, f'{formatted_log}\n')
-		self.debug_console_output.see(tkinter.END)
-		self.debug_console_output.config(state=tkinter.DISABLED)
+		
+		# Redirect STD (-OUT && -ERROR) to debug console
+		sys.stdout = h.RedirectSTD(self.debug_console_output)
+		sys.stderr = h.RedirectSTD(self.debug_console_output)
 
 if __name__ == '__main__':
 	# Init UI
@@ -288,12 +279,9 @@ if __name__ == '__main__':
 	ui_root.iconbitmap(h.ICON_CLIENT_PATH)
 	ui_root.minsize(width=100, height=100)
 	mainWindow = VM_MainWindow(ui_root)
-	cfg = h.VMConfig.init(1, mainWindow.createLog)
+	cfg = h.VMConfig.init(1)
 	
 	mainWindow.refreshColorScheme()
-	mainWindow.initMessenger(cfg)
+	mainWindow.initMessenger()
 
-	if '--debug' in sys.argv: mainWindow.showDebugConsole()
-	if '--testchat' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
-	if '--testchat-inf' in sys.argv: Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True,)).start()
 	ui_root.mainloop()
