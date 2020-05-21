@@ -10,7 +10,7 @@ executables = [
 ]
 
 includes = ['tkinter', 'VectorMessenger']
-excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer']
 zip_include_packages = []
 include_files = [('./VectorMessenger/data/ico', './data/ico')]
 
@@ -34,7 +34,7 @@ executables = [
 	Executable('./VectorMessenger/server.py', targetName='VM Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
 ]
 
-excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
 options['build_exe']['build_exe'] = './build/VMServer'
 options['build_exe']['include_files'] = []
 options['build_exe']['includes'] = ['VectorMessenger']

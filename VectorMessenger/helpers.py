@@ -13,7 +13,7 @@ CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
 DEF_CONNECTION_DICT = {'ip': 'localhost', 'port': 9263}
-DEF_KEY_INT = 12345
+DEF_AES_KEY = 'ChangeMeNOW'
 
 APPDICT = {
 	'client': {
@@ -21,7 +21,7 @@ APPDICT = {
 		'config_default': {
 			'username': 'Anonymous',
 			'version': VERSION,
-			'key_int': DEF_KEY_INT,
+			'aes_key': DEF_AES_KEY,
 			'connection': DEF_CONNECTION_DICT,
 			'ui': {
 				'theme_selected': 'light',

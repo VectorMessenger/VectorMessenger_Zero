@@ -1,6 +1,6 @@
 from sys import argv, platform as sysplatform
 from os import system as cmd
-from VectorMessenger.MessengerCore.Messages import MessengerServer
+from VectorMessenger.MessengerCore.CoreServer import MessengerServer
 from VectorMessenger.helpers import APPDICT
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
-from VectorMessenger.MessengerCore.Messages import MessengerClient
-from VectorMessenger.MessengerCore.Encryption import MXORCrypt
+from VectorMessenger.MessengerCore.CoreClient import MessengerClient
+from VectorMessenger.MessengerCore.Encryption import VMCrypt
 from VectorMessenger import helpers as h
 import tkinter
 import sys, os
@@ -181,17 +181,12 @@ class VM_MainWindow:
 
 		# Encryption settings
 		def _setEncKey():
-			try:
-				key = int(ekey_input_field.get())
-			except ValueError:
-				ekey_input_field.delete(0, tkinter.END)
-				ekey_warning_label.config(text='ONLY INTEGER VALUES ALLOWED D:<', fg='#ff0000')
-			else:
-				MXORCrypt.set_key(key)
-				_hideEncKey
-				ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
+			key = ekey_input_field.get()
+			VMCrypt.__set_key(key)
+			_hideEncKey()
+			ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
 		def _showEncKey():
-			ekey_currentKey_label.config(text=f'Current Key: {h.VMConfig.get(1)["key_int"]}')
+			ekey_currentKey_label.config(text=f'Current Key: {h.VMConfig.get(1)["aes_key"]}')
 		def _hideEncKey():
 			ekey_currentKey_label.config(text='Current Key: ****')
 
@@ -232,10 +227,6 @@ class VM_MainWindow:
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,mainWindow.createLog,True)).start()
-			elif input_str.startswith('test-xor'):
-				input_str=input_str[9:]
-				self.createLog(f'\tOriginal input: <  {input_str} >', False)
-				msg = MXORCrypt.run(input_str); self.createLog(f'\tResult of XOR encrypt: < ' + msg + ' >', False); msg = MXORCrypt.run(msg); self.createLog(f'\tResult of XOR decrypt: < ' + msg + ' >', False)
 			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
 			else: self.createLog('No such command', False)
 			self.debug_console_input.delete(0, tkinter.END)

@@ -1,25 +1,29 @@
 from VectorMessenger import helpers as h
+from io import BytesIO
+import pyAesCrypt
 
-class MXORCrypt:
+class VMCrypt:
 	@staticmethod
-	def run(text: str) -> str:
-		"""
-		Message encryptor/decryptor based on XOR cipher
-
-		Arguments:
-			text {str} -- Text to commit actions on
-
-		Returns:
-			str -- Result of actions
-		"""
-		key = h.VMConfig.get(1)['key_int']
-		result = str()
-		for char in text:
-			result += chr(ord(char)^key)
-		return result
+	def encrypt(text: str) -> bytes:
+		passwd = h.VMConfig.get(1)['aes_key']
+		bufferSize = 128 * 1024
+		text_bin = text.encode('utf-8')
+		text_file = BytesIO(text_bin)
+		result_file = BytesIO()
+		pyAesCrypt.encryptStream(text_file, result_file, passwd, bufferSize)
+		return result_file.getvalue()
 		
 	@staticmethod
-	def set_key(key: int):
+	def decrypt(encoded_bytes: bytes) -> str:
+		passwd = h.VMConfig.get(1)['aes_key']
+		bufferSize = 128 * 1024
+		encb_file = BytesIO(encoded_bytes)
+		decb_file = BytesIO()
+		pyAesCrypt.decryptStream(encb_file, decb_file, passwd, bufferSize, len(encb_file.getvalue()))
+		return decb_file.getvalue().decode('utf-8')
+	
+	@staticmethod
+	def __set_key(key: str):
 		cfg = h.VMConfig.get(1)
-		cfg['key_int'] = key
+		cfg['aes_key'] = key
 		h.VMConfig.write(cfg, 1)

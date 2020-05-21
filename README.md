@@ -17,7 +17,6 @@ Simple python-based ui application for network global chatting through UDP proto
 | `refresh-theme`  | Read config .json values and update theme                           |
 | `test-chat`      | Run chat widget test by sending messages to it (only 48 messages)   |
 | `test-chat-inf`  | Run chat widget test by sending messages to it (inifinite messages) |
-| `test-xor {str}` | Test XOR cipher and show the result to debug console                |
 | `polling-stop`   | Will stop message polling thread                                    |
 
 Note, that all commands are <ins>case sensitive</ins>!
