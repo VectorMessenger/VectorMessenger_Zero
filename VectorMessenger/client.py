@@ -216,11 +216,11 @@ class VM_MainWindow:
 		if hasattr(self, 'debug_console_showing'): return False
 
 		def _handleConsoleInput(e):
-			input_str = self.debug_console_input.get()
+			input_str = self.__debug_console_input.get()
 			if input_str == 'clear': 
-				self.debug_console_output.config(state=tkinter.NORMAL)
-				self.debug_console_output.delete(1.0, tkinter.END)
-				self.debug_console_output.config(state=tkinter.DISABLED)
+				self.__debug_console_output.config(state=tkinter.NORMAL)
+				self.__debug_console_output.delete(1.0, tkinter.END)
+				self.__debug_console_output.config(state=tkinter.DISABLED)
 			elif input_str == 'clear-chat':
 				self.chat_messages.config(state=tkinter.NORMAL)
 				self.chat_messages.delete(1.0, tkinter.END)
@@ -231,7 +231,7 @@ class VM_MainWindow:
 			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
 			elif input_str == 'test-raise': raise Exception('Test exception raised')
 			else: h.createLog('No such command')
-			self.debug_console_input.delete(0, tkinter.END)
+			self.__debug_console_input.delete(0, tkinter.END)
 
 		def _onClose(window, obj):
 			delattr(obj, 'debug_console_showing')
@@ -248,31 +248,31 @@ class VM_MainWindow:
 		ui_window.rowconfigure(0, weight=1)
 
 		# Top
-		self.debug_console_FTop = tkinter.Frame(ui_window)
-		self.debug_console_FTop.columnconfigure(0, weight=1)
-		self.debug_console_FTop.rowconfigure(0, weight=1)
-		self.debug_console_output = tkinter.Text(self.debug_console_FTop, bg='#262626', fg='white', font=h.VMConfig.get(1)['ui']['debug_console']['font'], state=tkinter.DISABLED)
-		self.debug_console_scrollbar = tkinter.Scrollbar(self.debug_console_FTop, command=self.debug_console_output.yview)
-		self.debug_console_output.config(yscrollcommand=self.debug_console_scrollbar.set)
-		self.debug_console_FTop.grid(column=0, row=0, sticky="NSEW")
-		self.debug_console_output.grid(column=0, row=0, sticky="NSEW")
-		self.debug_console_scrollbar.grid(column=1, row=0, sticky="NS")
+		self.__debug_console_FTop = tkinter.Frame(ui_window)
+		self.__debug_console_FTop.columnconfigure(0, weight=1)
+		self.__debug_console_FTop.rowconfigure(0, weight=1)
+		self.__debug_console_output = tkinter.Text(self.__debug_console_FTop, bg='#262626', fg='white', font=h.VMConfig.get(1)['ui']['debug_console']['font'], state=tkinter.DISABLED)
+		self.__debug_console_scrollbar = tkinter.Scrollbar(self.__debug_console_FTop, command=self.__debug_console_output.yview)
+		self.__debug_console_output.config(yscrollcommand=self.__debug_console_scrollbar.set)
+		self.__debug_console_FTop.grid(column=0, row=0, sticky="NSEW")
+		self.__debug_console_output.grid(column=0, row=0, sticky="NSEW")
+		self.__debug_console_scrollbar.grid(column=1, row=0, sticky="NS")
 		
 		# Bottom
-		self.debug_console_FBot = tkinter.Frame(ui_window)
-		self.debug_console_FBot.columnconfigure(0, weight=1)
-		self.debug_console_FBot.rowconfigure(0, weight=1)
-		self.debug_console_input = tkinter.Entry(self.debug_console_FBot, bg='#303030', fg='#00fa00', font='Consolas 10')
-		self.debug_console_input.bind('<Return>', _handleConsoleInput)
-		self.debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
-		self.debug_console_input.grid(column=0, row=0, sticky="EW")
+		self.__debug_console_FBot = tkinter.Frame(ui_window)
+		self.__debug_console_FBot.columnconfigure(0, weight=1)
+		self.__debug_console_FBot.rowconfigure(0, weight=1)
+		self.__debug_console_input = tkinter.Entry(self.__debug_console_FBot, bg='#303030', fg='#00fa00', font='Consolas 10')
+		self.__debug_console_input.bind('<Return>', _handleConsoleInput)
+		self.__debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
+		self.__debug_console_input.grid(column=0, row=0, sticky="EW")
 
 		self.HM_Advanced.entryconfig(0, state=tkinter.DISABLED)
 		self.debug_console_showing = True
 		
 		# Redirect STD (-OUT && -ERROR) to debug console
-		sys.stdout = h.RedirectSTD(self.debug_console_output)
-		sys.stderr = h.RedirectSTD(self.debug_console_output)
+		sys.stdout = h.RedirectSTD(self.__debug_console_output)
+		sys.stderr = h.RedirectSTD(self.__debug_console_output)
 
 if __name__ == '__main__':
 	# Init UI
