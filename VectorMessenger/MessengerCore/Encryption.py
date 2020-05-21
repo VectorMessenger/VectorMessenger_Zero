@@ -1,6 +1,7 @@
-from VectorMessenger import helpers as h
 from io import BytesIO
 import pyAesCrypt
+
+from VectorMessenger import helpers as h
 
 class VMCrypt:
 	@staticmethod

@@ -1,11 +1,13 @@
+import os
+import sys
+import tkinter
+from datetime import datetime
+from threading import Thread
+from time import sleep, time
+
+from VectorMessenger import helpers as h
 from VectorMessenger.MessengerCore.CoreClient import MessengerClient
 from VectorMessenger.MessengerCore.Encryption import VMCrypt
-from VectorMessenger import helpers as h
-import tkinter
-import sys, os
-from threading import Thread
-from datetime import datetime
-from time import sleep, time
 
 class VM_MainWindow:
 	def __init__(self, root: object):

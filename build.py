@@ -1,6 +1,6 @@
-from cx_Freeze import setup, Executable
-from VectorMessenger import helpers
 from sys import argv
+from cx_Freeze import Executable, setup
+from VectorMessenger import helpers
 
 if 'build' not in argv: argv.append('build')
 
@@ -9,8 +9,8 @@ executables = [
 	Executable('./VectorMessenger/client.py', targetName='VM Client', base='Win32GUI', icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
 ]
 
-includes = ['tkinter', 'VectorMessenger']
-excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer']
+includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer']
 zip_include_packages = []
 include_files = [('./VectorMessenger/data/ico', './data/ico')]
 

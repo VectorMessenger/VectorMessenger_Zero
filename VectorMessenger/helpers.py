@@ -1,9 +1,9 @@
 import json
 import os
+import tkinter
 from datetime import datetime
 from random import choice as RChoice
 from threading import Thread
-import tkinter
 
 # CONSTS
 VERSION = "#dev"
