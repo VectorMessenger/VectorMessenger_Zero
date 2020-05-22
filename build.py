@@ -12,7 +12,7 @@ executables = [
 includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
 excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer']
 zip_include_packages = []
-include_files = [('./VectorMessenger/data/ico', './data/ico')]
+include_files = [('./VectorMessenger/data/ico', './data/ico'), './LICENSE']
 
 options = {
     'build_exe': {
@@ -36,7 +36,7 @@ executables = [
 
 excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
 options['build_exe']['build_exe'] = './build/VMServer'
-options['build_exe']['include_files'] = []
+options['build_exe']['include_files'] = ['./LICENSE']
 options['build_exe']['includes'] = ['VectorMessenger']
 options['build_exe']['excludes'] = excludes
 
