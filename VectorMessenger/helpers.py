@@ -6,7 +6,7 @@ from random import choice as RChoice
 from threading import Thread
 
 # CONSTS
-VERSION = "#dev"
+VERSION = "B:22052020"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'
 ICON_SEND_MESSAGE = './data/ico/send_message.png'
@@ -188,6 +188,11 @@ class VMConfig:
 		path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
 		cfg_path = os.path.join(CONFIG_DIR, path)
 		return cfg_path
+
+class UpdateChecker:
+	# TODO
+	def __init__(self):
+		pass
 
 class RedirectSTD:
 	def __init__(self, console):

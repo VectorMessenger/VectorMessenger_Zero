@@ -193,7 +193,7 @@ class VM_MainWindow:
 			ekey_currentKey_label.config(text='Current Key: ****')
 
 		frame_encKeySettings = tkinter.LabelFrame(window, text='Encryption Key')
-		ekey_warning_label = tkinter.Label(frame_encKeySettings, text='Please note that only integer values are allowed.')
+		ekey_warning_label = tkinter.Label(frame_encKeySettings, text='')
 		ekey_currentKey_label = tkinter.Label(frame_encKeySettings, text='Current Key: ****', bg='#ffffff')
 		ekey_btn_showCurrentKey = tkinter.Button(frame_encKeySettings, text='Show', command=_showEncKey, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
 		ekey_input_field = tkinter.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
