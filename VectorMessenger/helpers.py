@@ -60,7 +60,6 @@ APPDICT = {
 	'server': {
 		'title': 'VM Server',
 		'config_default': {
-			'version': VERSION,
 			'connection': DEF_CONNECTION_DICT
 		}
 	}
