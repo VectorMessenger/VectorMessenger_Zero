@@ -17,6 +17,8 @@ Simple python-based ui application for network global chatting through UDP proto
 | `test-chat-inf` | Run chat widget test by sending messages to it (inifinite messages)        |
 | `polling-stop`  | Will stop message polling thread                                           |
 | `test-raise`    | This command will raise test exception that <ins>will crash</ins> this app |
+| `version`       | Print app version                                                          |
+| `updates-check` | Check for available updates                                                |
 
 Note, that all commands are <ins>case sensitive</ins>!
 

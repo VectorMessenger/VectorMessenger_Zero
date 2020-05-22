@@ -55,6 +55,11 @@ class VM_MainWindow:
 		root.columnconfigure(0, weight=1)
 		root.rowconfigure(0, weight=1)
 
+		# Update checker
+		self.HM_Root.add_command(label='', state=tkinter.DISABLED)
+		self.update_checker = h.UpdateChecker(self.HM_Root)
+		Thread(target=self.update_checker.check).start()
+
 	def initMessenger(self):
 		self.messenger = MessengerClient(self)
 
@@ -230,6 +235,8 @@ class VM_MainWindow:
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,True)).start()
 			elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
 			elif input_str == 'test-raise': raise Exception('Test exception raised')
+			elif input_str == 'version': h.createLog(f'Version: {h.VERSION}')
+			elif input_str == 'updates-check': self.update_checker.check()
 			else: h.createLog('No such command')
 			self.__debug_console_input.delete(0, tkinter.END)
 

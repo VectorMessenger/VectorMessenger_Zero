@@ -4,9 +4,12 @@ import tkinter
 from datetime import datetime
 from random import choice as RChoice
 from threading import Thread
+from urllib import request, error as urllib_error
+import json
 
 # CONSTS
 VERSION = "B:22052020"
+VERSION_UPDATE_API = "https://pastebin.com/raw/5cSTveV4"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'
 ICON_SEND_MESSAGE = './data/ico/send_message.png'
@@ -21,7 +24,6 @@ APPDICT = {
 		'title': 'Vector Messenger',
 		'config_default': {
 			'username': 'Anonymous',
-			'version': VERSION,
 			'aes_key': DEF_AES_KEY,
 			'connection': DEF_CONNECTION_DICT,
 			'ui': {
@@ -190,9 +192,27 @@ class VMConfig:
 		return cfg_path
 
 class UpdateChecker:
-	# TODO
-	def __init__(self):
-		pass
+	"""
+	VM Update checker. Currently it works with modifying tk.Menu bar label, so its kinda hardcoded, yes.
+	"""	
+	def __init__(self, ui_ctrl):
+		self.__U_NOUPDATES = '\u2713'
+		self.__U_OUTDATE = '\u2191'
+		
+		self.__ui_ctrl = ui_ctrl
+
+	def check(self):
+		self.__ui_ctrl.entryconfig(4, label='Checking for updates \u2B6E')
+		try:
+			createLog('Checking for updates')
+			content = request.urlopen(VERSION_UPDATE_API).read()
+		except urllib_error.URLError:
+			self.__ui_ctrl.entryconfig(4, label="")
+			createLog("Can't check for updates. No connection to network or source unavailable")
+		else:
+			content = json.loads(content)
+			if VERSION == content['version']: self.__ui_ctrl.entryconfig(4, label=f'Up-To-Date {self.__U_NOUPDATES}'); createLog('Version is up to date')
+			else: self.__ui_ctrl.entryconfig(4, label=f'Update Available {self.__U_OUTDATE}'); createLog('Update is available')
 
 class RedirectSTD:
 	def __init__(self, console):
