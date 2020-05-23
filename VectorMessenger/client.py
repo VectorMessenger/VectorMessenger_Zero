@@ -1,9 +1,6 @@
-import os
 import sys
-import tkinter
-from datetime import datetime
+import tkinter as tk
 from threading import Thread
-from time import sleep, time
 
 from VectorMessenger import helpers as h
 from VectorMessenger.MessengerCore.CoreClient import MessengerClient
@@ -17,21 +14,21 @@ class VM_MainWindow:
 		root.protocol('WM_DELETE_WINDOW', _onClose)
 
 		# Header Menu
-		self.HM_Root = tkinter.Menu(root)
+		self.HM_Root = tk.Menu(root)
 		root.configure(menu=self.HM_Root)
-		self.HM_Theme = tkinter.Menu(self.HM_Root, tearoff=0)
+		self.HM_Theme = tk.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Theme', menu=self.HM_Theme)
 		self.HM_Theme.add_command(label='Light', command=lambda: self.setColorScheme(0))
 		self.HM_Theme.add_command(label='Dark', command=lambda: self.setColorScheme(1))
-		self.HM_Advanced = tkinter.Menu(self.HM_Root, tearoff=0)
+		self.HM_Advanced = tk.Menu(self.HM_Root, tearoff=0)
 		self.HM_Root.add_cascade(label='Settings', command=self.showWindow_settings)
 		self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
 		self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
 
 		# Top
-		self.frame_top = tkinter.Frame(root)
-		self.chat_messages = tkinter.Text(self.frame_top, width=48, height=26, wrap=tkinter.WORD, state=tkinter.DISABLED, font='Arial 13')
-		self.chat_scroll = tkinter.Scrollbar(self.frame_top, command=self.chat_messages.yview)
+		self.frame_top = tk.Frame(root)
+		self.chat_messages = tk.Text(self.frame_top, width=48, height=26, wrap=tk.WORD, state=tk.DISABLED, font='Arial 13')
+		self.chat_scroll = tk.Scrollbar(self.frame_top, command=self.chat_messages.yview)
 		self.chat_messages.config(yscrollcommand=self.chat_scroll.set)
 
 		self.frame_top.grid(column=0, row=0, sticky="NSEW")
@@ -41,10 +38,10 @@ class VM_MainWindow:
 		self.frame_top.rowconfigure(0, weight=1)
 
 		# Bottom
-		self.frame_bot = tkinter.Frame(root)
-		self.chat_message_input = tkinter.Entry(self.frame_bot, width=50) 
+		self.frame_bot = tk.Frame(root)
+		self.chat_message_input = tk.Entry(self.frame_bot, width=50) 
 		self.chat_message_input.bind('<Return>', self.sendMessage)
-		self.chat_btn_sendMessage = tkinter.Button(self.frame_bot, text="\u27A2", font=20, relief=tkinter.FLAT, command=self.sendMessage)
+		self.chat_btn_sendMessage = tk.Button(self.frame_bot, text="\u27A2", font=20, relief=tk.FLAT, command=self.sendMessage)
 
 		self.frame_bot.grid(column=0, row=1, sticky="NSEW")
 		self.chat_message_input.grid(column=0, row=0, sticky="NSEW")
@@ -56,7 +53,7 @@ class VM_MainWindow:
 		root.rowconfigure(0, weight=1)
 
 		# Update checker
-		self.HM_Root.add_command(label='', state=tkinter.DISABLED)
+		self.HM_Root.add_command(label='', state=tk.DISABLED)
 		self.update_checker = h.UpdateChecker(self.HM_Root)
 		Thread(target=self.update_checker.check).start()
 
@@ -67,14 +64,14 @@ class VM_MainWindow:
 		""" Will show the message in chat ui """
 		text = text + '\n'
 
-		self.chat_messages.config(state=tkinter.NORMAL)
-		self.chat_messages.insert(tkinter.END, text)
-		self.chat_messages.config(state=tkinter.DISABLED)
-		self.chat_messages.see(tkinter.END)
+		self.chat_messages.config(state=tk.NORMAL)
+		self.chat_messages.insert(tk.END, text)
+		self.chat_messages.config(state=tk.DISABLED)
+		self.chat_messages.see(tk.END)
 	
 	def sendMessage(self, *args):
 		message = self.chat_message_input.get()
-		self.chat_message_input.delete(0, tkinter.END)
+		self.chat_message_input.delete(0, tk.END)
 		if len(message) > 0:
 			self.messenger.sendMessage(message)
 	
@@ -112,11 +109,11 @@ class VM_MainWindow:
 				pass # TODO: Implement theme refreshing for settings window
 			
 			if theme_name == 'theme_light':
-				self.HM_Theme.entryconfig(0, state=tkinter.DISABLED)
-				self.HM_Theme.entryconfig(1, state=tkinter.NORMAL)
+				self.HM_Theme.entryconfig(0, state=tk.DISABLED)
+				self.HM_Theme.entryconfig(1, state=tk.NORMAL)
 			elif theme_name == 'theme_dark':
-				self.HM_Theme.entryconfig(1, state=tkinter.DISABLED)
-				self.HM_Theme.entryconfig(0, state=tkinter.NORMAL)
+				self.HM_Theme.entryconfig(1, state=tk.DISABLED)
+				self.HM_Theme.entryconfig(0, state=tk.NORMAL)
 		else:
 			h.createLog('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
 			h.VMConfig.init(1)
@@ -140,11 +137,11 @@ class VM_MainWindow:
 		""" Will show window with settings """
 		ENTRY_WIDTH = 40
 
-		window = tkinter.Toplevel(ui_root)
+		window = tk.Toplevel(ui_root)
 		window.iconbitmap(h.ICON_CLIENT_PATH)
 		window.title('Settings')
 		window.resizable(False, False)
-		window = tkinter.Frame(window)
+		window = tk.Frame(window)
 		window.grid(row=0, column=0, padx=5, pady=5)
 
 		# Username settings
@@ -159,13 +156,13 @@ class VM_MainWindow:
 				h.VMConfig.write(cfg, 1)
 				_reloadUname()
 			else: 
-				uname_input.delete(0, tkinter.END)
+				uname_input.delete(0, tk.END)
 				uname_input.insert(0, 'Username cant be empty!')
 		
-		frame_setUsername = tkinter.LabelFrame(window, text='Username')
-		uname_currentLabel = tkinter.Label(frame_setUsername, text=''); _reloadUname()
-		uname_input = tkinter.Entry(frame_setUsername, width=ENTRY_WIDTH)
-		uname_btn_set = tkinter.Button(frame_setUsername, text='Set', command=_setUname, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
+		frame_setUsername = tk.LabelFrame(window, text='Username')
+		uname_currentLabel = tk.Label(frame_setUsername, text=''); _reloadUname()
+		uname_input = tk.Entry(frame_setUsername, width=ENTRY_WIDTH)
+		uname_btn_set = tk.Button(frame_setUsername, text='Set', command=_setUname, height=1, relief=tk.FLAT, bg='#dfdfdf')
 
 		frame_setUsername.grid(row=0, column=0, sticky='NSEW')
 		uname_currentLabel.grid(row=0, column=0, sticky='W')
@@ -180,8 +177,8 @@ class VM_MainWindow:
 			self.refreshColorScheme(refreshAll=True)
 			h.createLog('Config file reset complete')
 
-		frame_advanced = tkinter.LabelFrame(window, text='Advanced')
-		adv_btn_resetConfig = tkinter.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
+		frame_advanced = tk.LabelFrame(window, text='Advanced')
+		adv_btn_resetConfig = tk.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, height=1, relief=tk.FLAT, bg='#dfdfdf')
 
 		frame_advanced.grid(row=0, column=1, sticky='NSEW', rowspan=10)
 		adv_btn_resetConfig.grid(row=0, column=1, sticky='EW', padx=2)
@@ -197,12 +194,12 @@ class VM_MainWindow:
 		def _hideEncKey():
 			ekey_currentKey_label.config(text='Current Key: ****')
 
-		frame_encKeySettings = tkinter.LabelFrame(window, text='Encryption Key')
-		ekey_warning_label = tkinter.Label(frame_encKeySettings, text='')
-		ekey_currentKey_label = tkinter.Label(frame_encKeySettings, text='Current Key: ****', bg='#ffffff')
-		ekey_btn_showCurrentKey = tkinter.Button(frame_encKeySettings, text='Show', command=_showEncKey, height=1, relief=tkinter.FLAT, bg='#dfdfdf')
-		ekey_input_field = tkinter.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
-		ekey_btn_set = tkinter.Button(frame_encKeySettings, text='Set', command=_setEncKey, relief=tkinter.FLAT, bg='#dfdfdf')
+		frame_encKeySettings = tk.LabelFrame(window, text='Encryption Key')
+		ekey_warning_label = tk.Label(frame_encKeySettings, text='')
+		ekey_currentKey_label = tk.Label(frame_encKeySettings, text='Current Key: ****', bg='#ffffff')
+		ekey_btn_showCurrentKey = tk.Button(frame_encKeySettings, text='Show', command=_showEncKey, height=1, relief=tk.FLAT, bg='#dfdfdf')
+		ekey_input_field = tk.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
+		ekey_btn_set = tk.Button(frame_encKeySettings, text='Set', command=_setEncKey, relief=tk.FLAT, bg='#dfdfdf')
 
 		frame_encKeySettings.grid(row=1, column=0, sticky='NSEW')
 		ekey_warning_label.grid(row=0, column=0, sticky='W')
@@ -223,13 +220,13 @@ class VM_MainWindow:
 		def _handleConsoleInput(e):
 			input_str = self.__debug_console_input.get()
 			if input_str == 'clear': 
-				self.__debug_console_output.config(state=tkinter.NORMAL)
-				self.__debug_console_output.delete(1.0, tkinter.END)
-				self.__debug_console_output.config(state=tkinter.DISABLED)
+				self.__debug_console_output.config(state=tk.NORMAL)
+				self.__debug_console_output.delete(1.0, tk.END)
+				self.__debug_console_output.config(state=tk.DISABLED)
 			elif input_str == 'clear-chat':
-				self.chat_messages.config(state=tkinter.NORMAL)
-				self.chat_messages.delete(1.0, tkinter.END)
-				self.chat_messages.config(state=tkinter.DISABLED)
+				self.chat_messages.config(state=tk.NORMAL)
+				self.chat_messages.delete(1.0, tk.END)
+				self.chat_messages.config(state=tk.DISABLED)
 			elif input_str == 'refresh-theme': self.refreshColorScheme()
 			elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,)).start()
 			elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage,True)).start()
@@ -238,16 +235,16 @@ class VM_MainWindow:
 			elif input_str == 'version': h.createLog(f'Version: {h.VERSION}')
 			elif input_str == 'updates-check': self.update_checker.check()
 			else: h.createLog('No such command')
-			self.__debug_console_input.delete(0, tkinter.END)
+			self.__debug_console_input.delete(0, tk.END)
 
 		def _onClose(window, obj):
 			delattr(obj, 'debug_console_showing')
-			obj.HM_Advanced.entryconfig(0, state=tkinter.NORMAL)
+			obj.HM_Advanced.entryconfig(0, state=tk.NORMAL)
 			sys.stdout = sys.__stdout__
 			sys.stderr = sys.__stderr__
 			window.destroy()
 
-		ui_window = tkinter.Toplevel(bg='#181818')
+		ui_window = tk.Toplevel(bg='#181818')
 		ui_window.geometry('700x300')
 		ui_window.title('Debug Console')
 		ui_window.protocol('WM_DELETE_WINDOW', lambda: _onClose(ui_window, self))
@@ -255,26 +252,26 @@ class VM_MainWindow:
 		ui_window.rowconfigure(0, weight=1)
 
 		# Top
-		self.__debug_console_FTop = tkinter.Frame(ui_window)
+		self.__debug_console_FTop = tk.Frame(ui_window)
 		self.__debug_console_FTop.columnconfigure(0, weight=1)
 		self.__debug_console_FTop.rowconfigure(0, weight=1)
-		self.__debug_console_output = tkinter.Text(self.__debug_console_FTop, bg='#262626', fg='white', font=h.VMConfig.get(1)['ui']['debug_console']['font'], state=tkinter.DISABLED)
-		self.__debug_console_scrollbar = tkinter.Scrollbar(self.__debug_console_FTop, command=self.__debug_console_output.yview)
+		self.__debug_console_output = tk.Text(self.__debug_console_FTop, bg='#262626', fg='white', font=h.VMConfig.get(1)['ui']['debug_console']['font'], state=tk.DISABLED)
+		self.__debug_console_scrollbar = tk.Scrollbar(self.__debug_console_FTop, command=self.__debug_console_output.yview)
 		self.__debug_console_output.config(yscrollcommand=self.__debug_console_scrollbar.set)
 		self.__debug_console_FTop.grid(column=0, row=0, sticky="NSEW")
 		self.__debug_console_output.grid(column=0, row=0, sticky="NSEW")
 		self.__debug_console_scrollbar.grid(column=1, row=0, sticky="NS")
 		
 		# Bottom
-		self.__debug_console_FBot = tkinter.Frame(ui_window)
+		self.__debug_console_FBot = tk.Frame(ui_window)
 		self.__debug_console_FBot.columnconfigure(0, weight=1)
 		self.__debug_console_FBot.rowconfigure(0, weight=1)
-		self.__debug_console_input = tkinter.Entry(self.__debug_console_FBot, bg='#303030', fg='#00fa00', font='Consolas 10')
+		self.__debug_console_input = tk.Entry(self.__debug_console_FBot, bg='#303030', fg='#00fa00', font='Consolas 10')
 		self.__debug_console_input.bind('<Return>', _handleConsoleInput)
 		self.__debug_console_FBot.grid(column=0, row=1, sticky="NSEW")
 		self.__debug_console_input.grid(column=0, row=0, sticky="EW")
 
-		self.HM_Advanced.entryconfig(0, state=tkinter.DISABLED)
+		self.HM_Advanced.entryconfig(0, state=tk.DISABLED)
 		self.debug_console_showing = True
 		
 		# Redirect STD (-OUT && -ERROR) to debug console
@@ -283,7 +280,7 @@ class VM_MainWindow:
 
 if __name__ == '__main__':
 	# Init UI
-	ui_root = tkinter.Tk()
+	ui_root = tk.Tk()
 	ui_root.title(h.APPDICT['client']['title'])
 	ui_root.iconbitmap(h.ICON_CLIENT_PATH)
 	ui_root.minsize(width=100, height=100)

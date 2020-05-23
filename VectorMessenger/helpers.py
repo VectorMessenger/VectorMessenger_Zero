@@ -2,9 +2,8 @@ import json
 import os
 from datetime import datetime
 from random import choice as RChoice
-from threading import Thread
-from urllib import request, error as urllib_error
-import json
+from urllib import error as urllib_error
+from urllib import request
 
 # CONSTS
 VERSION = "B:22052020"
