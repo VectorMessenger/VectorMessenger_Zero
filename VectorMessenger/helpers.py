@@ -1,6 +1,5 @@
 import json
 import os
-import tkinter
 from datetime import datetime
 from random import choice as RChoice
 from threading import Thread
@@ -218,10 +217,10 @@ class RedirectSTD:
 		self.console = console
 	
 	def write(self, string):
-		self.console.config(state=tkinter.NORMAL)
-		self.console.insert(tkinter.END, f'{string}')
-		self.console.see(tkinter.END)
-		self.console.config(state=tkinter.DISABLED)
+		self.console.config(state="normal")
+		self.console.insert("end", f'{string}')
+		self.console.see("end")
+		self.console.config(state="disabled")
 
 # ----- CLIENT -----
 # Debug Functions

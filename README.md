@@ -7,6 +7,8 @@
 Simple python-based ui application for network global chatting through UDP protocol.
 
 ## Client
+### Information
+Main File: `./VectorMessenger/client.py`
 ### Debug Console Commands
 | Command         | Description                                                                |
 | :-------------- | :------------------------------------------------------------------------- |
@@ -23,6 +25,8 @@ Simple python-based ui application for network global chatting through UDP proto
 Note, that all commands are <ins>case sensitive</ins>!
 
 ## Server
+## Information
+Main File: `./VectorMessenger/server.py`
 ### Startup arguments
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
