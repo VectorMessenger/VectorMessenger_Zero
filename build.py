@@ -1,12 +1,13 @@
-from sys import argv
+from sys import argv, platform
 from cx_Freeze import Executable, setup
 from VectorMessenger import helpers
 
 if 'build' not in argv: argv.append('build')
 
 # Client Build
+base = 'Win32GUI' if platform == 'win32' else None
 executables = [
-	Executable('./VectorMessenger/client.py', targetName='VM Client', base='Win32GUI', icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
+	Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
 ]
 
 includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
@@ -31,10 +32,10 @@ setup(name='VectorMessenger',
 
 # Server Build
 executables = [
-	Executable('./VectorMessenger/server.py', targetName='VM Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
+	Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
 ]
 
-excludes = ['logging', 'unittest', 'test', 'distutils', 'email', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
 options['build_exe']['build_exe'] = './build/VMServer'
 options['build_exe']['include_files'] = ['./LICENSE']
 options['build_exe']['includes'] = ['VectorMessenger']
