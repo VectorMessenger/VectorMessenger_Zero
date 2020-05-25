@@ -11,7 +11,7 @@ executables = [
 ]
 
 includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
-excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer', 'VectorMessenger.MessengerCore.server']
 zip_include_packages = []
 include_files = [('./VectorMessenger/data/ico', './data/ico'), './LICENSE']
 
@@ -35,7 +35,7 @@ executables = [
     Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
 ]
 
-excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
+excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
 options['build_exe']['build_exe'] = './build/VMServer'
 options['build_exe']['include_files'] = ['./LICENSE']
 options['build_exe']['includes'] = ['VectorMessenger']
