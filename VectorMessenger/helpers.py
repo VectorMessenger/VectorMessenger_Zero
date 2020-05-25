@@ -8,15 +8,15 @@ from urllib import request
 
 # CONSTS
 VERSION = "B:22052020"
-VERSION_UPDATE_API = "https://pastebin.com/raw/5cSTveV4"
+VERSION_UPDATE_API = "https://docs.google.com/document/d/1jFWDZzJEPdsjs3JqcVKMfRzaFuz8VTrDc15JxsUJRUA/export?format=txt"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'
-ICON_SEND_MESSAGE = './data/ico/send_message.png'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
 CONFIG_CLIENT = 'config_client.json'
-DEF_CONNECTION_DICT = {'ip': 'localhost', 'port': 9263}
 DEF_AES_KEY = 'ChangeMeNOW'
+CONNECTION_PORT = 31635
+FORCE_IP = None
 
 APPDICT = {
     'client': {
@@ -24,7 +24,10 @@ APPDICT = {
         'config_default': {
             'username': 'Anonymous',
             'aes_key': DEF_AES_KEY,
-            'connection': DEF_CONNECTION_DICT,
+            'connection': {
+                'ip': 'localhost',
+                'port': 31635
+            },
             'ui': {
                 'theme_selected': 'light',
                 'root': {
@@ -59,7 +62,10 @@ APPDICT = {
     'server': {
         'title': 'VM Server',
         'config_default': {
-            'connection': DEF_CONNECTION_DICT
+            'force_localhost': False,
+            'connection': {
+                'port': 31635
+            }
         }
     }
 }
@@ -101,7 +107,12 @@ class VMConfig:
         cfg_path = cls.getConfigPath(conf_type)
         if os.path.isfile(cfg_path):
             with open(cfg_path, 'rt') as f:
-                return json.load(f)
+                cfg = json.load(f)
+                if conf_type == 1 and FORCE_IP:
+                    cfg['connection']['ip'] = FORCE_IP
+                    return cfg
+                else:
+                    return cfg
         else:
             return {}
 
@@ -207,8 +218,8 @@ class UpdateChecker:
     VM Update checker. Currently it works with modifying tk.Menu bar label, so its kinda hardcoded, yes.
     """
     def __init__(self, ui_ctrl):
-        self.__U_NOUPDATES = '\u2713'
-        self.__U_OUTDATE = '\u2191'
+        self.__U_NOUPDATES = '[ \u2713 ]'
+        self.__U_OUTDATE = '[ \u2191 ]'
 
         self.__ui_ctrl = ui_ctrl
 
@@ -216,11 +227,13 @@ class UpdateChecker:
         self.__ui_ctrl.entryconfig(4, label='Checking for updates \u2B6E')
         try:
             createLog('Checking for updates')
-            content = request.urlopen(VERSION_UPDATE_API).read()
+            content = request.urlopen(VERSION_UPDATE_API).read().decode('utf-8')
         except urllib_error.URLError:
             self.__ui_ctrl.entryconfig(4, label="")
             createLog("Can't check for updates. No connection to network or source unavailable")
         else:
+            if 'docs.google.com' in VERSION_UPDATE_API:
+                content = content[1:]
             content = json.loads(content)
             if VERSION == content['version']:
                 self.__ui_ctrl.entryconfig(4, label=f'Up-To-Date {self.__U_NOUPDATES}')

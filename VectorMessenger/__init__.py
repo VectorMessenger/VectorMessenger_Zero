@@ -1,1 +1,3 @@
-""" Package Init """
+"""
+Vector Messenger main package
+"""

@@ -10,7 +10,8 @@ class MessengerServer(VMUDPBase):
     def __init__(self):
         super().__init__()
         self.cfg = h.VMConfig.init(0)
-        self.sock.bind((self.cfg['connection']['ip'], self.cfg['connection']['port']))
+        ip = 'localhost' if self.cfg['force_localhost'] or '--localhost' in sys.argv else self.cfg['connection']['ip']
+        self.sock.bind((ip, self.cfg['connection']['port']))
         self.clients = []
         self.__online = True
         h.createLog('Server online')

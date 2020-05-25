@@ -32,6 +32,7 @@ Run From Source `./run_server.sh`
 ### Startup arguments
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
+| `--localhost`    | Run server on localhost                                                             |
 | `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decryption!</ins> |
 
 ## Preparing Source
