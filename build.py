@@ -7,7 +7,7 @@ if 'build' not in argv: argv.append('build')
 # Client Build
 base = 'Win32GUI' if platform == 'win32' else None
 executables = [
-	Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
+    Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
 ]
 
 includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
@@ -17,22 +17,22 @@ include_files = [('./VectorMessenger/data/ico', './data/ico'), './LICENSE']
 
 options = {
     'build_exe': {
-		'includes': includes,
+        'includes': includes,
         'excludes': excludes,
         'zip_include_packages': zip_include_packages,
-		'include_files': include_files,
-		'build_exe': './build/VMClient'
+        'include_files': include_files,
+        'build_exe': './build/VMClient'
     }
 }
 
 setup(name='VectorMessenger',
-    description='',
-	executables=executables,
-    options=options)
+      description='',
+      executables=executables,
+      options=options)
 
 # Server Build
 executables = [
-	Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
+    Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
 ]
 
 excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
@@ -42,6 +42,6 @@ options['build_exe']['includes'] = ['VectorMessenger']
 options['build_exe']['excludes'] = excludes
 
 setup(name='VectorMessenger',
-    description='',
-	executables=executables,
-    options=options)
+      description='',
+      executables=executables,
+      options=options)

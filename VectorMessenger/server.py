@@ -5,5 +5,5 @@ from VectorMessenger.helpers import APPDICT
 from VectorMessenger.MessengerCore.CoreServer import MessengerServer
 
 if __name__ == '__main__':
-	if sysplatform == 'win32': cmd(f'title {APPDICT["server"]["title"]}')
-	server = MessengerServer()
+    if sysplatform == 'win32': cmd(f'title {APPDICT["server"]["title"]}')
+    server = MessengerServer()
