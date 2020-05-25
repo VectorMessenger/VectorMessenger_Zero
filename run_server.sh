@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ./VectorMessenger
-py server.py
+poetry run py server.py

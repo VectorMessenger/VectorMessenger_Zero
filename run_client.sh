@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ./VectorMessenger
-py client.py
+poetry run py client.py

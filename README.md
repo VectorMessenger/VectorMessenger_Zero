@@ -8,7 +8,8 @@ Simple python-based ui application for network global chatting through UDP proto
 
 ## Client
 ### Information
-Main File: `./VectorMessenger/client.py`
+Main File: `./VectorMessenger/client.py`  
+Run From Source: `./run_client.sh`
 ### Debug Console Commands
 | Command         | Description                                                                |
 | :-------------- | :------------------------------------------------------------------------- |
@@ -26,15 +27,21 @@ Note, that all commands are <ins>case sensitive</ins>!
 
 ## Server
 ## Information
-Main File: `./VectorMessenger/server.py`
+Main File: `./VectorMessenger/server.py`  
+Run From Source `./run_server.sh`
 ### Startup arguments
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
 | `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decryption!</ins> |
 
-## Development
-### Preparing the project
+## Preparing Source
+### For Development
 ```bash
-$ pipenv install
-$ pipenv install --dev
+$ poetry install
 ```
+### For Building
+```bash
+$ poetry install --no-dev
+$ poetry run py build.py
+```
+> Build will be saved to `./build/VM(_Server && _Client)`
