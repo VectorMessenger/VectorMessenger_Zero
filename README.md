@@ -15,6 +15,7 @@ Simple python-based ui application for network global chatting through UDP proto
 - [Preparing Source](#preparing-source)
 	- [For Development](#for-development)
 	- [For Building](#for-building)
+- [Special Thanks](#special-thanks)
 
 ## Client
 ### Information
@@ -60,3 +61,10 @@ $ poetry install --no-dev
 $ poetry run py build.py
 ```
 > Build will be saved to `./build/VM(_Server && _Client)`
+
+## Special Thanks
+| <ins>Closed Alpha Testers</ins> |
+| :------------------------------ |
+| Dmitry                          |
+| Max 'Forzz' Bannov              |
+| Nikita 'CrazyFearka' Stepanov   |
