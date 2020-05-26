@@ -57,8 +57,17 @@ $ poetry install
 ```
 ### For Building
 ```bash
+# Project env init
 $ poetry install --no-dev
-$ poetry run py build.py
+
+# Build client and server
+$ poetry run py compile.py
+
+# Build only client
+$ poetry run py compile.py client
+
+# Build only server
+$ poetry run py compile.py server
 ```
 > Build will be saved to `./build/VM(_Server && _Client)`
 
