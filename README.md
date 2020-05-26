@@ -5,11 +5,25 @@
 
 ---
 Simple python-based ui application for network global chatting through UDP protocol.
+- [Client](#client)
+	- [Information](#information)
+	- [Startup Args](#startup-args)
+	- [Debug Console Commands](#debug-console-commands)
+- [Server](#server)
+- [Information](#information-1)
+	- [Startup Args](#startup-args-1)
+- [Preparing Source](#preparing-source)
+	- [For Development](#for-development)
+	- [For Building](#for-building)
 
 ## Client
 ### Information
 Main File: `./VectorMessenger/client.py`  
 Run From Source: `./run_client.sh`
+### Startup Args
+| Argument            | Description              |
+| :------------------ | :----------------------- |
+| `--disable-updater` | Disable VM Updater start |
 ### Debug Console Commands
 | Command         | Description                                                                |
 | :-------------- | :------------------------------------------------------------------------- |
@@ -29,7 +43,7 @@ Note, that all commands are <ins>case sensitive</ins>!
 ## Information
 Main File: `./VectorMessenger/server.py`  
 Run From Source `./run_server.sh`
-### Startup arguments
+### Startup Args
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
 | `--localhost`    | Run server on localhost                                                             |

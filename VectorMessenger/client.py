@@ -54,9 +54,10 @@ class VM_MainWindow:
         root.rowconfigure(0, weight=1)
 
         # Update checker
-        self.HM_Root.add_command(label='', state=tk.DISABLED)
-        self.update_checker = h.UpdateChecker(self.HM_Root)
-        Thread(target=self.update_checker.check).start()
+        if '--disable-updater' not in sys.argv:
+            self.HM_Root.add_command(label='', state=tk.DISABLED)
+            self.update_checker = h.UpdateChecker(self.HM_Root)
+            Thread(target=self.update_checker.check).start()
 
     def initMessenger(self):
         self.messenger = MessengerClient(self)
