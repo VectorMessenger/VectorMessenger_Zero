@@ -18,7 +18,7 @@ class MessengerClient(VMUDPBase):
         h.createLog('Message polling thread is active')
         while self.messagePollingEnabled:
             try:
-                data, _ = self.sock.recvfrom(1024)
+                data, _ = self.sock.recvfrom(8192)
             except socket.error:
                 pass
             else:

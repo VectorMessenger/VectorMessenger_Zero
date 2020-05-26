@@ -1,7 +1,7 @@
 import socket
 
 
-class VMUDPBase():
+class VMUDPBase:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setblocking(False)

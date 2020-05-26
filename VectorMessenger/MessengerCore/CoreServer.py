@@ -28,7 +28,7 @@ class MessengerServer(VMUDPBase):
         try:
             while self.__online:
                 try:
-                    data, addres = self.sock.recvfrom(1024)
+                    data, addres = self.sock.recvfrom(8192)
                 except socket.error:
                     pass
                 else:
