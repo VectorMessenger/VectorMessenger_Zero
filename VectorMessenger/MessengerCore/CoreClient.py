@@ -28,6 +28,22 @@ class MessengerClient(VMUDPBase):
             sleep(0.5)
         h.createLog('Message polling thread was stopped')
 
+    def sendMessage(self, text=''):
+        """
+        Send message to server
+
+        Arguments:
+            text {str} -- Text of message
+        """
+        self.__refreshConfig()
+        message = VMCrypt.encrypt('@{}: {}'.format(self.cfg['username'], text))
+        self.sock.sendto(message, (self.cfg['connection']['ip'], self.cfg['connection']['port']))
+
+    def registerUser(self):
+        " Register user on server "
+        self.__refreshConfig()
+        self.sock.sendto('312VM_REGISTER_USER'.encode('utf-8'), (self.cfg['connection']['ip'], self.cfg['connection']['port']))
+
     def startMessagePolling(self):
         self.messagePollingEnabled = True
         self.messagePollingThread = Thread(target=self.messagePolling)
@@ -36,11 +52,6 @@ class MessengerClient(VMUDPBase):
     def stopMessagePolling(self):
         self.messagePollingEnabled = False
         self.sock.close()
-
-    def sendMessage(self, text: str):
-        self.__refreshConfig()
-        text_bytes = VMCrypt.encrypt('@{}: {}'.format(self.cfg['username'], text))
-        self.sock.sendto(text_bytes, (self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
     def __refreshConfig(self):
         self.cfg = h.VMConfig.get(1)

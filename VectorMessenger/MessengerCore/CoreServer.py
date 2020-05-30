@@ -32,16 +32,26 @@ class MessengerServer(VMUDPBase):
                 except socket.error:
                     pass
                 else:
+                    is_reg_request = False
                     h.createLog(f'Receiving data from {addres}')
                     if addres not in self.clients:
+                        try:
+                            reg_code = data.decode('utf-8')
+                        except Exception:
+                            pass
+                        else:
+                            if reg_code == '312VM_REGISTER_USER':
+                                is_reg_request = True
+                                h.createLog('-> User registration request received')
                         self.clients.append(addres)
-                        h.createLog('-> New address, adding to [clients] var')
+                        h.createLog('-> New address added to clients list')
                     for client in self.clients:
                         # TODO: Add client existence check before sending
                         # UPD0: Bruh, there's no way you can check connection with UDP
                         # UPD1: Actually, I have some ideas about UDP connection check, but... it would be better to use TCP then >_<
-                        self.sock.sendto(data, client)
-                        self.logMessage(addres, str(data))
+                        if not is_reg_request:
+                            self.sock.sendto(data, client)
+                            self.logMessage(addres, str(data))
                 sleep(0.1)
         except (KeyboardInterrupt, SystemExit):
             self.stop()

@@ -61,6 +61,7 @@ class VM_MainWindow:
 
     def initMessenger(self):
         self.messenger = MessengerClient(self)
+        self.messenger.registerUser()
 
     def showMessage(self, text: str):
         """ Will show the message in chat ui """
