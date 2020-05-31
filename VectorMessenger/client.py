@@ -234,8 +234,6 @@ class VM_MainWindow:
                 self.chat_messages.delete(1.0, tk.END)
                 self.chat_messages.config(state=tk.DISABLED)
             elif input_str == 'refresh-theme': self.refreshColorScheme()
-            elif input_str == 'test-chat': Thread(target=h._testChat, args=(mainWindow.showMessage,)).start()
-            elif input_str == 'test-chat-inf': Thread(target=h._testChat, args=(mainWindow.showMessage, True)).start()
             elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
             elif input_str == 'test-raise': raise Exception('Test exception raised')
             elif input_str == 'version': h.createLog(f'Version: {h.VERSION}')

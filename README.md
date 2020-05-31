@@ -6,15 +6,15 @@
 ---
 Simple python-based ui application for network global chatting through UDP protocol.
 - [Client](#client)
-	- [Information](#information)
-	- [Startup Args](#startup-args)
-	- [Debug Console Commands](#debug-console-commands)
+  - [Information](#information)
+  - [Startup Args](#startup-args)
+  - [Debug Console Commands](#debug-console-commands)
 - [Server](#server)
 - [Information](#information-1)
-	- [Startup Args](#startup-args-1)
+  - [Startup Args](#startup-args-1)
 - [Preparing Source](#preparing-source)
-	- [For Development](#for-development)
-	- [For Building](#for-building)
+  - [For Development](#for-development)
+  - [For Building](#for-building)
 - [Special Thanks](#special-thanks)
 
 ## Client
@@ -31,8 +31,6 @@ Run From Source: `./run_client.sh`
 | `clear`         | Clear debug window output                                                  |
 | `clear-chat`    | Clear all messages in chat widget                                          |
 | `refresh-theme` | Read config .json values and update theme                                  |
-| `test-chat`     | Run chat widget test by sending messages to it (only 48 messages)          |
-| `test-chat-inf` | Run chat widget test by sending messages to it (inifinite messages)        |
 | `polling-stop`  | Will stop message polling thread                                           |
 | `test-raise`    | This command will raise test exception that <ins>will crash</ins> this app |
 | `version`       | Print app version                                                          |

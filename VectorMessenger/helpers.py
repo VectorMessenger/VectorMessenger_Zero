@@ -1,7 +1,6 @@
 import json
 import os
 from datetime import datetime
-from random import choice as RChoice
 from urllib import error as urllib_error
 from urllib import request
 
@@ -252,31 +251,3 @@ class RedirectSTD:
         self.console.insert("end", f'{string}')
         self.console.see("end")
         self.console.config(state="disabled")
-
-# ----- CLIENT -----
-# Debug Functions
-
-
-def _testChat(showMessageFNC, infinite=False):
-    """
-    Will test chat widget by sending test messages to it
-
-    Arguments:
-        showMessageFNC {function} -- Function for sending message to ui
-
-    Keyword Arguments:
-        infinite {bool} -- Enable infinite messages test. If False then only 48 messages will be sent (default: {False})
-    """
-
-    from time import sleep
-    createLog(f'Chat test begin. Infinite: {infinite}')
-    arrayMessage = ('test_0: Guys, Im testing this new chat app now.\n', 'test_34: Wow! Thats cool.\n', 'test_12: Hello world!\n', 'test_2: Why? Just... why?\n')
-    i = 0
-    while True:
-        showMessageFNC(RChoice(arrayMessage))
-        createLog(f'test message{"" if infinite else " #" + str(i + 1)} sent')
-        sleep(0.001)
-        if not infinite:
-            i = i + 1
-            if i >= 48: return False
-    createLog('Chat test ended')
