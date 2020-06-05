@@ -160,7 +160,7 @@ class VM_MainWindow:
                 _reloadUname()
             else:
                 uname_input.delete(0, tk.END)
-                uname_input.insert(0, 'Username cant be empty!')
+                uname_input.insert(0, "Username can't be empty!")
 
         frame_setUsername = tk.LabelFrame(window, text='Username')
         uname_currentLabel = tk.Label(frame_setUsername, text='')

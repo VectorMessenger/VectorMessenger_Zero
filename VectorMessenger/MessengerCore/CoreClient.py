@@ -42,7 +42,7 @@ class MessengerClient(VMUDPBase):
     def registerUser(self):
         " Register user on server "
         self.__refreshConfig()
-        self.sock.sendto('312VM_REGISTER_USER'.encode('utf-8'), (self.cfg['connection']['ip'], self.cfg['connection']['port']))
+        self.sock.sendto(f'VM{h.VERSION}_REGISTER_USER'.encode('utf-8'), (self.cfg['connection']['ip'], self.cfg['connection']['port']))
 
     def startMessagePolling(self):
         self.messagePollingEnabled = True
