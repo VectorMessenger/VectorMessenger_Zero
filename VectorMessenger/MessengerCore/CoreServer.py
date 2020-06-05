@@ -1,6 +1,5 @@
 import socket
 import sys
-from time import sleep
 
 from VectorMessenger import helpers as h
 from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
@@ -46,7 +45,6 @@ class MessengerServer(VMUDPBase):
                                 self.clients.append(addres)
                                 h.createLog('User registration request received. New address added to clients list')
                                 continue
-                sleep(0.1)
         except (KeyboardInterrupt, SystemExit):
             self.stop()
 

@@ -1,5 +1,4 @@
 import socket
-from time import sleep
 from threading import Thread
 
 from VectorMessenger import helpers as h
@@ -25,7 +24,6 @@ class MessengerClient(VMUDPBase):
                 msg = VMCrypt.decrypt(data)
                 self.ui.showMessage(msg)
                 h.createLog('Received message')
-            sleep(0.5)
         h.createLog('Message polling thread was stopped')
 
     def sendMessage(self, text=''):
