@@ -16,7 +16,7 @@ class MessengerServer(VMUDPBase):
             self.cfg['force_localhost'] = True
             h.VMConfig.write(self.cfg, 0)
         else:
-            print('Server starts in the global network')
+            h.createLog('Server starts in the global network')
             ip = ''
 
         self.sock.bind((ip, self.cfg['connection']['port']))
