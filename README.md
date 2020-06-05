@@ -4,18 +4,21 @@
 </p>
 
 ---
-Simple python-based ui application for network global chatting through UDP protocol.
+- [Information](#information)
 - [Client](#client)
-  - [Information](#information)
+  - [Information](#information-1)
   - [Startup Args](#startup-args)
   - [Debug Console Commands](#debug-console-commands)
 - [Server](#server)
-- [Information](#information-1)
+  - [Information](#information-2)
   - [Startup Args](#startup-args-1)
 - [Preparing Source](#preparing-source)
   - [For Development](#for-development)
   - [For Building](#for-building)
 - [Special Thanks](#special-thanks)
+
+## Information
+Simple python-based ui application for network global chatting through UDP protocol.
 
 ## Client
 ### Information
@@ -39,7 +42,7 @@ Run From Source: `./run_client.sh`
 Note, that all commands are <ins>case sensitive</ins>!
 
 ## Server
-## Information
+### Information
 Main File: `./VectorMessenger/server.py`  
 Run From Source `./run_server.sh`
 ### Startup Args
@@ -59,15 +62,9 @@ $ poetry install
 $ poetry install --no-dev
 
 # Build client and server
+# Read ./compile.py docstring for more information
 $ poetry run py compile.py
-
-# Build only client
-$ poetry run py compile.py client
-
-# Build only server
-$ poetry run py compile.py server
 ```
-> Build will be saved to `./build/VM(_Server && _Client)`
 
 ## Special Thanks
 | <ins>Closed Alpha Testers</ins> |
