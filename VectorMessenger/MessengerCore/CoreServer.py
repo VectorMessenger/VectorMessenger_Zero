@@ -6,17 +6,15 @@ from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
 
 
 class MessengerServer(VMUDPBase):
-    def __init__(self):
+    def __init__(self, is_localhost=False):
         super().__init__()
         self.cfg = h.VMConfig.init(0)
 
-        if self.cfg['force_localhost'] or '--localhost' in sys.argv:
-            h.createLog('Server starts on localhost')
+        if is_localhost:
+            h.createLog('Running server on localhost')
             ip = 'localhost'
-            self.cfg['force_localhost'] = True
-            h.VMConfig.write(self.cfg, 0)
         else:
-            h.createLog('Server starts in the global network')
+            h.createLog('Running server on a global network')
             ip = ''
 
         self.sock.bind((ip, self.cfg['connection']['port']))

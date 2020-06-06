@@ -61,7 +61,6 @@ APPDICT = {
     'server': {
         'title': 'VM Server',
         'config_default': {
-            'force_localhost': False,
             'connection': {
                 'port': 31635
             }
