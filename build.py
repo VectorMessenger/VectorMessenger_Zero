@@ -25,7 +25,7 @@ def build_client():
     ]
 
     includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
-    excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer', 'VectorMessenger.MessengerCore.server']
+    excludes = ['unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.CoreServer', 'VectorMessenger.MessengerCore.server']
     zip_include_packages = []
     include_files = [('./VectorMessenger/data/ico', './data/ico'), './LICENSE']
 
@@ -51,7 +51,7 @@ def build_server():
         Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
     ]
 
-    excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
+    excludes = ['unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
     includes = ['VectorMessenger']
     include_files = ['./LICENSE']
     zip_include_packages = []
@@ -81,7 +81,7 @@ def build_combined():
     ]
 
     includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
-    excludes = ['logging', 'unittest', 'test', 'distutils', 'pydoc_data']
+    excludes = ['unittest', 'test', 'distutils', 'pydoc_data']
     zip_include_packages = []
     include_files = [('./VectorMessenger/data/ico', './data/ico'), './LICENSE']
 

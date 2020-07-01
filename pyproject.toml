@@ -8,6 +8,10 @@ packages = [
     { include = "./VectorMessenger" }
 ]
 
+[tool.poetry.scripts]
+client = "VectorMessenger.client:run_source"
+server = "VectorMessenger.server:run_source"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 pyAesCrypt = "^0.4.3"

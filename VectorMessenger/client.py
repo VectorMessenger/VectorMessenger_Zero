@@ -1,4 +1,5 @@
 import sys
+import os
 import tkinter as tk
 from threading import Thread
 
@@ -13,6 +14,8 @@ class VM_MainWindow:
             self.messenger.stopMessagePolling()
             root.destroy()
         root.protocol('WM_DELETE_WINDOW', _onClose)
+
+        self.root = root
 
         # Header Menu
         self.HM_Root = tk.Menu(root)
@@ -140,7 +143,7 @@ class VM_MainWindow:
         """ Will show window with settings """
         ENTRY_WIDTH = 40
 
-        window = tk.Toplevel(ui_root)
+        window = tk.Toplevel(self.root)
         h.iconbitmap_universal(window)
         window.title('Settings')
         window.resizable(False, False)
@@ -283,16 +286,26 @@ class VM_MainWindow:
         sys.stderr = h.RedirectSTD(self.__debug_console_output)
 
 
-if __name__ == '__main__':
-    # Init UI
+def core():
+
     ui_root = tk.Tk()
     ui_root.title(h.APPDICT['client']['title'])
     h.iconbitmap_universal(ui_root)
     ui_root.minsize(width=100, height=100)
     mainWindow = VM_MainWindow(ui_root)
-    cfg = h.VMConfig.init(1)
+    h.VMConfig.init(1)
 
     mainWindow.refreshColorScheme()
     mainWindow.initMessenger()
 
     ui_root.mainloop()
+
+
+def run_source():
+    os.chdir(os.path.dirname(__file__))
+    core()
+
+
+if __name__ == '__main__':
+    os.chdir(os.path.dirname(sys.argv[0]))
+    core()

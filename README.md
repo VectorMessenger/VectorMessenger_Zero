@@ -23,7 +23,7 @@ Simple python-based ui application for network global chatting through UDP proto
 ## Client
 ### Information
 Main File: `./VectorMessenger/client.py`  
-Run From Source: `./run_client.sh`
+Run From Source: `poetry run client`
 ### Startup Args
 | Argument            | Description              |
 | :------------------ | :----------------------- |
@@ -44,7 +44,7 @@ Note, that all commands are <ins>case sensitive</ins>!
 ## Server
 ### Information
 Main File: `./VectorMessenger/server.py`  
-Run From Source `./run_server.sh`
+Run From Source `poetry run server`
 ### Startup Args
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
@@ -62,8 +62,8 @@ $ poetry install
 $ poetry install --no-dev
 
 # Build client and server
-# Read ./compile.py docstring for more information
-$ poetry run py compile.py
+# Read ./build.py docstring for more information
+$ poetry run py build.py
 ```
 
 ## Special Thanks

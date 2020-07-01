@@ -11,7 +11,6 @@ from PIL import Image, ImageTk
 VERSION = "B:202006060312"
 VERSION_UPDATE_API = "https://docs.google.com/document/d/1jFWDZzJEPdsjs3JqcVKMfRzaFuz8VTrDc15JxsUJRUA/export?format=txt"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
-ICON_PNG_CLIENT_PATH = './data/ico/VMClient.png'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
@@ -98,9 +97,6 @@ def iconbitmap_universal(window: object, icon_image=ICON_CLIENT_PATH):
         window (object): Tkinter window to apply icon to.
         icon_image (str)(Optional): Path to icon image.
     """
-    # icon_image currently loads .ico file, not .png
-    # TODO: Test, is .ico will load fine on linux
-    # And don't forget to remove ./data/ico/VMClient.png from app if .ico works fine
     image_pil = Image.open(icon_image)
     image_tk = ImageTk.PhotoImage(image_pil)
     window.tk.call('wm', 'iconphoto', window._w, image_tk)
