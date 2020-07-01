@@ -4,11 +4,14 @@ from datetime import datetime
 from urllib import error as urllib_error
 from urllib import request
 
+from PIL import Image, ImageTk
+
 
 # CONSTS
 VERSION = "B:260520200324"
 VERSION_UPDATE_API = "https://docs.google.com/document/d/1jFWDZzJEPdsjs3JqcVKMfRzaFuz8VTrDc15JxsUJRUA/export?format=txt"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
+ICON_PNG_CLIENT_PATH = './data/ico/VMClient.png'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'
 CONFIG_DIR = './data/config'
 CONFIG_SERVER = 'config_server.json'
@@ -87,6 +90,17 @@ def createLog(text: str, echo=False):
         return f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}'
     else:
         print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
+
+
+def iconbitmap_universal(window: object, icon_image=ICON_CLIENT_PATH):
+    """ Cross-platform icon loader for tkinter windows.
+    Args:
+        window (object): Tkinter window to apply icon to.
+        icon_image (str)(Optional): Path to icon image.
+    """
+    image_pil = Image.open(icon_image)
+    image_tk = ImageTk.PhotoImage(image_pil)
+    window.tk.call('wm', 'iconphoto', window._w, image_tk)
 
 # Global Classes
 

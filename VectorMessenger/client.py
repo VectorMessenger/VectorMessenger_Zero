@@ -141,7 +141,7 @@ class VM_MainWindow:
         ENTRY_WIDTH = 40
 
         window = tk.Toplevel(ui_root)
-        window.iconbitmap(h.ICON_CLIENT_PATH)
+        h.iconbitmap_universal(window)
         window.title('Settings')
         window.resizable(False, False)
         window = tk.Frame(window)
@@ -287,7 +287,7 @@ if __name__ == '__main__':
     # Init UI
     ui_root = tk.Tk()
     ui_root.title(h.APPDICT['client']['title'])
-    ui_root.iconbitmap(h.ICON_CLIENT_PATH)
+    h.iconbitmap_universal(ui_root)
     ui_root.minsize(width=100, height=100)
     mainWindow = VM_MainWindow(ui_root)
     cfg = h.VMConfig.init(1)
