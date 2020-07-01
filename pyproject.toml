@@ -4,6 +4,9 @@ version = "0.0.0"
 description = ""
 authors = ["maximilionus <xxxarakxxx@gmail.com>"]
 license = "MIT"
+packages = [
+    { include = "./VectorMessenger" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"

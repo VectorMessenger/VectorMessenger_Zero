@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 
 
 # CONSTS
-VERSION = "B:260520200324"
+VERSION = "B:202006060312"
 VERSION_UPDATE_API = "https://docs.google.com/document/d/1jFWDZzJEPdsjs3JqcVKMfRzaFuz8VTrDc15JxsUJRUA/export?format=txt"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
 ICON_PNG_CLIENT_PATH = './data/ico/VMClient.png'
@@ -64,7 +64,6 @@ APPDICT = {
     'server': {
         'title': 'VM Server',
         'config_default': {
-            'force_localhost': False,
             'connection': {
                 'port': 31635
             }
