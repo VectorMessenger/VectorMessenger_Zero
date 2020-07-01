@@ -93,10 +93,14 @@ def createLog(text: str, echo=False):
 
 def iconbitmap_universal(window: object, icon_image=ICON_CLIENT_PATH):
     """ Cross-platform icon loader for tkinter windows.
+
     Args:
         window (object): Tkinter window to apply icon to.
         icon_image (str)(Optional): Path to icon image.
     """
+    # icon_image currently loads .ico file, not .png
+    # TODO: Test, is .ico will load fine on linux
+    # And don't forget to remove ./data/ico/VMClient.png from app if .ico works fine
     image_pil = Image.open(icon_image)
     image_tk = ImageTk.PhotoImage(image_pil)
     window.tk.call('wm', 'iconphoto', window._w, image_tk)
