@@ -12,16 +12,20 @@ Script available startup args
 from sys import platform, argv
 from time import time
 from cx_Freeze import Executable, setup
-from VectorMessenger import helpers
 
-build_time_start = time()
-argv.append('build')
+from VectorMessenger import helpers
 
 
 def build_client():
-    base = 'Win32GUI' if platform == 'win32' else None
+    if platform == 'win32':
+        base = 'Win32GUI'
+        icon = './VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:]
+    else:
+        base = None
+        icon = None
+
     executables = [
-        Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:])
+        Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon=icon)
     ]
 
     includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
@@ -47,8 +51,9 @@ def build_client():
 
 
 def build_server():
+    icon = './VectorMessenger/' + helpers.ICON_SERVER_PATH[2:] if platform == 'win32' else None
     executables = [
-        Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
+        Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon=icon)
     ]
 
     excludes = ['unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
@@ -74,10 +79,18 @@ def build_server():
 
 
 def build_combined():
-    base = 'Win32GUI' if platform == 'win32' else None
+    if platform == 'win32':
+        base_client = 'Win32GUI'
+        icon_client = './VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:]
+        icon_server = './VectorMessenger/' + helpers.ICON_SERVER_PATH[2:]
+    else:
+        base_client = None
+        icon_client = None
+        icon_server = None
+
     executables = [
-        Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base, icon='./VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:]),
-        Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon='./VectorMessenger/' + helpers.ICON_SERVER_PATH[2:])
+        Executable('./VectorMessenger/client.py', targetName='VM_Client', base=base_client, icon=icon_client),
+        Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon=icon_server)
     ]
 
     includes = ['tkinter', 'VectorMessenger', 'pyAesCrypt', '_cffi_backend']
@@ -102,17 +115,21 @@ def build_combined():
           options=options)
 
 
-if 'client' in argv:
-    argv.remove('client')
-    build_client()
-elif 'server' in argv:
-    argv.remove('server')
-    build_server()
-elif 'combined' in argv:
-    argv.remove('combined')
-    build_combined()
-else:
-    build_client()
-    build_server()
+if __name__ == "__main__":
+    build_time_start = time()
+    argv.append('build')
 
-print(f'\n--- Built successfully in < {round(time() - build_time_start, 2)} > sec. ---')
+    if 'client' in argv:
+        argv.remove('client')
+        build_client()
+    elif 'server' in argv:
+        argv.remove('server')
+        build_server()
+    elif 'combined' in argv:
+        argv.remove('combined')
+        build_combined()
+    else:
+        build_client()
+        build_server()
+
+    print(f'\n--- Built successfully in < {round(time() - build_time_start, 2)} > sec. ---')
