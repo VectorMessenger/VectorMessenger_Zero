@@ -3,7 +3,8 @@ import os
 import tkinter as tk
 from threading import Thread
 
-from VectorMessenger import helpers as h
+from VectorMessenger.MessengerCore.Helpers import Global as h
+from VectorMessenger.MessengerCore.Helpers import Client as h_cl
 from VectorMessenger.MessengerCore.CoreClient import MessengerClient
 from VectorMessenger.MessengerCore.Encryption import VMCrypt
 
@@ -59,7 +60,7 @@ class VM_MainWindow:
         # Update checker
         if '--disable-updater' not in sys.argv:
             self.HM_Root.add_command(label='', state=tk.DISABLED)
-            self.update_checker = h.UpdateChecker(self.HM_Root)
+            self.update_checker = h_cl.UpdateChecker(self.HM_Root)
             Thread(target=self.update_checker.check).start()
 
     def initMessenger(self):
@@ -144,7 +145,7 @@ class VM_MainWindow:
         ENTRY_WIDTH = 40
 
         window = tk.Toplevel(self.root)
-        h.iconbitmap_universal(window)
+        h_cl.iconbitmap_universal(window)
         window.title('Settings')
         window.resizable(False, False)
         window = tk.Frame(window)
@@ -283,15 +284,14 @@ class VM_MainWindow:
         self.debug_console_showing = True
 
         # Redirect STD (-OUT && -ERROR) to debug console
-        sys.stdout = h.RedirectSTD(self.__debug_console_output)
-        sys.stderr = h.RedirectSTD(self.__debug_console_output)
+        sys.stdout = h_cl.RedirectSTD(self.__debug_console_output)
+        sys.stderr = h_cl.RedirectSTD(self.__debug_console_output)
 
 
-def core():
-
+def startup():
     ui_root = tk.Tk()
     ui_root.title(h.APPDICT['client']['title'])
-    h.iconbitmap_universal(ui_root)
+    h_cl.iconbitmap_universal(ui_root)
     ui_root.minsize(width=100, height=100)
     mainWindow = VM_MainWindow(ui_root)
     h.VMConfig.init(1)
@@ -304,9 +304,9 @@ def core():
 
 def run_source():
     os.chdir(os.path.dirname(__file__))
-    core()
+    startup()
 
 
 if __name__ == '__main__':
     os.chdir(os.path.dirname(sys.argv[0]))
-    core()
+    startup()

@@ -13,13 +13,13 @@ from sys import platform, argv
 from time import time
 from cx_Freeze import Executable, setup
 
-from VectorMessenger import helpers
+from VectorMessenger.MessengerCore.Helpers import Global as h
 
 
 def build_client():
     if platform == 'win32':
         base = 'Win32GUI'
-        icon = './VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:]
+        icon = './VectorMessenger/' + h.ICON_CLIENT_PATH[2:]
     else:
         base = None
         icon = None
@@ -51,12 +51,12 @@ def build_client():
 
 
 def build_server():
-    icon = './VectorMessenger/' + helpers.ICON_SERVER_PATH[2:] if platform == 'win32' else None
+    icon = './VectorMessenger/' + h.ICON_SERVER_PATH[2:] if platform == 'win32' else None
     executables = [
         Executable('./VectorMessenger/server.py', targetName='VM_Server', base=None, icon=icon)
     ]
 
-    excludes = ['unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt']
+    excludes = ['unittest', 'test', 'distutils', 'pydoc_data', 'VectorMessenger.MessengerCore.Ecnryption', 'VectorMessenger.MessengerCore.client', 'VectorMessenger.MessengerCore.CoreClient', 'pyAesCrypt', 'Pillow']
     includes = ['VectorMessenger']
     include_files = ['./LICENSE']
     zip_include_packages = []
@@ -81,8 +81,8 @@ def build_server():
 def build_combined():
     if platform == 'win32':
         base_client = 'Win32GUI'
-        icon_client = './VectorMessenger/' + helpers.ICON_CLIENT_PATH[2:]
-        icon_server = './VectorMessenger/' + helpers.ICON_SERVER_PATH[2:]
+        icon_client = './VectorMessenger/' + h.ICON_CLIENT_PATH[2:]
+        icon_server = './VectorMessenger/' + h.ICON_SERVER_PATH[2:]
     else:
         base_client = None
         icon_client = None

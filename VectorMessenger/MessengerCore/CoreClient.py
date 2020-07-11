@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 
-from VectorMessenger import helpers as h
+from VectorMessenger.MessengerCore.Helpers import Global as h
 from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
 from VectorMessenger.MessengerCore.Encryption import VMCrypt
 

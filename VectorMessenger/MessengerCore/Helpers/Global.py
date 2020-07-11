@@ -1,10 +1,10 @@
+"""
+Helpers for server and client
+"""
+
 import json
 import os
 from datetime import datetime
-from urllib import error as urllib_error
-from urllib import request
-
-from PIL import Image, ImageTk
 
 
 # CONSTS
@@ -89,17 +89,6 @@ def createLog(text: str, echo=False):
     else:
         print(f'[{datetime.now().strftime("%H:%M:%S:%f")}] {text}')
 
-
-def iconbitmap_universal(window: object, icon_image=ICON_CLIENT_PATH):
-    """ Cross-platform icon loader for tkinter windows.
-
-    Args:
-        window (object): Tkinter window to apply icon to.
-        icon_image (str)(Optional): Path to icon image.
-    """
-    image_pil = Image.open(icon_image)
-    image_tk = ImageTk.PhotoImage(image_pil)
-    window.tk.call('wm', 'iconphoto', window._w, image_tk)
 
 # Global Classes
 
@@ -223,44 +212,3 @@ class VMConfig:
         path = CONFIG_SERVER if conf_type == 0 else CONFIG_CLIENT
         cfg_path = os.path.join(CONFIG_DIR, path)
         return cfg_path
-
-
-class UpdateChecker:
-    """
-    VM Update checker. Currently it works with modifying tk.Menu bar label, so its kinda hardcoded, yes.
-    """
-    def __init__(self, ui_ctrl):
-        self.__U_NOUPDATES = '[ \u2713 ]'
-        self.__U_OUTDATE = '[ \u2191 ]'
-
-        self.__ui_ctrl = ui_ctrl
-
-    def check(self):
-        self.__ui_ctrl.entryconfig(4, label='Checking for updates \u2B6E')
-        try:
-            createLog('Checking for updates')
-            content = request.urlopen(VERSION_UPDATE_API).read().decode('utf-8')
-        except urllib_error.URLError:
-            self.__ui_ctrl.entryconfig(4, label="")
-            createLog("Can't check for updates. No connection to network or source unavailable")
-        else:
-            if 'docs.google.com' in VERSION_UPDATE_API:
-                content = content[1:]
-            content = json.loads(content)
-            if VERSION == content['version']:
-                self.__ui_ctrl.entryconfig(4, label=f'Up-To-Date {self.__U_NOUPDATES}')
-                createLog('Version is up to date')
-            else:
-                self.__ui_ctrl.entryconfig(4, label=f'Update Available {self.__U_OUTDATE}')
-                createLog('Update is available')
-
-
-class RedirectSTD:
-    def __init__(self, console):
-        self.console = console
-
-    def write(self, string):
-        self.console.config(state="normal")
-        self.console.insert("end", f'{string}')
-        self.console.see("end")
-        self.console.config(state="disabled")
