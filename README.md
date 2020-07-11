@@ -29,15 +29,16 @@ Run From Source: `poetry run client`
 | :------------------ | :----------------------- |
 | `--disable-updater` | Disable VM Updater start |
 ### Debug Console Commands
-| Command         | Description                                                                |
-| :-------------- | :------------------------------------------------------------------------- |
-| `clear`         | Clear debug window output                                                  |
-| `clear-chat`    | Clear all messages in chat widget                                          |
-| `refresh-theme` | Read config .json values and update theme                                  |
-| `polling-stop`  | Will stop message polling thread                                           |
-| `test-raise`    | This command will raise test exception that <ins>will crash</ins> this app |
-| `version`       | Print app version                                                          |
-| `updates-check` | Check for available updates                                                |
+| Command          | Description                                                                |
+| :--------------- | :------------------------------------------------------------------------- |
+| `clear`          | Clear debug window output                                                  |
+| `clear-chat`     | Clear all messages in chat widget                                          |
+| `refresh-theme`  | Read config .json values and update theme                                  |
+| `polling-stop`   | Will stop message polling thread                                           |
+| `test-raise`     | This command will raise test exception that <ins>will crash</ins> this app |
+| `version`        | Print app version                                                          |
+| `updates-check`  | Check for available updates                                                |
+| `eval <COMMAND>` | Execute `<COMMAND>` in python interpreter                                  |
 
 Note, that all commands are <ins>case sensitive</ins>!
 

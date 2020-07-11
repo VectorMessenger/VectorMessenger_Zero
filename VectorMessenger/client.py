@@ -227,7 +227,7 @@ class VM_MainWindow:
         if hasattr(self, 'debug_console_showing'): return False
 
         def _handleConsoleInput(e):
-            input_str = self.__debug_console_input.get()
+            input_str: str = self.__debug_console_input.get()
             if input_str == 'clear':
                 self.__debug_console_output.config(state=tk.NORMAL)
                 self.__debug_console_output.delete(1.0, tk.END)
@@ -241,6 +241,7 @@ class VM_MainWindow:
             elif input_str == 'test-raise': raise Exception('Test exception raised')
             elif input_str == 'version': h.createLog(f'Version: {h.VERSION}')
             elif input_str == 'updates-check': self.update_checker.check()
+            elif input_str.startswith('eval'): eval(input_str[5:])
             else: h.createLog('No such command')
             self.__debug_console_input.delete(0, tk.END)
 
