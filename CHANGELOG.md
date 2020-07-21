@@ -1,6 +1,9 @@
 # **Vector Messenger** - Changelog
 > This changelog was started from `2020.07.01`. Any change before this date is not stated here at this moment.
 
+**2020-07-21**
+- Removed `--log-messages` command from server-side
+
 **2020-07-14**
 - Removed `VMClient.png` from source again
 

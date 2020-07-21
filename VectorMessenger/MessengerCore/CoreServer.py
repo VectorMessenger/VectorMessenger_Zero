@@ -36,7 +36,6 @@ class MessengerServer(VMUDPBase):
                         if addres in self.clients:
                             for client in self.clients:
                                 self.sock.sendto(data, client)
-                                self.logMessage(addres, str(data))
                     else:
                         if reg_code == f'VM{h.VERSION}_REGISTER_USER':
                             if addres not in self.clients:
@@ -51,16 +50,3 @@ class MessengerServer(VMUDPBase):
         self.__online = False
         h.createLog('Shutting down the server')
         sys.exit()
-
-    @staticmethod
-    def logMessage(user: list, message: str):
-        """
-        Log all messages, coming through server for debug purposes. No decryption!
-
-        Arguments:
-            user {list} -- User data
-            message {str} -- Message string
-        """
-        if '--log-messages' in sys.argv:
-            with open('./server_messages_log.txt', 'at', encoding='utf-8') as logfile:
-                logfile.write(h.createLog(f'< {user[0]}:{user[1]} > {message}', echo=True) + '\n')

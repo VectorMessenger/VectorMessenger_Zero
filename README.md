@@ -50,7 +50,6 @@ Run From Source `poetry run server`
 | Argument         | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------------------------- |
 | `--localhost`    | Run server on localhost                                                             |
-| `--log-messages` | Will log all messages to `./server_message_log.txt` file. <ins>No decryption!</ins> |
 
 ## Preparing Source
 ### For Development
