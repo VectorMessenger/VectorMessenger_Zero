@@ -12,6 +12,7 @@ Script available startup args
 from sys import platform, argv
 from time import time
 from cx_Freeze import Executable, setup
+from multiprocessing import Process
 
 from VectorMessenger.MessengerCore.Helpers import Global as h
 
@@ -129,7 +130,11 @@ if __name__ == "__main__":
         argv.remove('combined')
         build_combined()
     else:
-        build_client()
-        build_server()
+        processes = (Process(target=build_client), Process(target=build_server))
+
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
 
     print(f'\n--- Built successfully in < {round(time() - build_time_start, 2)} > sec. ---')
