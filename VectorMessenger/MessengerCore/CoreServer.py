@@ -11,16 +11,16 @@ class MessengerServer(VMUDPBase):
         self.cfg = h.VMConfig.init(0)
 
         if is_localhost:
-            h.createLog('Running server on localhost')
+            h.create_log('Running server on localhost')
             ip = 'localhost'
         else:
-            h.createLog('Running server on a global network')
+            h.create_log('Running server on a global network')
             ip = ''
 
         self.sock.bind((ip, self.cfg['connection']['port']))
         self.clients = []
         self.__online = True
-        h.createLog('Server online')
+        h.create_log('Server is online')
 
         try:
             while self.__online:
@@ -29,7 +29,7 @@ class MessengerServer(VMUDPBase):
                 except socket.error:
                     pass
                 else:
-                    h.createLog(f'Receiving data from {addres}')
+                    h.create_log(f'Receiving data from {addres}')
                     try:
                         reg_code = data.decode('utf-8')
                     except Exception:
@@ -40,13 +40,12 @@ class MessengerServer(VMUDPBase):
                         if reg_code == f'VM{h.VERSION}_REGISTER_USER':
                             if addres not in self.clients:
                                 self.clients.append(addres)
-                                h.createLog('User registration request received. New address added to clients list')
+                                h.create_log('User registration request received. New address added to clients list')
                                 continue
         except (KeyboardInterrupt, SystemExit):
-            self.stop()
+            self.stop_server()
 
-    def stop(self):
-        """ Will stop the server """
+    def stop_server(self):
         self.__online = False
-        h.createLog('Shutting down the server')
+        h.create_log('Shutting down the server')
         sys.exit()

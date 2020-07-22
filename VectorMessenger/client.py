@@ -11,10 +11,10 @@ from VectorMessenger.MessengerCore.Encryption import VMCrypt
 
 class VM_MainWindow:
     def __init__(self, root: object):
-        def _onClose():
-            self.messenger.stopMessagePolling()
+        def _on_close():
+            self.messenger.stop_message_polling()
             root.destroy()
-        root.protocol('WM_DELETE_WINDOW', _onClose)
+        root.protocol('WM_DELETE_WINDOW', _on_close)
 
         self.root = root
 
@@ -23,12 +23,12 @@ class VM_MainWindow:
         root.configure(menu=self.HM_Root)
         self.HM_Theme = tk.Menu(self.HM_Root, tearoff=0)
         self.HM_Root.add_cascade(label='Theme', menu=self.HM_Theme)
-        self.HM_Theme.add_command(label='Light', command=lambda: self.setColorScheme(0))
-        self.HM_Theme.add_command(label='Dark', command=lambda: self.setColorScheme(1))
+        self.HM_Theme.add_command(label='Light', command=lambda: self.set_color_scheme(0))
+        self.HM_Theme.add_command(label='Dark', command=lambda: self.set_color_scheme(1))
         self.HM_Advanced = tk.Menu(self.HM_Root, tearoff=0)
-        self.HM_Root.add_cascade(label='Settings', command=self.showWindow_settings)
+        self.HM_Root.add_cascade(label='Settings', command=self.show_window_settings)
         self.HM_Root.add_cascade(label='Advanced', menu=self.HM_Advanced)
-        self.HM_Advanced.add_command(label='Debug Console', command=self.showDebugConsole)
+        self.HM_Advanced.add_command(label='Debug Console', command=self.show_debug_console)
 
         # Top
         self.frame_top = tk.Frame(root)
@@ -45,12 +45,12 @@ class VM_MainWindow:
         # Bottom
         self.frame_bot = tk.Frame(root)
         self.chat_message_input = tk.Entry(self.frame_bot, width=50)
-        self.chat_message_input.bind('<Return>', self.sendMessage)
-        self.chat_btn_sendMessage = tk.Button(self.frame_bot, text="\u27A2", font=20, relief=tk.FLAT, command=self.sendMessage)
+        self.chat_message_input.bind('<Return>', self.send_message)
+        self.chat_btn_send_message = tk.Button(self.frame_bot, text="\u27A2", font=20, relief=tk.FLAT, command=self.send_message)
 
         self.frame_bot.grid(column=0, row=1, sticky="NSEW")
         self.chat_message_input.grid(column=0, row=0, sticky="NSEW")
-        self.chat_btn_sendMessage.grid(column=1, row=0, sticky="SE")
+        self.chat_btn_send_message.grid(column=1, row=0, sticky="SE")
         self.frame_bot.columnconfigure(0, weight=1)
         self.frame_bot.rowconfigure(0, weight=0)
 
@@ -61,13 +61,13 @@ class VM_MainWindow:
         if '--disable-updater' not in sys.argv:
             self.HM_Root.add_command(label='', state=tk.DISABLED)
             self.update_checker = h_cl.UpdateChecker(self.HM_Root)
-            Thread(target=self.update_checker.check).start()
+            Thread(target=self.update_checker.check, daemon=True).start()
 
-    def initMessenger(self):
+    def init_messenger(self):
         self.messenger = MessengerClient(self)
-        self.messenger.registerUser()
+        self.messenger.register_user()
 
-    def showMessage(self, text: str):
+    def show_message(self, text: str):
         """ Will show the message in chat ui """
         text = text + '\n'
 
@@ -76,13 +76,13 @@ class VM_MainWindow:
         self.chat_messages.config(state=tk.DISABLED)
         self.chat_messages.see(tk.END)
 
-    def sendMessage(self, *args):
+    def send_message(self, *args):
         message = self.chat_message_input.get()
         self.chat_message_input.delete(0, tk.END)
         if len(message) > 0:
-            self.messenger.sendMessage(message)
+            self.messenger.send_message(message)
 
-    def refreshColorScheme(self, screen=0, refreshAll=False):
+    def refresh_color_scheme(self, screen=0, refreshAll=False):
         """
         Will refresh color theme from json config file
 
@@ -92,7 +92,7 @@ class VM_MainWindow:
         """
         if refreshAll:
             for i in range(2):
-                self.refreshColorScheme(screen=i)
+                self.refresh_color_scheme(screen=i)
                 return 0
 
         cfg = h.VMConfig.get(1)
@@ -100,18 +100,18 @@ class VM_MainWindow:
             theme_name = 'theme_' + cfg['ui']['theme_selected']
             selected_theme = cfg['ui']['root'][theme_name]
             if screen == 0:
-                def _updateThemeFromDict(theme: dict):
+                def _update_theme_from_dict(theme: dict):
                     self.frame_top.config(bg=theme['frame_bg'])
                     self.chat_messages.config(bg=theme['chat_bg'], fg=theme['text'])
                     self.frame_bot.config(bg=theme['chat_bg'])
                     self.chat_message_input.config(bg=theme['message_input_bg'], fg=theme['text'])
-                    self.chat_btn_sendMessage.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
+                    self.chat_btn_send_message.config(bg=theme['buttond_send_bg'], fg=theme['buttond_send_fg'])
 
                 # Font update
                 self.chat_messages.config(font=cfg['ui']['root']['font'])
                 self.chat_message_input.config(font=cfg['ui']['root']['font'])
                 # Theme update
-                _updateThemeFromDict(selected_theme)
+                _update_theme_from_dict(selected_theme)
             if screen == 1:
                 pass  # TODO: Implement theme refreshing for settings window
 
@@ -122,11 +122,11 @@ class VM_MainWindow:
                 self.HM_Theme.entryconfig(1, state=tk.DISABLED)
                 self.HM_Theme.entryconfig(0, state=tk.NORMAL)
         else:
-            h.createLog('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
+            h.create_log('Cant refresh color theme - config file was not found -> Building config from built-in values and trying again')
             h.VMConfig.init(1)
-            self.refreshColorScheme(screen, refreshAll)
+            self.refresh_color_scheme(screen, refreshAll)
 
-    def setColorScheme(self, mode: int):
+    def set_color_scheme(self, mode: int):
         """
         Set color scheme to selected mode
 
@@ -137,10 +137,10 @@ class VM_MainWindow:
         theme = 'light' if mode == 0 else 'dark'
         cfg['ui']['theme_selected'] = theme
         h.VMConfig.write(cfg, 1)
-        h.createLog(f'UI Theme set to {theme}')
-        self.refreshColorScheme()
+        h.create_log(f'UI Theme set to {theme}')
+        self.refresh_color_scheme()
 
-    def showWindow_settings(self):
+    def show_window_settings(self):
         """ Will show window with settings """
         ENTRY_WIDTH = 40
 
@@ -152,7 +152,7 @@ class VM_MainWindow:
         window.grid(row=0, column=0, padx=5, pady=5)
 
         # Username settings
-        def _reloadUname():
+        def _reload_uname():
             uname_currentLabel.config(text='Current username: ' + h.VMConfig.get(1)['username'])
 
         def _setUname():
@@ -161,14 +161,14 @@ class VM_MainWindow:
                 cfg = h.VMConfig.get(1)
                 cfg['username'] = username
                 h.VMConfig.write(cfg, 1)
-                _reloadUname()
+                _reload_uname()
             else:
                 uname_input.delete(0, tk.END)
                 uname_input.insert(0, "Username can't be empty!")
 
         frame_setUsername = tk.LabelFrame(window, text='Username')
         uname_currentLabel = tk.Label(frame_setUsername, text='')
-        _reloadUname()
+        _reload_uname()
         uname_input = tk.Entry(frame_setUsername, width=ENTRY_WIDTH)
         uname_btn_set = tk.Button(frame_setUsername, text='Set', command=_setUname, height=1, relief=tk.FLAT, bg='#dfdfdf')
 
@@ -178,38 +178,38 @@ class VM_MainWindow:
         uname_btn_set.grid(row=1, column=1, sticky='EW')
 
         # Advanced
-        def _resetCfg():
+        def _reset_cfg():
             h.VMConfig.reset(1)
-            _reloadUname()
-            _hideEncKey()
-            self.refreshColorScheme(refreshAll=True)
-            h.createLog('Config file reset complete')
+            _reload_uname()
+            _hide_enc_key()
+            self.refresh_color_scheme(refreshAll=True)
+            h.create_log('Config file reset complete')
 
         frame_advanced = tk.LabelFrame(window, text='Advanced')
-        adv_btn_resetConfig = tk.Button(frame_advanced, text='Reset To Defaults', command=_resetCfg, height=1, relief=tk.FLAT, bg='#dfdfdf')
+        adv_btn_resetConfig = tk.Button(frame_advanced, text='Reset To Defaults', command=_reset_cfg, height=1, relief=tk.FLAT, bg='#dfdfdf')
 
         frame_advanced.grid(row=0, column=1, sticky='NSEW', rowspan=10)
         adv_btn_resetConfig.grid(row=0, column=1, sticky='EW', padx=2)
 
         # Encryption settings
-        def _setEncKey():
+        def _set_enc_key():
             key = ekey_input_field.get()
             VMCrypt.set_key(key)
-            _hideEncKey()
+            _hide_enc_key()
             ekey_warning_label.config(text='Key was successfully set', fg='#009f00')
 
-        def _showEncKey():
+        def _show_enc_key():
             ekey_currentKey_label.config(text=f'Current Key: {h.VMConfig.get(1)["aes_key"]}')
 
-        def _hideEncKey():
+        def _hide_enc_key():
             ekey_currentKey_label.config(text='Current Key: ****')
 
         frame_encKeySettings = tk.LabelFrame(window, text='Encryption Key')
         ekey_warning_label = tk.Label(frame_encKeySettings, text='')
         ekey_currentKey_label = tk.Label(frame_encKeySettings, text='Current Key: ****', bg='#ffffff')
-        ekey_btn_showCurrentKey = tk.Button(frame_encKeySettings, text='Show', command=_showEncKey, height=1, relief=tk.FLAT, bg='#dfdfdf')
+        ekey_btn_showCurrentKey = tk.Button(frame_encKeySettings, text='Show', command=_show_enc_key, height=1, relief=tk.FLAT, bg='#dfdfdf')
         ekey_input_field = tk.Entry(frame_encKeySettings, width=ENTRY_WIDTH)
-        ekey_btn_set = tk.Button(frame_encKeySettings, text='Set', command=_setEncKey, relief=tk.FLAT, bg='#dfdfdf')
+        ekey_btn_set = tk.Button(frame_encKeySettings, text='Set', command=_set_enc_key, relief=tk.FLAT, bg='#dfdfdf')
 
         frame_encKeySettings.grid(row=1, column=0, sticky='NSEW')
         ekey_warning_label.grid(row=0, column=0, sticky='W')
@@ -219,9 +219,9 @@ class VM_MainWindow:
         ekey_btn_set.grid(row=2, column=1, sticky='EW')
 
         # Refresh theme
-        # self.refreshColorScheme(1) # TODO: Finish screen
+        # self.refresh_color_scheme(1) # TODO: Finish screen
 
-    def showDebugConsole(self):
+    def show_debug_console(self):
         """
         Show in-app console with actions logs.
         """
@@ -237,16 +237,16 @@ class VM_MainWindow:
                 self.chat_messages.config(state=tk.NORMAL)
                 self.chat_messages.delete(1.0, tk.END)
                 self.chat_messages.config(state=tk.DISABLED)
-            elif input_str == 'refresh-theme': self.refreshColorScheme()
-            elif input_str == 'polling-stop': self.messenger.stopMessagePolling()
+            elif input_str == 'refresh-theme': self.refresh_color_scheme()
+            elif input_str == 'polling-stop': self.messenger.stop_message_polling()
             elif input_str == 'test-raise': raise Exception('Test exception raised')
-            elif input_str == 'version': h.createLog(f'Version: {h.VERSION}')
+            elif input_str == 'version': h.create_log(f'Version: {h.VERSION}')
             elif input_str == 'updates-check': self.update_checker.check()
             elif input_str.startswith('eval'): eval(input_str[5:])
-            else: h.createLog('No such command')
+            else: h.create_log('No such command')
             self.__debug_console_input.delete(0, tk.END)
 
-        def _onClose(window, obj):
+        def _on_close(window, obj):
             delattr(obj, 'debug_console_showing')
             obj.HM_Advanced.entryconfig(0, state=tk.NORMAL)
             sys.stdout = sys.__stdout__
@@ -256,7 +256,7 @@ class VM_MainWindow:
         ui_window = tk.Toplevel(bg='#181818')
         ui_window.geometry('700x300')
         ui_window.title('Debug Console')
-        ui_window.protocol('WM_DELETE_WINDOW', lambda: _onClose(ui_window, self))
+        ui_window.protocol('WM_DELETE_WINDOW', lambda: _on_close(ui_window, self))
         ui_window.columnconfigure(0, weight=1)
         ui_window.rowconfigure(0, weight=1)
 
@@ -296,8 +296,8 @@ def startup():
     mainWindow = VM_MainWindow(ui_root)
     h.VMConfig.init(1)
 
-    mainWindow.refreshColorScheme()
-    mainWindow.initMessenger()
+    mainWindow.refresh_color_scheme()
+    mainWindow.init_messenger()
 
     ui_root.mainloop()
 

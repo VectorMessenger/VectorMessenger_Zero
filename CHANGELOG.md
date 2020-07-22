@@ -1,6 +1,10 @@
 # **Vector Messenger** - Changelog
 > This changelog was started from `2020.07.01`. Any change before this date is not stated here at this moment.
 
+**2020-07-22**
+- Run `update checker` thread as daemon
+- CamelCase to under_score
+
 **2020-07-21**
 - Removed `--log-messages` command from server-side
 

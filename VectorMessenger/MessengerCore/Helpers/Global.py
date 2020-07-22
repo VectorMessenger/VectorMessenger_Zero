@@ -73,7 +73,7 @@ APPDICT = {
 # Global Functions
 
 
-def createLog(text: str, echo=False):
+def create_log(text: str, echo=False):
     """
     Create log output to stdout or another function if ui_log defined
 
@@ -177,10 +177,10 @@ class VMConfig:
         if conf_type == 0:
             if not os.path.isdir(CONFIG_DIR):
                 os.makedirs(CONFIG_DIR)
-                createLog('Created config dir')
+                create_log('Created config dir')
             cfgserver_path = os.path.join(CONFIG_DIR, CONFIG_SERVER)
             if os.path.isfile(cfgserver_path):
-                createLog('Config file was found')
+                create_log('Config file was found')
                 exist = True
             if not exist:
                 cls.write(APPDICT['server']['config_default'], conf_type)
@@ -188,14 +188,14 @@ class VMConfig:
         elif conf_type == 1:
             if not os.path.isdir(CONFIG_DIR):
                 os.makedirs(CONFIG_DIR)
-                createLog('Created config dir')
+                create_log('Created config dir')
             cfgclient_path = os.path.join(CONFIG_DIR, CONFIG_CLIENT)
             if os.path.isfile(cfgclient_path):
-                createLog('Config file was found')
+                create_log('Config file was found')
                 exist = True
             if not exist:
                 cls.write(APPDICT['client']['config_default'], conf_type)
-                createLog(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >')
+                create_log(f'Config file successfully generated < {os.path.abspath(cfgclient_path)} >')
             return cls.get(conf_type)
 
     @staticmethod

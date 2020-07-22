@@ -46,18 +46,18 @@ class UpdateChecker:
     def check(self):
         self.__ui_ctrl.entryconfig(4, label='Checking for updates \u2B6E')
         try:
-            h.createLog('Checking for updates')
+            h.create_log('Checking for updates')
             content = request.urlopen(h.VERSION_UPDATE_API).read().decode('utf-8')
         except urllib_error.URLError:
             self.__ui_ctrl.entryconfig(4, label="")
-            h.createLog("Can't check for updates. No connection to network or source unavailable")
+            h.create_log("Can't check for updates. No connection to network or source unavailable")
         else:
             if 'docs.google.com' in h.VERSION_UPDATE_API:
                 content = content[1:]
             content = json.loads(content)
             if h.VERSION == content['version']:
                 self.__ui_ctrl.entryconfig(4, label=f'Up-To-Date {self.__U_NOUPDATES}')
-                h.createLog('Version is up to date')
+                h.create_log('Version is up to date')
             else:
                 self.__ui_ctrl.entryconfig(4, label=f'Update Available {self.__U_OUTDATE}')
-                h.createLog('Update is available')
+                h.create_log('Update is available')
