@@ -1,21 +1,22 @@
-<p align="center">
-	<img src="./.github/VMLogo.png" width=128><br>
-	<b>Vector Messenger</b>
-</p>
+<img src="./.github/VMLogo.png" width=128 align="right">
 
----
-- [Information](#information)
-- [Client](#client)
-  - [Information](#information-1)
-  - [Startup Args](#startup-args)
-  - [Debug Console Commands](#debug-console-commands)
-- [Server](#server)
-  - [Information](#information-2)
-  - [Startup Args](#startup-args-1)
-- [Preparing Source](#preparing-source)
-  - [For Development](#for-development)
-  - [For Building](#for-building)
-- [Special Thanks](#special-thanks)
+# Vector Messenger
+
+- [Vector Messenger](#vector-messenger)
+  - [Information](#information)
+  - [Client](#client)
+    - [Information](#information-1)
+    - [Startup Args](#startup-args)
+    - [Debug Console Commands](#debug-console-commands)
+  - [Server](#server)
+    - [Information](#information-2)
+    - [Startup Args](#startup-args-1)
+  - [Preparing Source](#preparing-source)
+    - [For Development](#for-development)
+    - [For Building](#for-building)
+  - [Special Thanks](#special-thanks)
+
+</p>
 
 ## Information
 Simple python-based ui application for network global chatting through UDP protocol.
