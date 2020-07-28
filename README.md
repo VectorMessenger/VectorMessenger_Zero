@@ -1,4 +1,4 @@
-<p align="right"><b>Vector Messenger</b></p>
+<div align="right"><b>Vector Messenger</b></div>
 <img src="./.github/VMLogo.png" width=128 align="right">
 
 - [Information](#information)
