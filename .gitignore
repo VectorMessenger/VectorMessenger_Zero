@@ -9,5 +9,7 @@ __pycache__
 # VM Logs
 server_messages_log.txt
 
-# cx-Freeze build
+# pyinstaller
 build
+dist
+VM_Client.spec
