@@ -310,5 +310,5 @@ def run_source():
 
 
 if __name__ == '__main__':
-    os.chdir(sys._MEIPASS)
+    os.chdir(os.path.dirname(sys.argv[0]))
     startup()

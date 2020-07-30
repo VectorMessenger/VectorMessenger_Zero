@@ -12,4 +12,4 @@ server_messages_log.txt
 # pyinstaller
 build
 dist
-VM_Client.spec
+*.spec
