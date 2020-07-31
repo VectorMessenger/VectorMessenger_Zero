@@ -1,5 +1,3 @@
-# -*- coding: utf8 -*-
-
 import sys
 import os
 import tkinter as tk
@@ -310,5 +308,5 @@ def run_source():
 
 
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(sys.argv[0]))
+    os.chdir(os.path.abspath('.'))
     startup()

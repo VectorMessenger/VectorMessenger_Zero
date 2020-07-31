@@ -13,7 +13,7 @@ client = "VectorMessenger.client:run_source"
 server = "VectorMessenger.server:run_source"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7.0 <3.8"
 pyAesCrypt = "^0.4.3"
 pillow = "^7.2.0"
 pyinstaller = "^3.6"

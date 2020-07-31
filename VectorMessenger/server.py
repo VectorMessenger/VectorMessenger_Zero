@@ -1,7 +1,6 @@
 from os import system as cmd, chdir, path
 from sys import platform as sysplatform
 from argparse import ArgumentParser
-from sys import argv
 
 from VectorMessenger.MessengerCore.Helpers.Global import APPDICT
 from VectorMessenger.MessengerCore.CoreServer import MessengerServer
@@ -30,5 +29,5 @@ def run_source():
 
 if __name__ == '__main__':
     argparser()
-    chdir(path.dirname(argv[0]))
+    chdir(path.abspath('.'))
     startup()
