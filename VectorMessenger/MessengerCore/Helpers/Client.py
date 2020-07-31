@@ -1,7 +1,6 @@
-"""
-Helpers for client-side
-"""
+""" Helpers for client-side """
 
+import sys
 from urllib import error as urllib_error
 from urllib import request
 import json
@@ -23,14 +22,37 @@ def iconbitmap_universal(window: object, icon_image=h.ICON_CLIENT_PATH):
 
 
 class RedirectSTD:
-    def __init__(self, console):
-        self.__console = console
+    def __init__(self, text_widget: object):
+        """ Redirect STD(-OUT & -ERR) to tkinter Text widget.
 
-    def write(self, string):
-        self.__console.config(state="normal")
-        self.__console.insert("end", f'{string}')
-        self.__console.see("end")
-        self.__console.config(state="disabled")
+        Args:
+            text_widget (object): Tkinter Text widget.
+        """
+        self.__text_widget = text_widget
+        self.redirect()
+
+    def redirect(self):
+        sys.stdout = self.__STD2TK(self.__text_widget)
+        sys.stderr = self.__STD2TK(self.__text_widget)
+
+    def disable(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    class __STD2TK:
+        def __init__(self, text_widget):
+            """ Low level redirect STD(-OUT & -ERR) to tkinter Text widget realisation.
+
+            Args:
+                text_widget (object): Tkinter Text widget.
+            """
+            self.__text_widget = text_widget
+
+        def write(self, string):
+            self.__text_widget.config(state="normal")
+            self.__text_widget.insert("end", f'{string}')
+            self.__text_widget.see("end")
+            self.__text_widget.config(state="disabled")
 
 
 class UpdateChecker:

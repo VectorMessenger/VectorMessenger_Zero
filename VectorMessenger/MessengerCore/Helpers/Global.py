@@ -1,6 +1,4 @@
-"""
-Helpers for server and client
-"""
+""" Global helpers for client and server """
 
 import json
 import os

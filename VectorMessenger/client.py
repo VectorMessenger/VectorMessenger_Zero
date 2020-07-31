@@ -249,8 +249,7 @@ class VM_MainWindow:
         def _on_close(window, obj):
             delattr(obj, 'debug_console_showing')
             obj.HM_Advanced.entryconfig(0, state=tk.NORMAL)
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
+            std_redirect.disable()
             window.destroy()
 
         ui_window = tk.Toplevel(bg='#181818')
@@ -284,8 +283,7 @@ class VM_MainWindow:
         self.debug_console_showing = True
 
         # Redirect STD (-OUT && -ERROR) to debug console
-        sys.stdout = h_cl.RedirectSTD(self.__debug_console_output)
-        sys.stderr = h_cl.RedirectSTD(self.__debug_console_output)
+        std_redirect = h_cl.RedirectSTD(self.__debug_console_output)
 
 
 def startup():
@@ -303,10 +301,12 @@ def startup():
 
 
 def run_source():
+    """ Startup from source code with poetry """
     os.chdir(os.path.dirname(__file__))
     startup()
 
 
 if __name__ == '__main__':
+    """ Built app startup """
     os.chdir(os.path.abspath('.'))
     startup()

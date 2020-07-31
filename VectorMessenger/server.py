@@ -22,12 +22,14 @@ def argparser():
 
 
 def run_source():
+    """ Startup from source code with poetry """
     argparser()
     chdir(path.dirname(__file__))
     startup()
 
 
 if __name__ == '__main__':
+    """ Built app startup """
     argparser()
     chdir(path.abspath('.'))
     startup()
