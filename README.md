@@ -16,7 +16,7 @@
 
 
 ## Information
-Simple python-based ui application for network global chatting through UDP protocol.
+Simple python-based ui application for network global chatting through UDP protocol. Source code can be launched and built <ins>only</ins> on `python 3.7`.
 
 
 ## Client
