@@ -5,14 +5,11 @@ Ignore folder ./build/
 
 Run with argument -h or --help to get more info
 
-Script available startup args
-(if empty then script will run with [client, server] args):
+Script available startup args:
     client - build only client. (output to ./dist/VM_Client)
     server - build only server. (output to ./dist/VM_Server)
     full - full VM build. (output to ./dist/*)
 """
-
-# ! Update README after new script is done
 
 from time import time
 from os import pathsep, path
