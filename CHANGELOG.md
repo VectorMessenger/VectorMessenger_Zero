@@ -1,5 +1,18 @@
 # **Vector Messenger** - Changelog
-> This changelog was started from `2020.07.01`. Any change before this date is not stated here at this moment.
+> This changelog begins from `2020.07.01`. Any change before this date is not stated here.
+
+
+## Build [**B202008020120**](https://github.com/maximilionus/VectorMessenger/releases/tag/B202008020120)
+
+**2020-08-02**
+- Downgrade to python `3.7`
+- Allow only python `>=3.7` `<3.8`
+- Changed `cx-Freeze` build module to `PyInstaller`
+- Rewritten `build.py` script to fully support `PyInstaller`
+- Added ags handling to `build.py` with `argparse` module
+- Updated `.lock` file
+- Fixed paths handling for PyInstaller builds
+- `RedirectSTD` enhanced to be more easy to use
 
 **2020-07-22**
 - Run `update checker` thread as daemon
