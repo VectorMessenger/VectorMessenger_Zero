@@ -14,19 +14,22 @@
   - [For Building](#for-building)
 - [Special Thanks](#special-thanks)
 
-</p>
 
 ## Information
 Simple python-based ui application for network global chatting through UDP protocol.
 
+
 ## Client
+
 ### Information
 Main File: `./VectorMessenger/client.py`  
 Run From Source: `poetry run client`
+
 ### Startup Args
 | Argument            | Description              |
 | :------------------ | :----------------------- |
 | `--disable-updater` | Disable VM Updater start |
+
 ### Debug Console Commands
 | Command          | Description                                                                |
 | :--------------- | :------------------------------------------------------------------------- |
@@ -41,33 +44,41 @@ Run From Source: `poetry run client`
 
 Note, that all commands are <ins>case sensitive</ins>!
 
+
 ## Server
+
 ### Information
 Main File: `./VectorMessenger/server.py`  
 Run From Source `poetry run server`
+
 ### Startup Args
-| Argument         | Description                                                                         |
-| :--------------- | :---------------------------------------------------------------------------------- |
-| `--localhost`    | Run server on localhost                                                             |
+| Argument      | Description             |
+| :------------ | :---------------------- |
+| `--localhost` | Run server on localhost |
+
 
 ## Preparing Source
+- First of all you need to install the [poetry](https://pypi.org/project/poetry/) dependency manager with pip.
+
 ### For Development
 ```bash
 $ poetry install
 ```
+
 ### For Building
 ```bash
 # Project env init
 $ poetry install --no-dev
 
 # Build client and server
-# Read ./build.py docstring for more information
-$ poetry run py build.py
+# Run script with argument --help or read build.py docstring for more information
+$ poetry run python build.py
 ```
+
 
 ## Special Thanks
 | <ins>Closed Alpha Testers</ins> |
 | :------------------------------ |
 | Dmitry                          |
-| Max 'Forzz' Bannov              |
-| Nikita 'CrazyFearka' Stepanov   |
+| Max "Forzz" Bannov              |
+| Nikita "CrazyFearka" Stepanov   |
