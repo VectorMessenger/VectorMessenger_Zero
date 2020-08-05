@@ -37,11 +37,9 @@ class MessengerServer(VMUDPBase):
                             for client in self.clients:
                                 self.sock.sendto(data, client)
                     else:
-                        if reg_code == f'VM{h.VERSION}_REGISTER_USER':
-                            if addres not in self.clients:
-                                self.clients.append(addres)
-                                h.create_log('User registration request received. New address added to clients list')
-                                continue
+                        if reg_code == f'VM{h.VERSION}_REGISTER_USER' and addres not in self.clients:
+                            self.clients.append(addres)
+                            h.create_log('User registration request received. New address added to clients list')
         except (KeyboardInterrupt, SystemExit):
             self.stop_server()
 
