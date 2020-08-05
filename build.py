@@ -107,7 +107,7 @@ if __name__ == "__main__":
     build_time_start = time()
     if args.mode == 'client':
         build_client()
-    elif args.mode == 'client_web':
+    elif args.mode == 'dev_client_web':
         build_client_web()
     elif args.mode == 'server':
         build_server()
