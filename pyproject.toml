@@ -1,12 +1,9 @@
 [tool.poetry]
-name = "vectormessenger"
+name = "VectorMessenger"
 version = "0.0.0"
 description = ""
 authors = ["maximilionus <xxxarakxxx@gmail.com>"]
 license = "MIT"
-packages = [
-    { include = "./VectorMessenger" }
-]
 
 [tool.poetry.scripts]
 client = "VectorMessenger.client:run_source"
