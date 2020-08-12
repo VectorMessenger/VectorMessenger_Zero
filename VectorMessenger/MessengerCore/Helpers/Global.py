@@ -1,6 +1,6 @@
 """ Global helpers for client and server """
 
-import json
+import ujson as json
 import os
 from datetime import datetime
 
