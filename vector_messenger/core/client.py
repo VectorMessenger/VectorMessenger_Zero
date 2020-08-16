@@ -1,9 +1,9 @@
 import socket
 from threading import Thread
 
-from VectorMessenger.MessengerCore.Helpers import Global as h
-from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
-from VectorMessenger.MessengerCore.Encryption import VMCrypt
+from vector_messenger.core.helpers import general as h
+from vector_messenger.core.messenger_base import VMUDPBase
+from vector_messenger.core.encryption import VMCrypt
 
 
 class MessengerClient(VMUDPBase):

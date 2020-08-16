@@ -1,8 +1,8 @@
 import socket
 import sys
 
-from VectorMessenger.MessengerCore.Helpers import Global as h
-from VectorMessenger.MessengerCore.MessengerBase import VMUDPBase
+from vector_messenger.core.helpers import general as h
+from vector_messenger.core.messenger_base import VMUDPBase
 
 
 class MessengerServer(VMUDPBase):

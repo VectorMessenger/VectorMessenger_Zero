@@ -1,7 +1,7 @@
 from io import BytesIO
 import pyAesCrypt
 
-from VectorMessenger.MessengerCore.Helpers import Global as h
+from vector_messenger.core.helpers import general as h
 
 
 class VMCrypt:

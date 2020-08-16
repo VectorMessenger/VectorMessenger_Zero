@@ -1,8 +1,8 @@
 import os
 from argparse import ArgumentParser
 
-from VectorMessenger.client_legacy_gui import startup as legacy_startup
-from VectorMessenger.client_web_gui import startup as web_startup
+from vector_messenger.client_legacy_gui import startup as legacy_startup
+from vector_messenger.client_web_gui import startup as web_startup
 
 
 def __args_handler() -> object:

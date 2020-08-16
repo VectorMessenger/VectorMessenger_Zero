@@ -2,8 +2,8 @@ from os import system as cmd, chdir, path
 from sys import platform as sysplatform
 from argparse import ArgumentParser
 
-from VectorMessenger.MessengerCore.Helpers.Global import APPDICT
-from VectorMessenger.MessengerCore.CoreServer import MessengerServer
+from vector_messenger.core.helpers.general import APPDICT
+from vector_messenger.core.server import MessengerServer
 
 
 args = None

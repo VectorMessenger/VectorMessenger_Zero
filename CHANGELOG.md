@@ -2,6 +2,17 @@
 > This changelog begins from `2020.07.01`. Any change before this date is not stated here.
 
 
+# Unreleased
+
+**2020-08-17**
+- Basic implementation of web-gui with `pywebview` and `flask`
+- Renamed all modules from CamelCase to under_score, also renamed some of them
+- Fixed VM package detection for `poetry` with self configured `setup.py`
+- Changed built-in `json` module to `ujson`
+- Short arg `-L` for running server on localhost
+
+---
+
 ## Build [**B202008020120**](https://github.com/maximilionus/VectorMessenger/releases/tag/B202008020120)
 
 **2020-08-02**

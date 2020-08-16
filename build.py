@@ -12,30 +12,30 @@ Script available startup args:
 """
 
 from time import time
-from os import pathsep, path
+from os import pathsep, path, chdir
 from sys import platform
 from argparse import ArgumentParser
 
 import PyInstaller.__main__
 
-from VectorMessenger.MessengerCore.Helpers import Global as h
+from vector_messenger.core.helpers import general as h
 
 
 UPX = '--noupx'
 BUILD_CHOICES = ["client", "server", "full"]
-PATH_CLIENT_PY = './VectorMessenger/client.py'
-PATH_SERVER_PY = './VectorMessenger/server.py'
+PATH_CLIENT_PY = './vector_messenger/client.py'
+PATH_SERVER_PY = './vector_messenger/server.py'
 
 
 def build_client():
     if platform == 'win32':
-        icon = '--icon=./VectorMessenger/' + h.ICON_CLIENT_PATH[2:]
+        icon = '--icon=./vector_messenger/' + h.ICON_CLIENT_PATH[2:]
     else:
         icon = ''
 
     ADD_FILES = (
-        f'--add-data=./VectorMessenger/data/ico{pathsep}./data/ico',
-        f'--add-data=./VectorMessenger/data/src{pathsep}./data/src',
+        f'--add-data=./vector_messenger/data/ico{pathsep}./data/ico',
+        f'--add-data=./vector_messenger/data/src{pathsep}./data/src',
         f'--add-data=./LICENSE{pathsep}.',
     )
 
@@ -53,12 +53,12 @@ def build_client():
 def build_server():
     # TODO: Exclude client-side and encryption modules
     if platform == 'win32':
-        icon = '--icon=./VectorMessenger/' + h.ICON_SERVER_PATH[2:]
+        icon = '--icon=./vector_messenger/' + h.ICON_SERVER_PATH[2:]
     else:
         icon = ''
 
     ADD_FILES = (
-        f'--add-data=./VectorMessenger/data/ico{pathsep}./data/ico',
+        f'--add-data=./vector_messenger/data/ico{pathsep}./data/ico',
         f'--add-data=./LICENSE{pathsep}.',
     )
 
@@ -74,6 +74,8 @@ def build_server():
 
 
 if __name__ == "__main__":
+    chdir(path.dirname(path.abspath(__file__)))
+
     parser = ArgumentParser(description=f"This utility will build Vector Messenger from source files. Result will be saved to directory: {path.abspath('./dist/')}")
     parser.add_argument('mode', action="store", default="full", type=str, choices=BUILD_CHOICES, nargs="?", help='Type of build. "server" - only server, "client" - only client, "full" - build client and server.')
     args = parser.parse_args()

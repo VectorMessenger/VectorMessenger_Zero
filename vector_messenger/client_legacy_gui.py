@@ -2,10 +2,10 @@ import sys
 import tkinter as tk
 from threading import Thread
 
-from VectorMessenger.MessengerCore.Helpers import Global as h
-from VectorMessenger.MessengerCore.Helpers import Client as h_cl
-from VectorMessenger.MessengerCore.CoreClient import MessengerClient
-from VectorMessenger.MessengerCore.Encryption import VMCrypt
+from vector_messenger.core.helpers import general as h
+from vector_messenger.core.helpers import client as h_cl
+from vector_messenger.core.client import MessengerClient
+from vector_messenger.core.encryption import VMCrypt
 
 
 class VM_MainWindow:

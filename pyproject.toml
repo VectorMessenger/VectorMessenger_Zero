@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "VectorMessenger"
+name = "vector_messenger"
 version = "0.0.0"
 description = ""
 authors = ["maximilionus <xxxarakxxx@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.scripts]
-client = "VectorMessenger.client:run_source"
-server = "VectorMessenger.server:run_source"
+client = "vector_messenger.client:run_source"
+server = "vector_messenger.server:run_source"
 
 [tool.poetry.dependencies]
 python = ">=3.7.0 <3.8"
