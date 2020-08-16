@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 # CONSTS
-VERSION = "B202008020120"
+VERSION = "B202008170236"
 VERSION_UPDATE_API = "https://docs.google.com/document/d/1jFWDZzJEPdsjs3JqcVKMfRzaFuz8VTrDc15JxsUJRUA/export?format=txt"
 ICON_CLIENT_PATH = './data/ico/VMClient.ico'
 ICON_SERVER_PATH = './data/ico/VMServer.ico'

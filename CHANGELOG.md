@@ -2,6 +2,14 @@
 > This changelog begins from `2020.07.01`. Any change before this date is not stated here.
 
 
+## Build [**B202008170236**](https://github.com/maximilionus/VectorMessenger/releases/tag/B202008170236)
+
+**2020-08-17**
+- Changed built-in `json` module to `ujson`
+
+> **`!`** This is the last update for legacy client
+
+
 ## Build [**B202008020120**](https://github.com/maximilionus/VectorMessenger/releases/tag/B202008020120)
 
 **2020-08-02**
