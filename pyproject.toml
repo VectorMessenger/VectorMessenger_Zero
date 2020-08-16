@@ -7,7 +7,6 @@ license = "MIT"
 
 [tool.poetry.scripts]
 client = "VectorMessenger.client:run_source"
-client_web = "VectorMessenger.client_web:run_source"
 server = "VectorMessenger.server:run_source"
 
 [tool.poetry.dependencies]
