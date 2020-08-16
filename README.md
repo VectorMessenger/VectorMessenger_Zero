@@ -35,9 +35,11 @@ Main File: `./VectorMessenger/client.py`
 Run From Source: `poetry run client`
 
 ### Startup Args
-| Argument            | Description              |
-| :------------------ | :----------------------- |
-| `--disable-updater` | Disable VM Updater start |
+| Argument            | Description                          |
+| :------------------ | :----------------------------------- |
+| `-h`, `--help`      | Get usage help                       |
+| `-L`, `--legacy`    | Use legacy gui for client            |
+| `--disable-updater` | Disable updater start for legacy gui |
 
 ### Debug Console Commands
 | Command          | Description                                                                |
@@ -61,14 +63,15 @@ Main File: `./VectorMessenger/server.py`
 Run From Source `poetry run server`
 
 ### Startup Args
-| Argument      | Description             |
-| :------------ | :---------------------- |
-| `--localhost` | Run server on localhost |
+| Argument            | Description             |
+| :------------------ | :---------------------- |
+| `-h`, `--help`      | Get usage help          |
+| `-L`, `--localhost` | Run server on localhost |
 
 
 ## Preparing Source
 - First of all you need to install the [poetry](https://pypi.org/project/poetry/) dependency manager with pip.
-- If you're on Linux, you will have to install `python3-tk` to your system. `Tkinter` currently used as the base of cross platform gui for client.
+- If you're on Linux, you will have to install `python3-tk` to your system. `Tkinter` currently used as the base of cross-platform gui for legacy client.
 
 ### For Development
 ```bash

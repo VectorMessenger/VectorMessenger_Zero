@@ -16,7 +16,7 @@ def startup():
 
 def argparser():
     parser = ArgumentParser(description="Server launcher")
-    parser.add_argument("--localhost", help="Run server on localhost", action="store_true")
+    parser.add_argument("--localhost", '-L', help="Run server on localhost", action="store_true")
     global args
     args = parser.parse_args()
 
