@@ -13,8 +13,8 @@ Script available startup args:
 
 from time import time
 from sys import platform
-from os import pathsep, path
 from argparse import ArgumentParser
+from os import pathsep, path, chdir
 
 import PyInstaller.__main__
 
