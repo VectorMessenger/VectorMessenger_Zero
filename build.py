@@ -12,8 +12,8 @@ Script available startup args:
 """
 
 from time import time
-from os import pathsep, path
 from sys import platform
+from os import pathsep, path
 from argparse import ArgumentParser
 
 import PyInstaller.__main__
@@ -28,19 +28,26 @@ PATH_SERVER_PY = './VectorMessenger/server.py'
 
 def build_client():
     # TODO: Exclude server-side
-    if platform == 'win32':
-        icon = '--icon=./VectorMessenger/' + h.ICON_CLIENT_PATH[2:]
-    else:
-        icon = ''
+    icon = '--icon=./VectorMessenger/' + h.ICON_CLIENT_PATH[2:]
 
-    ADD_FILES = (
-        f'--add-data=./VectorMessenger/data/ico{pathsep}./data/ico',
-        f'--add-data=./LICENSE{pathsep}.',
-    )
+    HIDDEN_IMPORT = [
+        'pkg_resources.py2_warn'
+    ]
+    if platform != 'win32':
+        # Fix of tkinter import for linux builds
+        # ! Remove when legacy gui completely removed
+        HIDDEN_IMPORT.extend(['tkinter', 'PIL._tkinter_finder'])
+    HIDDEN_IMPORT = [('--hidden-import=' + arg) for arg in HIDDEN_IMPORT]
+
+    ADD_FILES = [
+        f'./VectorMessenger/data/ico{pathsep}./data/ico',
+        f'./LICENSE{pathsep}.',
+    ]
+    ADD_FILES = [('--add-data=' + arg) for arg in ADD_FILES]
 
     PyInstaller.__main__.run([
         '--name={}'.format("VM_Client"),
-        '--hidden-import=pkg_resources.py2_warn',
+        *HIDDEN_IMPORT,
         '--windowed',
         *ADD_FILES,
         icon,
@@ -51,19 +58,22 @@ def build_client():
 
 def build_server():
     # TODO: Exclude client-side and encryption modules
-    if platform == 'win32':
-        icon = '--icon=./VectorMessenger/' + h.ICON_SERVER_PATH[2:]
-    else:
-        icon = ''
+    icon = '--icon=./VectorMessenger/' + h.ICON_SERVER_PATH[2:]
+
+    HIDDEN_IMPORT = [
+        'pkg_resources.py2_warn'
+    ]
+    HIDDEN_IMPORT = [('--hidden-import=' + arg) for arg in HIDDEN_IMPORT]
 
     ADD_FILES = (
-        f'--add-data=./VectorMessenger/data/ico{pathsep}./data/ico',
-        f'--add-data=./LICENSE{pathsep}.',
+        f'./VectorMessenger/data/ico{pathsep}./data/ico',
+        f'./LICENSE{pathsep}.',
     )
+    ADD_FILES = [('--add-data=' + arg) for arg in ADD_FILES]
 
     PyInstaller.__main__.run([
         '--name={}'.format("VM_Server"),
-        '--hidden-import=pkg_resources.py2_warn',
+        *HIDDEN_IMPORT,
         '--console',
         *ADD_FILES,
         icon,
