@@ -6,21 +6,21 @@ from vector_messenger.core.messenger_base import VMUDPBase
 
 
 class MessengerServer(VMUDPBase):
-    def __init__(self, is_localhost=False):
+    def __init__(self, is_localhost=False, port_override=0):
         super().__init__()
         self.cfg = h.VMConfig.init(0)
 
         if is_localhost:
-            h.create_log('Running server on localhost')
+            h.create_log('Running localhost server')
             ip = 'localhost'
         else:
-            h.create_log('Running server on a global network')
+            h.create_log('Running global network server')
             ip = ''
-
-        self.sock.bind((ip, self.cfg['connection']['port']))
+        port = port_override if port_override else self.cfg['connection']['port']
+        self.sock.bind((ip, port))
         self.clients = []
         self.__online = True
-        h.create_log('Server is online')
+        h.create_log(f'Server is online on port {port}')
 
         try:
             while self.__online:

@@ -67,6 +67,7 @@ Run From Source `poetry run server`
 | :------------------ | :---------------------- |
 | `-h`, `--help`      | Get usage help          |
 | `-L`, `--localhost` | Run server on localhost |
+| `-P`, `--port`      | Override server port    |
 
 
 ## Preparing Source
