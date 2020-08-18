@@ -18,7 +18,7 @@ from os import pathsep, path, chdir
 
 import PyInstaller.__main__
 
-from vector_messenger.core.helpers import general as h
+from vector_messenger.helpers import general as h
 
 
 UPX = '--noupx'

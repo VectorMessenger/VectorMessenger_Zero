@@ -1,7 +1,7 @@
 import socket
 import sys
 
-from vector_messenger.core.helpers import general as h
+from vector_messenger.helpers import general as h
 from vector_messenger.core.messenger_base import VMUDPBase
 
 

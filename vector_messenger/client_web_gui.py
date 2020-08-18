@@ -3,7 +3,7 @@ from os import path
 
 from flask import Flask, render_template
 
-from vector_messenger.core.helpers import general as h
+from vector_messenger.helpers import general as h
 
 
 def preinit_gui_server():

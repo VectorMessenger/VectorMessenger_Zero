@@ -2,8 +2,8 @@ import sys
 import tkinter as tk
 from threading import Thread
 
-from vector_messenger.core.helpers import general as h
-from vector_messenger.core.helpers import client as h_cl
+from vector_messenger.helpers import general as h
+from vector_messenger.helpers import client as h_cl
 from vector_messenger.core.client import MessengerClient
 from vector_messenger.core.encryption import VMCrypt
 

@@ -6,7 +6,7 @@ from urllib import request
 import json
 from PIL import Image, ImageTk
 
-from vector_messenger.core.helpers import general as h
+from vector_messenger.helpers import general as h
 
 
 def iconbitmap_universal(window: object, icon_image=h.ICON_CLIENT_PATH):
