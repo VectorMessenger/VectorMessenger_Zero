@@ -1,4 +1,27 @@
 html {
     background-color: #242424;
-    color: rgb(209, 209, 209);
+    color: #d1d1d1;
+}
+
+p#chat-field {
+    background: #303030;
+    color: #d1d1d1;
+    padding: 15px;
+    border-radius: 20px;
+}
+
+input[type="submit"] {
+    background: #008192;
+    color: #e6e6e6;
+    border: 0px;
+    border-radius: 30px;
+    height: 20px;
+}
+
+input[type="text"]#message-text {
+    background: #303030;
+    color: #d1d1d1;
+    border: 0px;
+    border-radius: 5px;
+    height: 20px;
 }

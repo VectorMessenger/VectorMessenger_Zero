@@ -6,10 +6,10 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat.css') }}">
     </head>
     <body>
-        <textarea id="chat-field" disabled></textarea>
+        <p id="chat-field"></p>
         <form action="{{ url_for('send_message') }}" method="POST" target="message-status">
-            <input type='text' name='message-text' autocomplete="off">
-            <input type='submit' value="Send">
+            <input type='text' name='message-text' id="message-text" autocomplete="off">
+            <input type='submit' value="send">
         </form>
         <iframe name="message-status" id="message-status" style="display: none;"></iframe>
         <script src="{{ url_for('static', filename='scripts/fetch_messages.js') }}"></script>

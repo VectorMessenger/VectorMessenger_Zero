@@ -1,7 +1,7 @@
 const fetch_interval_ms = 800
 
 function show_message(message_text) {
-    document.getElementById("chat-field").value = message_text
+    document.getElementById("chat-field").textContent = message_text
 }
 
 function fetch_messages() {
