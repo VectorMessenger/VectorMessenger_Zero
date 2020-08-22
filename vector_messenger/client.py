@@ -7,8 +7,9 @@ from vector_messenger.client_web_gui import startup as web_startup
 
 def __args_handler() -> object:
     parser = ArgumentParser(description="Launcher for Vector Messenger client.")
+    parser.add_argument('--server', '-S', action='store_true', help='Start only client server with gui accessible from web.')
     parser.add_argument('--legacy', '-L', action='store_true', help='Use legacy gui for client.')
-    parser.add_argument('--disable-updater', action='store_true', help='Disable updater start for legacy gui')
+    parser.add_argument('--disable-updater', action='store_true', help='Disable updater start for legacy gui.')
     return parser.parse_args()
 
 
@@ -17,7 +18,7 @@ def __startup():
     if args.legacy:
         legacy_startup()
     else:
-        web_startup()
+        web_startup(args.server)
 
 
 def run_source():
