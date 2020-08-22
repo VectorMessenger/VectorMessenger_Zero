@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <script src="{{ url_for('static', filename='scripts/jquery-3.5.1.min.js') }}"></script>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/scrollbar.css') }}">
     </head>
     <body>
         <p id="chat-field"></p>
@@ -12,6 +13,6 @@
             <input type='submit' value="send">
         </form>
         <iframe name="message-status" id="message-status" style="display: none;"></iframe>
-        <script src="{{ url_for('static', filename='scripts/fetch_messages.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/vector_messenger_core.js') }}"></script>
     </body>
 </html>

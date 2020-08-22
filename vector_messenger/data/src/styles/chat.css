@@ -1,11 +1,19 @@
 html {
     background-color: #242424;
     color: #d1d1d1;
+    scrollbar-base-color: #ff0000
 }
 
 p#chat-field {
+    background: #242424;
+    height: 400px;
+    overflow: auto;
+    scrollbar-color: red;
+}
+
+p.chat-message {
     background: #303030;
-    color: #d1d1d1;
+    color: #ececec;
     padding: 15px;
     border-radius: 20px;
 }
